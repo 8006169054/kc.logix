@@ -199,12 +199,9 @@
             const sidebarExpandList = (_b = (_a = document.querySelector(SELECTOR_SIDEBAR_EXPAND)) === null || _a === void 0 ? void 0 : _a.classList) !== null && _b !== void 0 ? _b : [];
             const sidebarExpand = (_c = Array.from(sidebarExpandList).find(className => className.startsWith(CLASS_NAME_SIDEBAR_EXPAND))) !== null && _c !== void 0 ? _c : '';
             const sidebar = document.getElementsByClassName(sidebarExpand)[0];
-            const sidebarContent = null;
-            if(sidebar != undefined){
-				sidebarContent = window.getComputedStyle(sidebar, '::before').getPropertyValue('content');
-				this._config = Object.assign(Object.assign({}, this._config), { sidebarBreakpoint: Number(sidebarContent.replace(/[^\d.-]/g, '')) });
-			}
-            if (sidebarContent != null && window.innerWidth <= this._config.sidebarBreakpoint) {
+            const sidebarContent = window.getComputedStyle(sidebar, '::before').getPropertyValue('content');
+            this._config = Object.assign(Object.assign({}, this._config), { sidebarBreakpoint: Number(sidebarContent.replace(/[^\d.-]/g, '')) });
+            if (window.innerWidth <= this._config.sidebarBreakpoint) {
                 this.collapse();
             }
             else {
