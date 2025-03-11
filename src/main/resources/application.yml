@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: local
+    
+  thymeleaf:
+    cache: false
+    check-template-location: true
+    enabled: true
+    prefix: classpath:/static/templates/
+    suffix: .html
+    view-names: html/*
