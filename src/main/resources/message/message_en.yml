@@ -1,0 +1,10 @@
+common:
+    system.error:
+        message: A system error has occurred. Please contact the administrator
+        type: E
+    login.authority.valid:
+        message: You do not have access rights.
+        type: E
+    login.fail:
+        message: Login failed. Please check your ID or password.
+        type: E

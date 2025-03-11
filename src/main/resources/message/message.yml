@@ -1,0 +1,10 @@
+common:
+    system.error:
+        message: 시스템 오류 발생하였습니다. 관리자에게 문의해주세요.
+        type: E
+    login.authority.valid:
+        message: 접근 권한이 없습니다.
+        type: E
+    login.fail:
+        message: 로그인에 실패했습니다. 아이디 또는 비밀번호를 확인해 주세요.
+        type: E
