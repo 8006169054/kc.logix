@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!-- Default Layout Import-->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/defaultLayout}"
+      layout:fragment="Content"
+>
+
+<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/trirand/ui.jqgrid.css" />
+<script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+<script type="text/javascript"src="/assets/js/trirand/i18n/grid.locale-en.js" ></script>
+<script type="text/javascript" src="/assets/js/trirand/jquery.jqGrid.min.js" ></script>
+<script type="text/javascript" src="/js/api.js"></script>
+
+<script type="text/javascript">
+
+let colName = ['매출', '이월 매출', '체크박스', 'EDI & AN', 'INVOICE', 'PROFIT DATE', 'D/O RELEASE DATE', 'CNEE', 'CNEE EMAIL', '국내매출', '해외매출', 'Partner', 'Tank no.', 'POL', 'POD', 'TERMINAL CODE', 'Carrier', 'MBL NO.', 'HBL NO.', 'ETD', 'ETA', 'ATA', '비고'];
+// let colName = ['CNEE', '매출', '이월 매출', '체크박스', 'EDI & AN', 'INVOICE', 'PROFIT DATE', 'D/O RELEASE DATE', 'CNEE EMAIL', '국내매출', '해외매출', 'Partner', 'Tank no.', 'POL', 'POD', 'TERMINAL CODE', 'Carrier', 'MBL NO.', 'HBL NO.', 'ETD', 'ETA', 'ATA', '비고'];
+$(document).ready(function () {
+// 	, cellattr: arrtSetting
+$("#list").jqGrid({
+   	datatype: "json",
+   	colNames: colName,
+   	colModel: [
+       	{ name: 'a', index: 'a', width: 70, 	align:'center', sortable: false, editable: true, cellattr: arrtSetting},
+       	{ name: 'b', index: 'b', width: 100, 	align:'center', sortable: false, editable: true, cellattr: arrtSetting},
+       	{ name: 'c', index: 'c', width: 80, 	align:'center', sortable: false, formatter: 'checkbox',  editoptions:{value:'1:0'} },
+       	{ name: 'd', index: 'd', width: 100, 	align:'center', sortable: false},
+    	{ name: 'e', index: 'e', width: 80, 	align:'center', sortable: false},
+    	{ name: 'f', index: 'f', width: 120, 	align:'center', sortable: false},
+    	{ name: 'g', index: 'g', width: 150, 	align:'center', sortable: false},
+    	{ name: 'h', index: 'h', width: 120, 	align:'center', sortable: false, cellattr: arrtSetting},
+    	{ name: 'i', index: 'i', width: 150, 	align:'center', sortable: false},
+    	{ name: 'j', index: 'j', width: 100, 	align:'center', sortable: false},
+    	{ name: 'k', index: 'k', width: 100, 	align:'center', sortable: false},
+    	{ name: 'l', index: 'l', width: 100, 	align:'center', sortable: false},
+    	{ name: 'm', index: 'm', width: 120, 	align:'center', sortable: false},
+    	{ name: 'n', index: 'n', width: 100, 	align:'center', sortable: false},
+    	{ name: 'o', index: 'o', width: 100, 	align:'center', sortable: false},
+    	{ name: 'p', index: 'p', width: 140, 	align:'center', sortable: false},
+    	{ name: 'q', index: 'q', width: 100, 	align:'center', sortable: false},
+    	{ name: 'r', index: 'r', width: 140, 	align:'center', sortable: false},
+    	{ name: 's', index: 's', width: 140, 	align:'center', sortable: false},
+    	{ name: 't', index: 't', width: 100, 	align:'center', sortable: false, cellattr: arrtSetting},
+    	{ name: 'u', index: 'u', width: 100, 	align:'center', sortable: false},
+    	{ name: 'v', index: 'v', width: 100, 	align:'center', sortable: false},
+       	{ name: 'w', index: 'w', width: 250, 	align:'center', sortable: false, cellattr: arrtSetting}
+   	],
+	height: 290, 
+	width: '100%',
+    viewrecords : false,
+   	loadonce: true,
+//     cellEdit : true,
+//     cellsubmit : 'clientArray',
+// 	autoencode: true,
+// 	altrows: false,
+// 	  autowidth:true,    // jQgrid width 자동100% 채워지게
+      shrinkToFit:false,  // width를 자동설정 해주는 기능
+	emptyrecords:'데이터가 없습니다.'
+});
+
+
+
+});
+
+const offcanvas = async () => {
+		$("#list").clearGridData();
+		let response = await requestApi('GET', '/open/rowspan');
+		for ( var i = 0 ; i <= response.length ; i++ ) {
+			$("#list").addRowData(i+1,response[i]);
+		}
+	
+};
+
+arrtSetting = function (rowId, val, rawObject, cm) {
+    var attr = rawObject.attr[cm.name], result;
+    if (attr.rowspan) {
+        result = ' rowspan=' + '"' + attr.rowspan + '"';
+    } else if (attr.display == 'none') {
+        result = ' style="display:' + attr.display + '"';
+    }
+    return result;
+};
+
+</script>
+
+<main class="app-main">
+        <div class="app-content-header">
+          <!--begin::Container-->
+          <div class="container-fluid">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Grid1</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item">Sample</li>
+                  <li class="breadcrumb-item active" aria-current="page">Grid1</li>
+                </ol>
+              </div>
+            </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+        </div>
+        <!--end::App Content Header-->
+        
+        <!--begin::App Content-->
+        <div class="app-content">
+        <table id="list"></table>
+		<button type="button" id="button-addon2" onclick="offcanvas()">추가</button>
+        </div>
+      </main>
+      
+
+</html>
