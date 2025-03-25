@@ -42,7 +42,7 @@ public class PrimaryDataBase {
     		EntityManagerFactoryBuilder builder) {
         return builder
           .dataSource(dataSource)
-          .packages("kainos.project.example")
+          .packages("kc.logix.apps")
           .persistenceUnit(KainosKey.DBConfig.DataBase.PrimaryUnitName)
           .build();
     }

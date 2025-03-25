@@ -844,7 +844,7 @@ body .ui-tooltip {
 	font-size: 1em;
 }
 .ui-widget-content {
-	border: 1px solid #a6c9e2;
+	border: 1px solid #9da4a9;
 	background: #fcfdfd url("images/ui-bg_inset-hard_100_fcfdfd_1x100.png") 50% bottom repeat-x;
 	color: #222222;
 }
@@ -884,7 +884,7 @@ body .ui-tooltip {
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
 	border: 1px solid #448dae;
-	background: #79c9ec url("images/ui-bg_glass_75_79c9ec_1x400.png") 50% 50% repeat-x;
+	/* 정인선 로우전체가 색상이 변경됨 background: #79c9ec url("images/ui-bg_glass_75_79c9ec_1x400.png") 50% 50% repeat-x; */
 	font-weight: normal;
 	color: #026890;
 }
@@ -919,7 +919,7 @@ body .ui-tooltip {
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-	border: 1px solid #fcd113;
+	/* 정인선 선택시 보더라인색상 변경되는 부분 주석 border: 1px solid #fcd113; */
 	background: #f8da4e url("images/ui-bg_glass_55_f8da4e_1x400.png") 50% 50% repeat-x;
 	color: #915608;
 }

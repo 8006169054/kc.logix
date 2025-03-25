@@ -12,8 +12,7 @@ public class PagePaths {
 
 	public static Map<String, PageInfo> links = new HashMap<>();
 	static {
-		PagePaths.links.put("/HOME", PageInfo.builder().linkPath("/apps/main/home").auth(true).build());
-		PagePaths.links.put("/SAMPLE/GRID1", PageInfo.builder().linkPath("/apps/sample/grid1").auth(true).build());
+//		PagePaths.links.put("/HOME", PageInfo.builder().linkPath("/home").auth(true).build());
 	}
 	
 	@Data

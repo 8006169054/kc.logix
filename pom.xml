@@ -14,7 +14,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>kc.logix</name>
-	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -180,7 +179,7 @@
 		<dependency>
 			<groupId>com</groupId>
 			<artifactId>kainos_framework_core</artifactId>
-			<version>20250228</version>
+			<version>20250325</version>
 		</dependency>
 		<dependency>
 			<groupId>com</groupId>

@@ -9,6 +9,8 @@ spring:
     prefix: classpath:/static/templates/
     suffix: .html
     view-names: html/*
+  messages:
+    basename: messages/view
     
 kainos:
   web:
@@ -43,4 +45,4 @@ kainos:
     
   message:
     enabled: true
-    path: classpath:/message/*.yml ## 파일 사용할 경우
+    path: classpath:/messages/*.yml ## 파일 사용할 경우
