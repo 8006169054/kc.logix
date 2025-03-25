@@ -1,10 +1,10 @@
 common:
     system.error:
-        message: 시스템 오류 발생하였습니다. 관리자에게 문의해주세요.
+        message: 发生系统错误。请联系管理员。
         type: E
     login.authority.valid:
-        message: 접근 권한이 없습니다.
+        message: 您没有访问权限。
         type: E
     login.fail:
-        message: 로그인에 실패했습니다. 아이디 또는 비밀번호를 확인해 주세요.
+        message: 登录失败。请检查您的 ID 或密码。
         type: E

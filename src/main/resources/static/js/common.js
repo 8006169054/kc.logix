@@ -9,13 +9,13 @@ loding = async (type) => {
 /**
  * type = success , info, warning, error
  */
-alertMessage = async (message, type, title) => {
-	if(title === undefined){
-		if(type === 'success') title = 'Success';
-		else if(type === 'info') title = 'Info';
-		else if(type === 'warning') title = 'Warning';
-		else if(type === 'error') title = 'Error';
-	}
+alertMessage = async (message, type, title='') => {
+//	if(title === undefined){
+//		if(type === 'success') title = 'Success';
+//		else if(type === 'info') title = 'Info';
+//		else if(type === 'warning') title = 'Warning';
+//		else if(type === 'error') title = 'Error';
+//	}
 	swal(title, message, type);
 };
 

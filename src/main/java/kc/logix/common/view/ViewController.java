@@ -11,6 +11,9 @@ import org.springframework.web.servlet.LocaleResolver;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kainos.framework.core.KainosKey;
+import kainos.framework.core.session.KainosSessionContext;
+import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +28,7 @@ public class ViewController {
     private boolean secure;
     @Value("${kainos.security.httpOnly:#{null}}")
     private boolean httpOnly;
-	
+    private final KainosSessionContext kainosSession;
     private final LocaleResolver localeResolver;
     
 	/**
@@ -37,7 +40,6 @@ public class ViewController {
     public String index(HttpServletRequest request, HttpServletResponse response, Locale locale) throws Exception {
 		String cacheControl = CacheControl.noCache().getHeaderValue();
 		response.addHeader("Cache-Control", cacheControl);
-		setLocale(request, response, locale);
 		return "html/index";
     }
 	
@@ -57,7 +59,11 @@ public class ViewController {
 		
 		setLocale(request, response, locale);
 		// OPEN << 권한 체크 패스
-        return "html" + htmlPath;
+		
+		if(sessionCheck(request))
+			return "html" + htmlPath;
+		else
+			return "html/apps/login/authlogin";
     }
 	
 	private void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
@@ -75,4 +81,9 @@ public class ViewController {
         response.addCookie(cookie);
 	}
 	
+	private boolean sessionCheck(HttpServletRequest request) throws Exception {
+		KainosKey.Jwt.Code code = kainosSession.resolveToken(request);
+		if(code == null || (KainosKey.Jwt.Code.ACCESS != code)) return false;
+		return true;
+	}
 }

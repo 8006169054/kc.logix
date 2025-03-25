@@ -58,8 +58,10 @@
 	let menuActive = sessionStorage.getItem("active");
 	if(menuActive != null && menuActive != undefined){
 		let menuInfo = menuActive.split(",");
-		$("#" + menuInfo[0]).addClass("active");
-		$("#" + menuInfo[0] + menuInfo[1]).addClass("active");
+		if(menuInfo.length > 1){
+			$("#" + menuInfo[0]).addClass("active");
+			$("#" + menuInfo[0] + menuInfo[1]).addClass("active");
+		}
 	}
 	function locationHref(url, active){
 		sessionStorage.setItem("active", active);

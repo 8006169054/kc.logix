@@ -178,35 +178,23 @@
 		</dependency>
 		<dependency>
 			<groupId>com</groupId>
+			<artifactId>kainos_framework_utils</artifactId>
+			<version>20250325</version>
+		</dependency>
+		<dependency>
+			<groupId>com</groupId>
 			<artifactId>kainos_framework_core</artifactId>
 			<version>20250325</version>
 		</dependency>
 		<dependency>
 			<groupId>com</groupId>
 			<artifactId>kainos_framework_data_querydsl</artifactId>
-			<version>20241101</version>
-		</dependency>
-		<dependency>
-			<groupId>com</groupId>
-			<artifactId>kainos_framework_utils</artifactId>
-			<version>20240521</version>
+			<version>20250325</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
