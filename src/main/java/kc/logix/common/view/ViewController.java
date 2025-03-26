@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kainos.framework.core.KainosKey;
 import kainos.framework.core.session.KainosSessionContext;
-import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
 
@@ -61,7 +60,7 @@ public class ViewController {
 		// OPEN << 권한 체크 패스
 		
 		if(sessionCheck(request))
-			return "html" + htmlPath;
+			return "html/apps" + htmlPath;
 		else
 			return "html/apps/login/authlogin";
     }

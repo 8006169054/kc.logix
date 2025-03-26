@@ -64,6 +64,7 @@
 .ui-jqgrid tr.ui-search-toolbar select {}
 /* body */ 
 .ui-jqgrid .ui-jqgrid-bdiv {position: relative; margin: 0; padding:0; overflow: auto; text-align:left;z-index: 101;}
+.ui-jqgrid .ui-jqgrid-bdiv > div { width: fit-content; }
 .ui-jqgrid .ui-jqgrid-btable {table-layout:fixed; margin:0; outline-style: none; border-collapse: separate;}
 .ui-jqgrid tr.jqgrow,
 .ui-jqgrid tr.jqgroup 
@@ -429,8 +430,8 @@ a.g-menu-item, a.soptclass, a.clearsearchclass { cursor: pointer; }
 	display:inline-block;
 }
 .ui-jqgrid .ui-jqgrid-htable .ui-th-div {
-	height:30px; /* 정인선 17 */
-	margin-top:10px; /* 정인선 5 */
+	height:17px; /* 정인선 17 */
+	margin-top:5px; /* 정인선 5 */
 }
 th.jqgrid-multibox .ui-th-div {
 	margin-top:2px !important;

@@ -908,8 +908,8 @@ tr:first-child > td > .fc-day-grid-event {
   border-color: #e4e6fc;
   min-height: 42px;
   border-radius: 3px;
-  padding-left: 10px;
-  padding-right: 10px;
+/*   padding-left: 10px; */
+/*   padding-right: 10px; */
 }
 .selectric:hover {
   background-color: #fdfdff;

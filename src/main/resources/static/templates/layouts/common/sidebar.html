@@ -9,45 +9,45 @@
 	      		<a href="/">KC</a>
 	    	</div>
 	    	<ul class="sidebar-menu">
-				<li><a class="nav-link" href='javascript:locationHref("/view/home", "")'><i class="fas fa-home"></i><span>홈</span></a></li>
+				<li><a class="nav-link" href='javascript:locationHref("/view/home", "")'><i class="fas fa-home"></i><span th:text="#{common.sidebar.hmoe.name}"></span></a></li>
 	        	<li id="B" class="nav-item dropdown">
-	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-list"></i><span>기준자료</span></a>
+	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-list"></i><span th:text="#{common.sidebar.baseline.name}"></span></a>
 	        		<ul class="dropdown-menu">
-						<li id="B01"><a class="nav-link" href='javascript:locationHref("/view/", "B,01")'><span>단위</span></a></li>
-						<li id="B02"><a class="nav-link" href='javascript:locationHref("/view/", "B,02")'><span>구간</span></a></li>
-						<li id="B03"><a class="nav-link" href='javascript:locationHref("/view/", "B,03")'><span>화물종류</span></a></li>
+						<li id="B01"><a class="nav-link" href='javascript:locationHref("/view/baseline/unit", "B,01")'><span th:text="#{common.sidebar.baseline.unit.name}">단위</span></a></li>
+						<li id="B02"><a class="nav-link" href='javascript:locationHref("/view/baseline/section", "B,02")'><span th:text="#{common.sidebar.baseline.section.name}">구간</span></a></li>
+						<li id="B03"><a class="nav-link" href='javascript:locationHref("/view/baseline/cargotype", "B,03")'><span th:text="#{common.sidebar.baseline.cargotype.name}">화물종류</span></a></li>
 					</ul>
 				</li>
 				<li id="C" class="nav-item dropdown">
-	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-folder"></i><span>기초자료</span></a>
+	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-folder"></i><span th:text="#{common.sidebar.basic.name}"></span></a>
 	        		<ul class="dropdown-menu">
-						<li id="C01"><a class="nav-link" href='javascript:locationHref("/view/", "C,01")'><span>수하인</span></a></li>
-						<li id="C02"><a class="nav-link" href='javascript:locationHref("/view/", "C,02")'><span>파트너</span></a></li>
-						<li id="C03"><a class="nav-link" href='javascript:locationHref("/view/", "C,03")'><span>운송사</span></a></li>
-						<li id="C04"><a class="nav-link" href='javascript:locationHref("/view/", "C,04")'><span>아이템</span></a></li>
-						<li id="C05"><a class="nav-link" href='javascript:locationHref("/view/", "C,05")'><span>항구</span></a></li>
-						<li id="C06"><a class="nav-link" href='javascript:locationHref("/view/", "C,06")'><span>DEPOT</span></a></li>
+						<li id="C01"><a class="nav-link" href='javascript:locationHref("/view/basic/consignee", "C,01")'><span th:text="#{common.sidebar.basic.consignee.name}"></span></a></li>
+						<li id="C02"><a class="nav-link" href='javascript:locationHref("/view/basic/partner", "C,02")'><span th:text="#{common.sidebar.basic.partner.name}"></span></a></li>
+						<li id="C03"><a class="nav-link" href='javascript:locationHref("/view/basic/shipping", "C,03")'><span th:text="#{common.sidebar.basic.shipping.name}"></span></a></li>
+						<li id="C04"><a class="nav-link" href='javascript:locationHref("/view/basic/product", "C,04")'><span th:text="#{common.sidebar.basic.product.name}"></span></a></li>
+						<li id="C05"><a class="nav-link" href='javascript:locationHref("/view/basic/port", "C,05")'><span th:text="#{common.sidebar.basic.port.name}"></span></a></li>
+						<li id="C06"><a class="nav-link" href='javascript:locationHref("/view/basic/depot", "C,06")'><span th:text="#{common.sidebar.basic.depot.name}"></span></a></li>
 					</ul>
 				</li>
 				<li id="D" class="nav-item dropdown">
-	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-file-alt"></i><span>관리자료</span></a>
+	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-file-alt"></i><span th:text="#{common.sidebar.management.name}"></span></a>
 	        		<ul class="dropdown-menu">
-						<li id="D01"><a class="nav-link" href='javascript:locationHref("/view/", "D,01")'><span>INBOUND</span></a></li>
+						<li id="D01"><a class="nav-link" href='javascript:locationHref("/view/management/inbound", "D,01")'><span th:text="#{common.sidebar.management.inbound.name}"></span></a></li>
 					</ul>
 				</li>
 				<li id="E" class="nav-item dropdown">
-	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-chart-area"></i><span>리포트</span></a>
+	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-chart-area"></i><span th:text="#{common.sidebar.report.name}"></span></a>
 	        		<ul class="dropdown-menu">
-						<li id="E01"><a class="nav-link" href='javascript:locationHref("/view/", "E,01")'><span>INBOUND</span></a></li>
-						<li id="E02"><a class="nav-link" href='javascript:locationHref("/view/", "E,02")'><span>INVENTORY</span></a></li>
+						<li id="E01"><a class="nav-link" href='javascript:locationHref("/view/report/inbound", "E,01")'><span th:text="#{common.sidebar.report.inbound.name}"></span></a></li>
+						<li id="E02"><a class="nav-link" href='javascript:locationHref("/view/report/inventory", "E,02")'><span th:text="#{common.sidebar.report.inventory.name}"></span></a></li>
 					</ul>
 				</li>
 				<li id="F" class="nav-item dropdown">
-	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i><span>시스템</span></a>
+	        		<a  href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i><span th:text="#{common.sidebar.system.name}"></span></a>
 	        		<ul class="dropdown-menu">
-						<li id="F01"><a class="nav-link" href='javascript:locationHref("/view/", "F,01")'><span>역할관리</span></a></li>
-						<li id="F02"><a class="nav-link" href='javascript:locationHref("/view/", "F,02")'><span>권한관리</span></a></li>
-						<li id="F03"><a class="nav-link" href='javascript:locationHref("/view/", "F,03")'><span>사용자관리</span></a></li>
+						<li id="F01"><a class="nav-link" href='javascript:locationHref("/view/system/role-management", "F,01")'><span th:text="#{common.sidebar.system.rolemanagement.name}"></span></a></li>
+						<li id="F02"><a class="nav-link" href='javascript:locationHref("/view/system/authority-management", "F,02")'><span th:text="#{common.sidebar.system.authoritymanagement.name}"></span></a></li>
+						<li id="F03"><a class="nav-link" href='javascript:locationHref("/view/system/user-management", "F,03")'><span th:text="#{common.sidebar.system.usermanagement.name}"></span></a></li>
 					</ul>
 				</li>
 	      	</ul>

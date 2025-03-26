@@ -1872,7 +1872,7 @@ h6 .badge {
 /* 3.18 Navbar */
 .navbar {
   height: 50px;
-  left: 250px;
+  left: 210px;
   right: 5px;
   position: absolute;
   z-index: 890;
@@ -3006,7 +3006,7 @@ pre {
   position: fixed;
   top: 0;
   height: 100%;
-  width: 250px;
+  width: 200px;
   background-color: #fff;
   z-index: 880;
   left: 0;
@@ -3465,7 +3465,7 @@ body.layout-3 .main-footer {
 }
 
 .main-content {
-  padding-left: 280px;
+  padding-left: 230px;
   padding-right: 30px;
   padding-top: 60px;
   width: 100%;
@@ -3474,7 +3474,7 @@ body.layout-3 .main-footer {
 
 .main-footer {
   padding: 20px 30px 20px 280px;
-  margin-top: 40px;
+  /*margin-top: 40px;*/
   color: #98a6ad;
   border-top: 1px solid #e3eaef;
   display: inline-block;

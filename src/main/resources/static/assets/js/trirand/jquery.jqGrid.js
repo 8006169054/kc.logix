@@ -5496,9 +5496,9 @@ $.fn.jqGrid = function( pin ) {
 			}
 			thead += "<th id='"+ts.p.id+"_" + tmpcm.name+"' role='columnheader'  scope='col' "+getstyle(stylemodule,'headerBox',false, "ui-th-column ui-th-" + dir + " " + ( tmpcm.labelClasses || "") ) +  tooltip+">";
 			idn = tmpcm.index || tmpcm.name;
-			// 정인선 해더 체크박스 style='padding-top: 7px;' 추가
+			// 정인선 해더 체크박스 style='padding-top: 3px;' 추가
 			let style = "";
-			if(tmpcm.name === 'cb') style = "style='padding-top: 7px;'";
+			if(tmpcm.name === 'cb') style = "style='padding-top: 3px;'";
 			thead += "<div class='ui-th-div' id='jqgh_" + ts.p.id + "_" + tmpcm.name +"' " + tdc + style + ">" +ts.p.colNames[i];
 			
 			if(!tmpcm.width)  {
@@ -8730,6 +8730,7 @@ $.jgrid.extend({
 				} else if(cm.edittype === 'select') {
 					$(elc).addClass(selclass);
 				}
+				$(elc).attr('autocomplete','off');
 
 				cc.html("").append(elc).attr("tabindex","0");
 				$.jgrid.bindEv.call($t, elc, opt);
