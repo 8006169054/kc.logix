@@ -60,19 +60,22 @@
 </nav>
 
 <script type="text/javascript">
-
-var kcUser = sessionStorage.getItem("KC-USER");
-$("#userName").html(JSON.parse(kcUser).name);
-
-function changeMultillanguage(language, reload){
-	setCookie('kainos-lang', language);
- 	location.reload();
-}
-
-const logout = async () => {
-	let response = await requestApi('GET', '/api/logout');
-	if(response.common.status === 'S') location.replace("/");
-}
+	var kcUser = sessionStorage.getItem("KC-USER");
+	if(kcUser != null)
+		$("#userName").html(JSON.parse(kcUser).name);
+	
+	function changeMultillanguage(language, reload){
+		setCookie('kainos-lang', language);
+	 	location.reload();
+	}
+	
+	const logout = async () => {
+		let response = await requestApi('GET', '/api/logout');
+		if(response.common.status === 'S'){
+			sessionStorage.clear();
+			location.replace("/");
+		}
+	}
 
 </script>
 </html>
