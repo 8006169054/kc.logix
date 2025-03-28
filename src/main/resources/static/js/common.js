@@ -1,5 +1,4 @@
 loding = async (type) => {
-	console.log('loding', type)
 	if(type)
 		$(".loading-mask").css('display','');
 	else
@@ -79,4 +78,19 @@ getCookie = (name) => {
 		return document.cookie.substring(start, end); 
 	} 
 	return "";	  
+}
+
+/**
+ * select Box 생성
+ */
+async function ComSelectBox(url, options){
+	let response = await requestApi('GET', url, options.param);
+	var select = document.getElementById(options.id);
+	$.each(response.data, function(index, data) {
+		var option = document.createElement('option');
+		option.value = data.value;
+		option.text = data.text;
+		select.appendChild(option);
+	});
+	$(select).selectric('refresh');
 }
