@@ -105,7 +105,8 @@
 		
 		let response = await requestApi('GET', '/open/dblogin', {id: $('#id').val(), password: $('#password').val()});
 		if(response.common.status === 'S'){
- 			sessionStorage.setItem("KC-USER", JSON.stringify(response.data));
+// 			sessionStorage.setItem("KC-USER", JSON.stringify(response.data));
+			localStorage.setItem("KC-USER", JSON.stringify(response.data));
 			location.replace("/view/home");
 		}else{
 			alertMessage(response.common.message, 'error');
