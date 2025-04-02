@@ -184,7 +184,7 @@
 		<dependency>
 			<groupId>com</groupId>
 			<artifactId>kainos_framework_core</artifactId>
-			<version>20250325</version>
+			<version>20250402</version>
 		</dependency>
 		<dependency>
 			<groupId>com</groupId>
