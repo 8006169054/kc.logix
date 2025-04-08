@@ -41,7 +41,7 @@ public class ConsigneeService {
 			throw new KainosBusinessException("basic.consignee.insert.duplicated");
 		}
 		else {
-			consigneeDto.setUpdateUserId(session.getUserId());
+			consigneeDto.setUpdateUserId(session.getUserName());
 			repository.insertConsignee(consigneeDto);
 		}
 	}
@@ -54,7 +54,7 @@ public class ConsigneeService {
 	 */
 	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
 	public void updateConsignee(BasicConsignee consigneeDto, SessionDto session)throws Exception {
-		consigneeDto.setUpdateUserId(session.getUserId());
+		consigneeDto.setUpdateUserId(session.getUserName());
 		repository.updateConsignee(consigneeDto);
 	}
 	
@@ -66,7 +66,7 @@ public class ConsigneeService {
 	 */
 	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
 	public void deleteConsignee(BasicConsignee consigneeDto, SessionDto session)throws Exception {
-		consigneeDto.setUpdateUserId(session.getUserId());
+		consigneeDto.setUpdateUserId(session.getUserName());
 		repository.deleteConsignee(consigneeDto);
 	}
 }

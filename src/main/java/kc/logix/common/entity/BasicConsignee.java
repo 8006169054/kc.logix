@@ -2,6 +2,8 @@ package kc.logix.common.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -29,6 +31,7 @@ public class BasicConsignee {
 	private String etcTwo;
 	private String etcThree;
 	private String updateUserId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime updateDate;
 
 }
