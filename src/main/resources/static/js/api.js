@@ -100,19 +100,18 @@ requestApi = async (method, url, params, option) => {
 		.then(function(response) {
 			switch (!!(responseStatus >= 200 && responseStatus < 300)) {
 				case true:
-					//				if(response.common.status === 'E'){
-					//					Swal.fire('', response.common.message, "error");
-					//				}
-					//				else{
-					//					if(method?.match(/(POST|PUT|PATCH)/) && autoMessage)
-					//						Swal.fire('', '저장되었습니다.', "success");
-					//					else if(method === 'DELETE' && autoMessage)
-					//						Swal.fire('', '삭제되었습니다.', "success");
-					//					if(response.common.token != null)
-					//						storage.setItem('kainos', response.common.token);
-
-					//				}
-					return response;
+					if(response.common.status === 'E' && response.common.message != undefined )
+						swal('', response.common.message, 'error').then((selection) => {
+					      if (selection)
+					      	option.errorFn(response);
+					    });				
+					else if(response.common.status === 'S' && response.common.message != undefined )
+						swal('', response.common.message, 'success').then((selection) => {
+					      if (selection)
+					      	option.errorFn(response);
+					    });				
+					else
+						return response;
 
 				default:
 					throw Error(`${response.status} , messages : ${response.error}`);

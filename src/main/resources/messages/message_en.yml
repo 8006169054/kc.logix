@@ -1,10 +1,20 @@
 common:
     system.error:
-        message: A system error has occurred. Please contact the administrator
-        type: E
-    login.authority.valid:
-        message: You do not have access rights.
+        message: 시스템 오류가 발생하였습니다. 담당자에게 문의해주세요.
         type: E
     login.fail:
-        message: Login failed. Please check your ID or password.
+        message: 로그인에 실패했습니다. ID 또는 비밀번호를 확인하세요.
+        type: E
+    data.insert:
+        message: 저장되었습니다.
+        type: S
+    data.update:
+        message: 변경되었습니다.
+        type: S
+    data.delete:
+        message: 삭제되었습니다.
+        type: S
+basic:
+    consignee.insert.duplicated:
+        message: 동일한 수화인 존재합니다.
         type: E

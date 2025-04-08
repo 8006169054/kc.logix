@@ -5,6 +5,14 @@
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
 <!-- Page Specific JS File -->
+<script th:inline="javascript">
+var consigneeTableColNames = [[#{basic.consignee.table.cols}]];
+</script>
+<script src="/templates/html/apps/basic/consignee.js"></script>
+
+<!-- 팝업 사용방법 -->
+<th:block th:replace="html/apps/basic/popup/consignee-popup :: Popup"></th:block>
+
 <!-- Main Content -->
 <div class="main-content">
 	<section class="section">
@@ -18,7 +26,40 @@
 				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.consignee.name}"></div>
 			</div>
 		</div>
-		<div class="section-body"></div>
+		<div class="section-body">
+			<div class="row">
+				<div class="col-100">
+					<div class="card">
+						<div class="card-header text-right">
+							<button class="btn btn-primary" onclick="search()">Search</button>
+						</div>
+						<div class="card-body">
+							<div class="form-group row">
+								<label th:text="#{basic.consignee.label.name}" class="col-form-label text-md-left col-md-10"></label>
+								<div class="col-md-20">
+									<input type="text" id="name" name="name" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-100">
+					<div class="card">
+						<div class="card-header text-right">
+							<button class="btn btn-success" data-toggle="modal" data-target="#consignee-popup">ADD</button>
+							<button class="btn btn-danger">Delete</button>
+						</div>
+						<div class="card-body p-0">
+							<div class="table-responsive" style="overflow: hidden;">
+								<table id="consignee-table"></table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 </div>
 

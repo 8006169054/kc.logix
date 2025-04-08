@@ -8,15 +8,15 @@ loding = async (type) => {
 /**
  * type = success , info, warning, error
  */
-alertMessage = async (message, type, title='') => {
+function alertMessage(message, type){
 //	if(title === undefined){
 //		if(type === 'success') title = 'Success';
 //		else if(type === 'info') title = 'Info';
 //		else if(type === 'warning') title = 'Warning';
 //		else if(type === 'error') title = 'Error';
 //	}
-	swal(title, message, type);
-};
+	swal('', message, type);
+}
 
 /**
  * type = success , info, warning, error
@@ -41,6 +41,13 @@ dataBinding = async (bindingData, prefix = "") => {
 	var keys = Object.keys(bindingData);
 	$.each(keys, function(index, key) {
 		$("#" + prefix + key).val(bindingData[key]);
+	});
+};
+
+clearFormValues = async (bindingData, prefix = "") => {
+	var keys = Object.keys(bindingData);
+	$.each(keys, function(index, key) {
+		$("#" + prefix + key).val("");
 	});
 };
 
@@ -93,4 +100,8 @@ async function ComSelectBox(url, options){
 		select.appendChild(option);
 	});
 	$(select).selectric('refresh');
+}
+
+function isEmpty(str){
+    return typeof str === 'undefined' || str === null || str === '' || str === 'null';
 }

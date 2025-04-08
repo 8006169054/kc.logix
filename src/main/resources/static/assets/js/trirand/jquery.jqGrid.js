@@ -2299,7 +2299,7 @@ $.fn.jqGrid = function( pin ) {
 			gridstate : "visible",
 			cellEdit: false,
 			dblEdit: false,
-			emptyrecords: '데이터가 없습니다.',
+//정인선			emptyrecords: '데이터가 없습니다.',
 			cellsubmit: "clientArray",
 			nv:0,
 			loadui: "enable",
@@ -6642,15 +6642,17 @@ $.jgrid.extend({
 						res = res = $.extend( {}, $t.p.data[ $t.p._index[ $.jgrid.stripPref($t.p.idPrefix, ind.id) ] ] );
 					} else {
 						$(ind).children('td[role="gridcell"]').each( function(i) {
-							nm = $t.p.colModel[i].name;
-							if ( !$.jgrid.isServiceCol( nm ) ) {
-								if($t.p.treeGrid===true && nm === $t.p.ExpandColumn) {
-									res[nm] = $.jgrid.htmlDecode( $(this).find("span").first().html() );
-								} else {
-									try {
-										res[nm] = $.unformat.call($t,this,{rowId:ind.id, colModel:$t.p.colModel[i]},i);
-									} catch (e){
-										res[nm] = $.jgrid.htmlDecode($(this).html());
+							if($t.p.colModel[i] != undefined ){
+								nm = $t.p.colModel[i].name;
+								if ( !$.jgrid.isServiceCol( nm ) ) {
+									if($t.p.treeGrid===true && nm === $t.p.ExpandColumn) {
+										res[nm] = $.jgrid.htmlDecode( $(this).find("span").first().html() );
+									} else {
+										try {
+											res[nm] = $.unformat.call($t,this,{rowId:ind.id, colModel:$t.p.colModel[i]},i);
+										} catch (e){
+											res[nm] = $.jgrid.htmlDecode($(this).html());
+										}
 									}
 								}
 							}
@@ -6888,6 +6890,7 @@ $.jgrid.extend({
 						prp = t.formatCol(i,1,v, data, rowid, lcdata);
 						row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
 					}
+					row[row.length] = "<td role=\"gridcell\" "+"style='height:0px;width:100%;'"+"></td>";
 					row.unshift( t.constructTr(rowid, false, classes, lcdata, data ) );
 					row[row.length] = "</tr>";
 					if(t.rows.length === 0){
