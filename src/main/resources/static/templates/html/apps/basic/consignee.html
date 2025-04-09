@@ -4,14 +4,14 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
+<!-- 팝업 사용방법 -->
+<th:block th:replace="html/apps/basic/popup/consignee-popup :: Popup"></th:block>
+
 <!-- Page Specific JS File -->
 <script th:inline="javascript">
 var consigneeTableColNames = [[#{basic.consignee.table.cols}]];
 </script>
 <script src="/templates/html/apps/basic/consignee.js"></script>
-
-<!-- 팝업 사용방법 -->
-<th:block th:replace="html/apps/basic/popup/consignee-popup :: Popup"></th:block>
 
 <!-- Main Content -->
 <div class="main-content">
@@ -31,7 +31,7 @@ var consigneeTableColNames = [[#{basic.consignee.table.cols}]];
 				<div class="col-100">
 					<div class="card">
 						<div class="card-header text-right">
-							<button class="btn btn-primary" onclick="search()">Search</button>
+							<button class="btn btn-primary" onclick="search()" th:text="#{common.button.label.search}"></button>
 						</div>
 						<div class="card-body">
 							<div class="form-group row">
@@ -48,8 +48,8 @@ var consigneeTableColNames = [[#{basic.consignee.table.cols}]];
 				<div class="col-100">
 					<div class="card">
 						<div class="card-header text-right">
-							<button class="btn btn-success" data-toggle="modal" data-target="#consignee-popup">ADD</button>
-							<button class="btn btn-danger">Delete</button>
+							<button class="btn btn-success" id="add" data-toggle="modal" data-target="#consignee-popup" th:text="#{common.button.label.add}"></button>
+							<button class="btn btn-danger" onclick="deleteConsignee()" th:text="#{common.button.label.delete}"></button>
 						</div>
 						<div class="card-body p-0">
 							<div class="table-responsive" style="overflow: hidden;">

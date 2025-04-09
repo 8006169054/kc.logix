@@ -57,12 +57,12 @@ requestFileDownload = async (method, url, params, fileName) => {
 requestApi = async (method, url, params, option) => {
 	let responseHeaders = {};
 	let responseHeaderJSON = {};
-	let autoMessage = (option != undefined && option.message != undefined) ? option.message : true;
+	//let autoMessage = (option != undefined && option.message != undefined) ? option.message : true;
 	let headers = {
-		'Content-Type': method?.match(/(POST|PUT|PATCH)/) ? 'application/json' : 'text/plain'
+		'Content-Type': method?.match(/(POST|PUT|PATCH|DELETE)/) ? 'application/json' : 'text/plain'
 		//    ,'Authorization': storage.getItem('kainos') === null ? '' : 'Bearer ' + storage.getItem('kainos')
 	};
-	let body = (method || '').match(/(POST|PUT|PATCH)/) && params ? JSON.stringify(params) : null;
+	let body = (method || '').match(/(POST|PUT|PATCH|DELETE)/) && params ? JSON.stringify(params) : null;
 
 	if (method.match(/GET/) && (params != null && params != undefined)) {
 		url = `${url}?${new URLSearchParams(params)}`;
@@ -103,12 +103,14 @@ requestApi = async (method, url, params, option) => {
 					if(response.common.status === 'E' && response.common.message != undefined )
 						swal('', response.common.message, 'error').then((selection) => {
 					      if (selection)
-					      	option.errorFn(response);
+					      	if(option.errorFn !== undefined)
+					      		option.errorFn(response);
 					    });				
 					else if(response.common.status === 'S' && response.common.message != undefined )
 						swal('', response.common.message, 'success').then((selection) => {
 					      if (selection)
-					      	option.errorFn(response);
+					      	if(option.successFn !== undefined)
+					      		option.successFn(response);
 					    });				
 					else
 						return response;

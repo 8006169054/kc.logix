@@ -68,13 +68,13 @@ public class ViewController {
 	private void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
 		Cookie langCookie = CookieUtil.getCookie("kainos-lang");
 		Cookie cookie = null;
-		if(langCookie != null && langCookie.getValue().equals("en")) {
-	       	localeResolver.setLocale(request, response, Locale.ENGLISH);
-			cookie = new Cookie("kainos-lang", "en");
+		if(langCookie != null && langCookie.getValue().equals("zh")) {
+			localeResolver.setLocale(request, response, Locale.CHINESE);
+	       	cookie = new Cookie("kainos-lang", "zh");
 	    }
 		else {
-	       	localeResolver.setLocale(request, response, Locale.CHINESE);
-	       	cookie = new Cookie("kainos-lang", "zh");
+			localeResolver.setLocale(request, response, Locale.ENGLISH);
+			cookie = new Cookie("kainos-lang", "en");
 	    }
 		cookie.setPath("/");
         response.addCookie(cookie);

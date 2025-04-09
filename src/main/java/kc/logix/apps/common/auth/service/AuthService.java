@@ -34,6 +34,8 @@ public class AuthService {
 				kainosSession.openSession(session);
 			else
 				throw new KainosBusinessException("common.login.fail");
+		} catch (KainosBusinessException e) {
+			throw e;
 		} catch (Exception e) {
 			log.error("{}", e);
 			throw new KainosBusinessException("common.system.error");

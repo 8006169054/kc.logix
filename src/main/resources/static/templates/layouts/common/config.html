@@ -7,7 +7,9 @@
 <meta http-equiv="content-language" content="en" />
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
 <title>KC LOGIX</title>
-
+<script th:inline="javascript">
+var jqgridEmptyRecords = [[#{common.jqgrid.label.emptyRecords}]];
+</script>
 <!-- General CSS Files -->
 <link rel="stylesheet" href="/assets/css/bootstrap.css">
 <link rel="stylesheet" href="/assets/css/all.css">
@@ -55,6 +57,7 @@
 <script src="/js/common.js"></script>
 <script src="/js/comminGrid.js"></script>
 <script src="/js/api.js"></script>
+<script src="/js/message.js"></script>
 
 <script type="text/javascript">
 	$('input').attr('autocomplete','off');

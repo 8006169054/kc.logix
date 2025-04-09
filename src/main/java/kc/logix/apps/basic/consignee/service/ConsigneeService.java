@@ -65,8 +65,12 @@ public class ConsigneeService {
 	 * @throws Exception
 	 */
 	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
-	public void deleteConsignee(BasicConsignee consigneeDto, SessionDto session)throws Exception {
-		consigneeDto.setUpdateUserId(session.getUserName());
-		repository.deleteConsignee(consigneeDto);
+	public void deleteConsignee(List<BasicConsignee> consigneeDtos, SessionDto session)throws Exception {
+		for (int i = 0; i < consigneeDtos.size(); i++) {
+			BasicConsignee consigneeDto = consigneeDtos.get(i);
+			consigneeDto.setUpdateUserId(session.getUserName());
+			repository.deleteConsignee(consigneeDto);
+		}
+		
 	}
 }

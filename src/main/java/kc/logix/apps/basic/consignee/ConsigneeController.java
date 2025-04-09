@@ -1,5 +1,7 @@
 package kc.logix.apps.basic.consignee;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import kainos.framework.core.lang.KainosBusinessException;
 import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
@@ -56,9 +59,9 @@ public class ConsigneeController {
 	}
 	
 	@DeleteMapping(value = "/api/basic/consignee")
-	public ResponseEntity<Void> deleteConsignee(@RequestBody BasicConsignee consigneeDto, @KainosSession SessionDto session) throws Exception {
+	public ResponseEntity<Void> deleteConsignee(@RequestBody List<BasicConsignee> consigneeDtos, @KainosSession SessionDto session) throws Exception {
 		try {
-			service.deleteConsignee(consigneeDto, session);
+			service.deleteConsignee(consigneeDtos, session);
 		} catch (KainosBusinessException e) {
 			throw e;
 		} catch (Exception e) {

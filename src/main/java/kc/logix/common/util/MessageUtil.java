@@ -43,8 +43,8 @@ public class MessageUtil {
 	 */
 	public KainosResponseEntity getDeleteMessage(KainosResponseEntity responseEntity) {
 		responseEntity.setMessage(KainosMessageString.builder()
-				.message(message.getMessage("common.data.dalete"))
-				.messageType(message.getMessageType("common.data.dalete"))
+				.message(message.getMessage("common.data.delete"))
+				.messageType(message.getMessageType("common.data.delete"))
 				.build());
 		return responseEntity;
 	}

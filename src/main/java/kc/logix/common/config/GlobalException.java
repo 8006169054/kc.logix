@@ -44,6 +44,7 @@ public class GlobalException {
      */
     @ExceptionHandler( KainosBusinessException.class )
     private ResponseEntity<?> kainosCustomerException(KainosBusinessException ex) {
+//    	log.error("{}", ex);
     	KainosException kainosException = new KainosException(message.getMessageConvert(ex.getMessageId(), ex.getArguments()), HttpStatus.OK);
     	kainosException.setType(message.getMessageType(ex.getMessageId()));
     	return KainosResponseEntity.builder().failResponse(kainosException).build().close();

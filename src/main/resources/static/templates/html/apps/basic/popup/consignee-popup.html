@@ -15,7 +15,7 @@
 				<div class="col-100">
 					<div class="card p-0">
 						<form id="consigneePopupForm" name="consigneePopupForm">
-							<input type="hidden" id="code">
+							<input type="hidden" id="code" name="code">
 							<div id="formDiv" class="card-body needs-validation">
 								<div class="form-group">
 									<label for="name" th:text="#{basic.consignee.popup.label.name}"></label>
@@ -42,15 +42,15 @@
 								</div>
 								<div class="form-group">
 									<label for="etcOne" th:text="#{basic.consignee.popup.label.etcOne}"></label>
-									<textarea class="form-control" id="etcOne" name="etcOne" data-height="60" style="resize: none;"></textarea>
+									<textarea class="form-control" id="etcOne" name="etcOne" data-height="60" style="resize: none;" maxlength="4000"></textarea>
 								</div>
 								<div class="form-group">
 									<label for="etcTwo" th:text="#{basic.consignee.popup.label.etcTwo}"></label>
-									<textarea class="form-control" id="etcTwo" name="etcTwo" data-height="60" style="resize: none;"></textarea>
+									<textarea class="form-control" id="etcTwo" name="etcTwo" data-height="60" style="resize: none;" maxlength="4000"></textarea>
 								</div>
 								<div class="form-group">
 									<label for="etcThree" th:text="#{basic.consignee.popup.label.etcThree}"></label>
-									<textarea class="form-control" id="etcThree" name="etcThree" data-height="60" style="resize: none;"></textarea>
+									<textarea class="form-control" id="etcThree" name="etcThree" data-height="60" style="resize: none;" maxlength="4000"></textarea>
 								</div>
 							</div>
 						</form>
@@ -58,8 +58,8 @@
 				</div>
 			</div>
 			<div class="modal-footer bg-whitesmoke br">
-				<button type="button" class="btn btn-secondary" id="consignee-popup-close" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-success" onclick="consigneePopupSave()">Save</button>
+				<button type="button" class="btn btn-secondary" id="consignee-popup-close" data-dismiss="modal" th:text="#{common.button.label.close}"></button>
+				<button type="button" class="btn btn-success" onclick="consigneePopupSave()" th:text="#{common.button.label.save}"></button>
 			</div>
 		</div>
 	</div>

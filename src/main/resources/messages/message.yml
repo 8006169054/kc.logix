@@ -13,7 +13,7 @@ common:
         type: S
     data.delete:
         message: 삭제되었습니다.
-        type: S			
+        type: S
 basic:
     consignee.insert.duplicated:
         message: 동일한 수화인 존재합니다.

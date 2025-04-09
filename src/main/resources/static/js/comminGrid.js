@@ -42,7 +42,7 @@ var cellEditRow;
  * @param rowId
  */
 function ComRowData(gridName, rowId){
-	var rowData = $(gridName).getRowData(rowId);
+	var rowData = $("#" + gridName).getRowData(rowId);
 	return rowData;
 }
 
@@ -163,6 +163,17 @@ function ComSelectRow(gridName){
 	return ret;
 }
 
+/**
+ * 
+ */
+function ComMultiSelectRow(gridName){
+	const ret = [];
+	var ids = $(gridName).getGridParam('selarrrow');
+	for ( var i = 0; i < ids.length; i++) {
+		ret.push($(gridName).getRowData(ids[i]));
+	}
+	return ret;
+}
 
 /**
  * grid edit input
