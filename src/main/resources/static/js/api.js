@@ -1,7 +1,7 @@
 requestFileDownload = async (method, url, params, fileName) => {
 	let headers = {
 		'Content-Type': method?.match(/(POST|PUT|PATCH)/) ? 'application/json' : 'text/plain'
-		//    ,'Authorization': storage.getItem('kainos') === null ? '' : 'Bearer ' + storage.getItem('kainos')
+		,'Authorization': sessionStorage.getItem("kainos") === null ? '' : 'Bearer ' + sessionStorage.getItem("kainos")
 	};
 	let body = (method || '').match(/(POST|PUT|PATCH)/) && params ? JSON.stringify(params) : null;
 
@@ -49,10 +49,6 @@ requestFileDownload = async (method, url, params, fileName) => {
 		.finally(function() { loding(false); });
 };
 
-
-
-
-
 /** Server API 호출 기능 */
 requestApi = async (method, url, params, option) => {
 	let responseHeaders = {};
@@ -60,7 +56,7 @@ requestApi = async (method, url, params, option) => {
 	//let autoMessage = (option != undefined && option.message != undefined) ? option.message : true;
 	let headers = {
 		'Content-Type': method?.match(/(POST|PUT|PATCH|DELETE)/) ? 'application/json' : 'text/plain'
-		//    ,'Authorization': storage.getItem('kainos') === null ? '' : 'Bearer ' + storage.getItem('kainos')
+		,'Authorization': sessionStorage.getItem("kainos") === null ? '' : 'Bearer ' + sessionStorage.getItem("kainos")
 	};
 	let body = (method || '').match(/(POST|PUT|PATCH|DELETE)/) && params ? JSON.stringify(params) : null;
 
@@ -81,6 +77,13 @@ requestApi = async (method, url, params, option) => {
 			responseHeaders = response.headers;
 			for (let pair of responseHeaders.entries()) {
 				responseHeaderJSON[pair[0]] = pair[1];
+			}
+			if($.cookie('kainos') === '' || $.cookie('kainos') === undefined){
+				if(responseHeaderJSON.authorization){
+					const token = responseHeaderJSON.authorization.split('Bearer ')[1];
+					sessionStorage.setItem("kainos", token);
+					$.cookie('kainos', token);
+				}
 			}
 			switch (response.status) {
 				case 200:

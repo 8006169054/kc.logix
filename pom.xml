@@ -199,7 +199,57 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<env></env>
+			</properties>
+		</profile>
+		<profile>
+			<id>develop</id>
+			<build>
+				<directory>${project.basedir}/target/develop</directory>
+				<finalName>kc.logix</finalName>
+			</build>
+			<properties>
+				<env>-develop</env>
+			</properties>
+		</profile>
+		<profile>
+			<id>master</id>
+			<build>
+				<directory>${project.basedir}/target/master</directory>
+				<finalName>kc.logix</finalName>
+			</build>
+			<properties>
+				<env>-master</env>
+			</properties>
+		</profile>
+	</profiles>
+	
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<excludes>
+					<exclude>application.yml</exclude>
+					<exclude>logback.xml</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources${env}</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

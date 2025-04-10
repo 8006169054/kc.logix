@@ -76,6 +76,8 @@
 			sessionStorage.clear();
 			localStorage.clear();
 			location.replace("/");
+			$.removeCookie('kainos', { path: '/view' });
+			$.removeCookie('kainos-lang', { path: '/' });
 		}
 	}
 
