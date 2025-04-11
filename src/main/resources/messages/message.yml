@@ -21,3 +21,6 @@ basic:
     partner.insert.duplicated:
         message: 동일한 파트너가 존재합니다.
         type: E
+    shipping.insert.duplicated:
+        message: 동일한 운송사가 존재합니다.
+        type: E

@@ -21,3 +21,6 @@ basic:
     partner.insert.duplicated:
         message: The same partner exists.
         type: E
+    shipping.insert.duplicated:
+        message: The same shipping exists.
+        type: E        

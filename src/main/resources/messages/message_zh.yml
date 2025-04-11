@@ -20,4 +20,7 @@ basic:
         type: E
     partner.insert.duplicated:
         message: 存在相同的合作伙伴.
-        type: E        
+        type: E    
+    shipping.insert.duplicated:
+        message: 存在相同的运输.
+        type: E            

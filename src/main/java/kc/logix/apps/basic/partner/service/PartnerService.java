@@ -30,7 +30,7 @@ public class PartnerService {
 	}
 	
 	/**
-	 * 수하인 등록
+	 * 
 	 * @param paramDto
 	 * @param session
 	 * @throws Exception
@@ -47,7 +47,7 @@ public class PartnerService {
 	}
 	
 	/**
-	 * 수하인 수정
+	 * 
 	 * @param paramDto
 	 * @param session
 	 * @throws Exception
@@ -59,7 +59,7 @@ public class PartnerService {
 	}
 	
 	/**
-	 * 수하인 삭제
+	 * 
 	 * @param paramDtos
 	 * @param session
 	 * @throws Exception
