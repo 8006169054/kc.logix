@@ -93,7 +93,9 @@ requestApi = async (method, url, params, option) => {
 					return undefined;
 
 				case 403:
-					//		  $.redirect("/", {path: "home/home"}, "POST");
+					$.removeCookie('kainos', { path: '/view' });
+					$.removeCookie('kainos-lang', { path: '/' });
+					location.replace("/view/home");
 					return undefined;
 
 				default:

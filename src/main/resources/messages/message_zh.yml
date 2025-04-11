@@ -27,3 +27,9 @@ basic:
     product.insert.duplicated:
         message: 存在相同的产品.
         type: E
+    port.insert.duplicated:
+        message: 存在相同的端口.
+        type: E
+    depot.insert.duplicated:
+        message: 存在相同的仓库.
+        type: E  

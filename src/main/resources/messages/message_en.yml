@@ -26,4 +26,10 @@ basic:
         type: E    
     product.insert.duplicated:
         message: The same product exists.
-        type: E     
+        type: E
+    port.insert.duplicated:
+        message: The same port exists.
+        type: E
+    depot.insert.duplicated:
+        message: The same depot exists.
+        type: E  

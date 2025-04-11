@@ -27,3 +27,9 @@ basic:
     product.insert.duplicated:
         message: 동일한 아아템이 존재합니다.
         type: E
+    port.insert.duplicated:
+        message: 동일한 항구 존재합니다.
+        type: E
+    depot.insert.duplicated:
+        message: 동일한 DEPOT 존재합니다.
+        type: E
