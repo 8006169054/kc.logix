@@ -24,3 +24,6 @@ basic:
     shipping.insert.duplicated:
         message: 동일한 운송사가 존재합니다.
         type: E
+    product.insert.duplicated:
+        message: 동일한 아아템이 존재합니다.
+        type: E

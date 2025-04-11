@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--Thymeleaf, ConfigFragment 선언-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="Popup">
+<div class="modal fade" tabindex="-1" role="dialog" id="product-popup">
+	<div class="modal-dialog" role="document" style="max-width: 40%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" th:text="#{basic.product.popup.name}"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="col-100">
+					<div class="card p-0">
+						<form id="productPopupForm" name="productPopupForm">
+							<input type="hidden" id="code" name="code">
+							<div id="formDiv" class="card-body needs-validation">
+								<div class="form-group">
+									<label for="name" th:text="#{basic.product.popup.label.name}"></label>
+									<input type="text" class="form-control" id="name" name="name" required autofocus>
+									<div class="invalid-feedback" th:text="#{basic.product.popup.label.name.invalid.feedback}"></div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer bg-whitesmoke br">
+				<button type="button" class="btn btn-secondary" id="product-popup-close" data-dismiss="modal" th:text="#{common.button.label.close}"></button>
+				<button type="button" class="btn btn-success" onclick="productPopupSave()" th:text="#{common.button.label.save}"></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+var productData = {
+	code : '',
+	name : ''
+}
+
+$("#product-popup").on("show.bs.modal", function(e) {
+	dataBinding(productData);
+});
+  
+$("#product-popup").on("hide.bs.modal", function(e) {
+	clearFormValues($('#productPopupForm').serializeObject());
+  	clearFormValues(productData);
+  	$('#formDiv').removeClass('was-validated');
+});
+  
+/* 데이터 저장 */
+async function productPopupSave(){
+ 	// 벨리데이션 체크 
+	if($('#name').val() === ''){
+		$('#formDiv').addClass('was-validated');
+		return false;
+	}
+  	
+  	let method = 'POST';
+  	if(!isEmpty($('#code').val())) method = 'PATCH';
+  	await requestApi(method, '/api/basic/product', $('#productPopupForm').serializeObject(), {successFn : productPopupSaveFn, errorFn : productPopupSaveFn});
+}
+ 	
+function productPopupSaveFn(response){
+	if(response.common.status === 'S'){
+ 		$('#product-popup-close').click();
+ 	}
+ }
+</script>
+</html>

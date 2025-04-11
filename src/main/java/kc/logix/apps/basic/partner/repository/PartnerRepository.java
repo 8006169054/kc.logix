@@ -54,7 +54,7 @@ public class PartnerRepository extends KainosRepositorySupport {
 			basicPartner.etcThree,
 			basicPartner.updateUserId
 		).values(
-			CodeGenerationUtil.createCode("CS"),
+			CodeGenerationUtil.createCode("PN"),
 			paramDto.getName(),
 			paramDto.getContactName(),
 			paramDto.getContactPerson(),

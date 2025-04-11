@@ -23,4 +23,7 @@ basic:
         type: E
     shipping.insert.duplicated:
         message: The same shipping exists.
-        type: E        
+        type: E    
+    product.insert.duplicated:
+        message: The same product exists.
+        type: E     

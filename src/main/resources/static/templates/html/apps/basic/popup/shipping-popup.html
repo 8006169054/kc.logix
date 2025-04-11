@@ -86,6 +86,7 @@ $("#shipping-popup").on("show.bs.modal", function(e) {
 $("#shipping-popup").on("hide.bs.modal", function(e) {
 	clearFormValues($('#shippingPopupForm').serializeObject());
   	clearFormValues(shippingData);
+  	$('#formDiv').removeClass('was-validated');
 });
   
 /* 데이터 저장 */

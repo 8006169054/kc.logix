@@ -4,7 +4,14 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
+<!-- 팝업 사용방법 -->
+<th:block th:replace="html/apps/basic/popup/product-popup :: Popup"></th:block>
+
 <!-- Page Specific JS File -->
+<script th:inline="javascript">
+var productTableColNames = [[#{basic.product.table.cols}]];
+</script>
+<script src="/templates/html/apps/basic/product.js"></script>
 <!-- Main Content -->
 <div class="main-content">
 	<section class="section">
@@ -18,7 +25,40 @@
 				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.product.name}"></div>
 			</div>
 		</div>
-		<div class="section-body"></div>
+		<div class="section-body">
+			<div class="row">
+				<div class="col-100">
+					<div class="card">
+						<div class="card-header text-right">
+							<button class="btn btn-primary" onclick="search()" th:text="#{common.button.label.search}"></button>
+						</div>
+						<div class="card-body">
+							<div class="form-group row">
+								<label th:text="#{basic.product.label.name}" class="col-form-label text-md-left col-md-10"></label>
+								<div class="col-md-20">
+									<input type="text" id="name" name="name" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-100">
+					<div class="card">
+						<div class="card-header text-right">
+							<button class="btn btn-success" id="add" data-toggle="modal" data-target="#product-popup" th:text="#{common.button.label.add}"></button>
+							<button class="btn btn-danger" onclick="deleteProduct()" th:text="#{common.button.label.delete}"></button>
+						</div>
+						<div class="card-body p-0">
+							<div class="table-responsive" style="overflow: hidden;">
+								<table id="product-table"></table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 </div>
 

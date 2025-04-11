@@ -55,7 +55,7 @@ public class ShippingRepository extends KainosRepositorySupport {
 			basicShipping.etcThree,
 			basicShipping.updateUserId
 		).values(
-			CodeGenerationUtil.createCode("CS"),
+			CodeGenerationUtil.createCode("SP"),
 			paramDto.getName(),
 			paramDto.getContactName(),
 			paramDto.getContactPerson(),

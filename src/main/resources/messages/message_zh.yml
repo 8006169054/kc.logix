@@ -23,4 +23,7 @@ basic:
         type: E    
     shipping.insert.duplicated:
         message: 存在相同的运输.
-        type: E            
+        type: E
+    product.insert.duplicated:
+        message: 存在相同的产品.
+        type: E
