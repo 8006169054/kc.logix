@@ -16,5 +16,8 @@ common:
         type: S
 basic:
     consignee.insert.duplicated:
-        message: 동일한 수화인 존재합니다.
+        message: 동일한 수화인이 존재합니다.
+        type: E
+    partner.insert.duplicated:
+        message: 동일한 파트너가 존재합니다.
         type: E
