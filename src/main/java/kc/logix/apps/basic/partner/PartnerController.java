@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import kainos.framework.core.lang.KainosBusinessException;
 import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
+import kc.logix.apps.basic.partner.dto.PartnerDto;
 import kc.logix.apps.basic.partner.service.PartnerService;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.entity.BasicPartner;
@@ -35,15 +36,10 @@ public class PartnerController {
 	}
 	
 	@PostMapping(value = "/api/basic/partner")
-	public ResponseEntity<Void> insertPartner(@RequestBody BasicPartner paramDto, @KainosSession SessionDto session) throws Exception {
-		try {
-			service.insertPartner(paramDto, session);
-		} catch (KainosBusinessException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new KainosBusinessException("common.system.error");
-		}
-		return message.getInsertMessage(KainosResponseEntity.builder().build()).close();
+	public ResponseEntity<BasicPartner> insertPartner(@RequestBody List<PartnerDto> paramDto, @KainosSession SessionDto session) throws Exception {
+		return KainosResponseEntity.builder().build()
+				.addData(service.insertPartner(paramDto, session))
+				.close();
 	}
 	
 	@PatchMapping(value = "/api/basic/partner")

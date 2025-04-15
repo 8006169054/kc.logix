@@ -1,12 +1,15 @@
 package kc.logix.apps.basic.partner.service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kainos.framework.core.KainosKey;
-import kainos.framework.core.lang.KainosBusinessException;
+import kc.logix.apps.basic.partner.dto.PartnerDto;
 import kc.logix.apps.basic.partner.repository.PartnerRepository;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.entity.BasicPartner;
@@ -36,14 +39,27 @@ public class PartnerService {
 	 * @throws Exception
 	 */
 	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
-	public void insertPartner(BasicPartner paramDto, SessionDto session)throws Exception {
-		if(repository.selectPartner(paramDto, true).size() > 0) {
-			throw new KainosBusinessException("basic.partner.insert.duplicated");
+	public List<BasicPartner> insertPartner(List<PartnerDto> paramDto, SessionDto session)throws Exception {
+		List<BasicPartner> returnDtos = new ArrayList<>();
+		for (Iterator<PartnerDto> iterator = paramDto.iterator(); iterator.hasNext();) {
+			PartnerDto partner = iterator.next();
+			BasicPartner basicPartner = BasicPartner.builder().build(); 
+			BeanUtils.copyProperties(basicPartner, partner);
+			if(repository.selectPartner(basicPartner, true).size() > 0) {
+				returnDtos.add(basicPartner);
+//				throw new KainosBusinessException("basic.partner.insert.duplicated");
+			}
+			else {
+				basicPartner.setUpdateUserId(session.getUserName());
+				if(partner.getJqFlag().equalsIgnoreCase("C"))
+					repository.insertPartner(basicPartner);
+				else if(partner.getJqFlag().equalsIgnoreCase("U"))
+					repository.updatePartner(basicPartner);
+				else if(partner.getJqFlag().equalsIgnoreCase("D"))
+					repository.deletePartner(basicPartner);
+			}
 		}
-		else {
-			paramDto.setUpdateUserId(session.getUserName());
-			repository.insertPartner(paramDto);
-		}
+		return returnDtos;
 	}
 	
 	/**

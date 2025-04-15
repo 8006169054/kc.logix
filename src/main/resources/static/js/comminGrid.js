@@ -16,18 +16,20 @@ function afterSaveJqFlag(grid, rowid, iRow, oRowData){
 	var iRowData = $(grid).getRowData(iRow);	
 	let jqFlag = "R";
 	/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
-	if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
-		let keys = Object.keys(oRowData);
-		$(keys).each(function(i ,key){
-			if(key !== 'jqFlag'){
-				if(iRowData[key] !== oRowData[key]) {
-					jqFlag = 'U';
-					return false;
+	if(oRowData !== undefined){
+		if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
+			let keys = Object.keys(oRowData);
+			$(keys).each(function(i ,key){
+				if(key !== 'jqFlag'){
+					if(iRowData[key] !== oRowData[key]) {
+						jqFlag = 'U';
+						return false;
+					}
 				}
-			}
-		});
-		
-		$(grid).setCell(iRow, 'jqFlag', jqFlag);
+			});
+			
+			$(grid).setCell(iRow, 'jqFlag', jqFlag);
+		}
 	}
 }
 
@@ -80,34 +82,46 @@ function ComGridAction(gridName, jsonData, callBack){
  * @param prefix
  * @returns {Array}
  */
-function ComGridData(gridName, prefix){
-
-	if ( prefix == undefined ) {prefix = "";}
+function ComGridData(gridName){
 
 	var rows = $(gridName).jqGrid('getRowData');
-	var gridData = "";
-	var paras = new Array();
+	var gridData = new Array();
 
 	for ( var i = 0 ; i < rows.length ; i++ ) {
-		paras.push($.param(rows[i]));
+		if(rows[i].jqFlag !== 'R'){
+			gridData.push(rows[i]);
+		} 
 	}
-
-	for ( var int = 0; int < paras.length; int++) {
-		gridData = gridData + paras[int] + "&";
-	}
-	
-	var arrParams = gridData.substring(0, gridData.length -1).split("&");
-	var result    = "";
-
-	for ( var i = 0 ; i < arrParams.length ; i++ ) {
-		var p = arrParams[i];
-		var arrP = p.split("=");
-
-		result = result + "&" + prefix + arrP[0] + "=" + arrP[1];
-	}
-
-	return result;
+	return gridData;
 }
+//function ComGridData(gridName, prefix){
+//
+//	if ( prefix == undefined ) {prefix = "";}
+//
+//	var rows = $(gridName).jqGrid('getRowData');
+//	var gridData = "";
+//	var paras = new Array();
+//
+//	for ( var i = 0 ; i < rows.length ; i++ ) {
+//		paras.push($.param(rows[i]));
+//	}
+//
+//	for ( var int = 0; int < paras.length; int++) {
+//		gridData = gridData + paras[int] + "&";
+//	}
+//	
+//	var arrParams = gridData.substring(0, gridData.length -1).split("&");
+//	var result    = "";
+//
+//	for ( var i = 0 ; i < arrParams.length ; i++ ) {
+//		var p = arrParams[i];
+//		var arrP = p.split("=");
+//
+//		result = result + "&" + prefix + arrP[0] + "=" + arrP[1];
+//	}
+//
+//	return result;
+//}
 
 function ComGridMultiSelectData(gridName, rows, prefix){
 	if ( prefix == undefined ) {prefix = "";}

@@ -2261,6 +2261,7 @@ $.fn.jqGrid = function( pin ) {
 			viewrecords: false,
 			loadonce: false,
 			multiselect: false,
+			delselect: false, //정인선 삭제 체크박스
 			multikey: false,
 			multiboxonly : false,
 			multimail : false,
@@ -5409,6 +5410,12 @@ $.fn.jqGrid = function( pin ) {
 			this.p.colNames.unshift("<input role='checkbox' id='cb_"+this.p.id+"' class='cbox' type='checkbox' title='"+allRowsSelectTitle+"'/>");
 			this.p.colModel.unshift({name:'cb',width:$.jgrid.cell_width ? ts.p.multiselectWidth+ts.p.cellLayout : ts.p.multiselectWidth,sortable:false,resizable:false,hidedlg:true,search:false,align:'center',fixed:true, frozen: true, classes : "jqgrid-multibox", labelClasses: "jqgrid-multibox" });
 		}
+		
+		// 정인선 삭제 체크박스
+		if(this.p.delselect) {
+			this.p.colNames.unshift("Del");
+			this.p.colModel.unshift({name:'cb',width:$.jgrid.cell_width ? ts.p.multiselectWidth+ts.p.cellLayout : ts.p.multiselectWidth,sortable:false,resizable:false,hidedlg:true,search:false,align:'center',fixed:true, frozen: true, classes : "jqgrid-multibox", labelClasses: "jqgrid-multibox" });
+		}
 		if(this.p.rownumbers) {
 			this.p.colNames.unshift("");
 			this.p.colModel.unshift({name:'rn',width:ts.p.rownumWidth,sortable:false,resizable:false,hidedlg:true,search:false,align:'center',fixed:true, frozen : true, labelClasses: "jqgrid-rownumber"});
@@ -6813,7 +6820,7 @@ $.jgrid.extend({
 	},
 	addRowData : function(rowid, rdata, pos, src, addclass) {
 		if($.inArray( pos, ["first", "last", "before", "after"] ) === -1) {pos = "last";}
-		var success = false, nm, row, rnc="", msc="", gi, si, ni,sind, i, v, prp="", aradd, cnm, data, cm, id;
+		var success = false, nm, row, rnc="", msc="", del="", gi, si, ni,sind, i, v, prp="", aradd, cnm, data, cm, id;
 		
 		// 정인선 신규데이터 상태값 C 추가
 		if(rdata.jqFlag === undefined || rdata.jqFlag === '')
@@ -6854,6 +6861,10 @@ $.jgrid.extend({
 				if(gi) {
 					msc = $(t).jqGrid('getStyleUI',t.p.styleUI+".base",'multiBox', false, 'cbox');
 				}
+				// 정인선 삭제 체크박스
+				if(t.p.delselect){
+					del = $(t).jqGrid('getStyleUI',t.p.styleUI+".base",'multiBox', false, 'cbox');
+				}
 				while(k < datalen) {
 					data = rdata[k];
 					row=[];
@@ -6879,16 +6890,26 @@ $.jgrid.extend({
 						prp = t.formatCol(ni,1,'', null, rowid, true);
 						row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
 					}
+					
+					// 정인선 삭제 체크박스
+					if(t.p.delselect){
+						v = "<input role=\"checkbox\" type=\"checkbox\""+" id=\"jqg_"+t.p.id+"_"+rowid+"\" "+del+"/>";
+						prp = t.formatCol(ni,1,'', null, rowid, true);
+						row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
+					}
 					if(si) {
 						row[row.length] = $(t).jqGrid("addSubGridCell",gi+ni,1);
 					}
 					for(i = gi+si+ni; i < t.p.colModel.length;i++){
 						cm = t.p.colModel[i];
 						nm = cm.name;
-						lcdata[nm] = data[nm];
-						v = t.formatter( rowid, $.jgrid.getAccessor(data,nm), i, data );
-						prp = t.formatCol(i,1,v, data, rowid, lcdata);
-						row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
+						// 정인선 삭제 체크박스
+						if(nm !== 'cb'){
+							lcdata[nm] = data[nm];
+							v = t.formatter( rowid, $.jgrid.getAccessor(data,nm), i, data );
+							prp = t.formatCol(i,1,v, data, rowid, lcdata);
+							row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
+						}
 					}
 					row[row.length] = "<td role=\"gridcell\" "+"style='height:0px;width:100%;'"+"></td>";
 					row.unshift( t.constructTr(rowid, false, classes, lcdata, data ) );

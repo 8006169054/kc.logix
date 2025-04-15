@@ -47,8 +47,10 @@ var partnerTableColNames = [[#{basic.partner.table.cols}]];
 				<div class="col-100">
 					<div class="card">
 						<div class="card-header text-right">
-							<button class="btn btn-success" id="add" data-toggle="modal" data-target="#partner-popup" th:text="#{common.button.label.add}"></button>
-							<button class="btn btn-danger" onclick="deletePartner()" th:text="#{common.button.label.delete}"></button>
+<!-- 							<button class="btn btn-success" id="add" data-toggle="modal" data-target="#partner-popup" th:text="#{common.button.label.add}"></button> -->
+							<button class="btn btn-success" id="add" onclick="gridAdd()" th:text="#{common.button.label.add}"></button>
+							<button class="btn btn-success" id="save" onclick="gridSave()" th:text="#{common.button.label.save}"></button>
+<!-- 							<button class="btn btn-danger" onclick="deletePartner()" th:text="#{common.button.label.delete}"></button> -->
 						</div>
 						<div class="card-body p-0">
 							<div class="table-responsive" style="overflow: hidden;">
