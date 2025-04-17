@@ -49,6 +49,89 @@ requestFileDownload = async (method, url, params, fileName) => {
 		.finally(function() { loding(false); });
 };
 
+/**
+ * 파일 업로드
+ */
+requestFormDataApi = async (method, url, formData, option) => {
+	let responseHeaders = {};
+	let responseHeaderJSON = {};
+	//let autoMessage = (option != undefined && option.message != undefined) ? option.message : true;
+	let headers = {
+//		'Content-Type': method?.match(/(POST|PUT|PATCH|DELETE)/) ? 'application/json' : 'text/plain',
+		'Authorization': sessionStorage.getItem("kainos") === null ? '' : 'Bearer ' + sessionStorage.getItem("kainos")
+	};
+	loding(true);
+	return await fetch(`${url}`, {
+		mode: 'cors',
+		headers: headers,
+		cache: 'no-cache',
+		credentials: 'include',
+		method: method,
+		enctype: 'multipart/form-data', // * 중요 *
+		body: formData
+	})
+	.then(function(response) {
+		responseStatus = response.status;
+        responseHeaders = response.headers;
+        for (let pair of responseHeaders.entries()) {
+			responseHeaderJSON[pair[0]] = pair[1];
+		}
+		if($.cookie('kainos') === '' || $.cookie('kainos') === undefined){
+			if(responseHeaderJSON.authorization){
+				const token = responseHeaderJSON.authorization.split('Bearer ')[1];
+				sessionStorage.setItem("kainos", token);
+				$.cookie('kainos', token);
+			}
+		}
+		switch (response.status) {
+			case 200:
+				return response.json();
+
+			case 204:
+				return undefined;
+
+			case 403:
+				$.removeCookie('kainos', { path: '/view' });
+				$.removeCookie('kainos-lang', { path: '/' });
+				location.replace("/view/home");
+				return undefined;
+
+			default:
+				return response;
+		}
+	})
+	.then(function(response) {
+		switch (!!(responseStatus >= 200 && responseStatus < 300)) {
+			case true:
+				if(response.common.status === 'E' && response.common.message != undefined )
+					swal('', response.common.message, 'error').then((selection) => {
+				      if (selection)
+				      	if(option.errorFn !== undefined)
+				      		option.errorFn(response);
+				    });				
+				else if(response.common.status === 'S' && response.common.message != undefined )
+					swal('', response.common.message, 'success').then((selection) => {
+				      if (selection)
+				      	if(option.successFn !== undefined)
+				      		option.successFn(response);
+				    });				
+				else
+					return response;
+
+			default:
+				throw Error(`${response.status} , messages : ${response.error}`);
+		}
+	})
+	.catch(function(error) {
+		console.log('error : ', error);
+		//      oLoader(false);
+		//      Swal.fire("", Error(`${error}`).message, "error");
+		throw Error(`${error}`).message;
+	})
+	.finally(function() { loding(false); });
+};
+
+
 /** Server API 호출 기능 */
 requestApi = async (method, url, params, option) => {
 	let responseHeaders = {};
