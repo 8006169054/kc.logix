@@ -14,6 +14,7 @@ async function upload(customFile) {
     response = await requestFormDataApi('POST', '/api/basic/excel-upload', frm);
     $(tableName).clearGridData();
 	$(tableName).searchData(response.data, {frozen:true});
+	document.getElementById("customFile").value=null;
 }
 
 /**
