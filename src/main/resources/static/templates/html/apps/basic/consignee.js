@@ -33,7 +33,7 @@ function consigneeTableInit(){
 		width: '100%',
 		delselect: true,
 		multiselect: true,
-		//cellEdit : true,
+		cellEdit : true,
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
 //			Object.assign(consigneeData, ComRowData(this.id, iRow));
 //			$('#add').click();

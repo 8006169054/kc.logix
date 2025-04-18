@@ -5887,11 +5887,11 @@ $.fn.jqGrid = function( pin ) {
 					if(ts.p.iRow !== ts.p.savedRow[0].id && s.p.iCol !== ts.p.savedRow[0].ic)
 						$(ts).jqGrid("saveCell", ts.p.savedRow[0].id, ts.p.savedRow[0].ic);
 				}
-				
-				if($(td).closest("td,th")[0].getAttribute('aria-describedby') === 'consignee-table_deletcb'){
-					$(ts).jqGrid("checKedDelRow", ptr[0].id, ts.p.iCol, $(td).closest("td,th")[0].children[0].checked);
-					return;
-				}
+				if($(td).closest("td,th")[0] !== undefined)
+					if($(td).closest("td,th")[0].getAttribute('aria-describedby') === 'consignee-table_deletcb'){
+						$(ts).jqGrid("checKedDelRow", ptr[0].id, ts.p.iCol, $(td).closest("td,th")[0].children[0].checked);
+						return;
+					}
 				
 				if($(ptr).length === 0 || ptr[0].className.indexOf( disabled ) > -1 || ($(td,ts).closest("table.ui-jqgrid-btable").attr('id') || '').replace("_frozen","") !== ts.id ) {
 					return this;
@@ -5910,7 +5910,7 @@ $.fn.jqGrid = function( pin ) {
 					$(e.target).prop('checked',!$(e.target).prop('checked'));
 				}
 
-				if (td.tagName === 'A' || ((td.tagName === 'INPUT' || td.tagName === 'TEXTAREA' || td.tagName === 'OPTION' || td.tagName === 'SELECT' ) &&  !scb && !dcb && !(td.tagName === 'INPUT' && td.id.startsWith("jqs_"+ts.p.id))) )  { 
+				if (td.tagName === 'A' || ((td.tagName === 'INPUT' || td.tagName === 'TEXTAREA' || td.tagName === 'OPTION' || td.tagName === 'SELECT' ) &&  !scb && !(td.tagName === 'INPUT' && td.id.startsWith("jqs_"+ts.p.id))) )  { 
 					if($(e.target).prop("type") === 'checkbox'){
 						if(ts.p.savedRow.length > 0){
 							$(ts).jqGrid("saveCell", ts.p.savedRow[0].id, ts.p.savedRow[0].ic);
@@ -6822,7 +6822,7 @@ $.jgrid.extend({
 		if(checked)
 			$(t).jqGrid('setCell', iRow, 'jqFlag', 'D' );
 		else{
-			$(t).jqGrid("afterSaveJqFlag", iRow, t[0].p.basedata[iRow-1], true);
+			$(t).jqGrid("afterSaveJqFlag", iRow, t[0].p.basedata[iRow-1]);
 //			afterSaveJqFlag(t, iRow, t[0].p.basedata[iRow-1]);
 		}
 	},
@@ -6920,7 +6920,7 @@ $.jgrid.extend({
 							prp = t.formatCol(i,1,'', null, rowid, true);
 							row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
 						}else if(nm === 'deletcb') {
-							v = "<input role=\"checkbox\" type=\"checkbox\""+" id=\"jqg_"+t.p.id+"_"+rowid+"\" "+del+"/>";
+							v = "<input role=\"checkbox\" type=\"checkbox\""+" id=\"delete_"+t.p.id+"_"+rowid+"\" "+del+"/>";
 							prp = t.formatCol(i,1,'', null, rowid, true);
 							row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
 						}else{
@@ -7620,37 +7620,38 @@ $.jgrid.extend({
 			}
 		});
 	},
-	afterSaveJqFlag : function(iRow, oRowData, deleteCheck) {
+	afterSaveJqFlag : function(iRow, oRowData) {
 		var $t = this;
+		var deleteChecked = $('#' + 'delete_' + $t[0].id + '_' + iRow).is(":checked");
+		if(deleteChecked) return;
+		
 		var iRowData = $($t).jqGrid('getRowData', iRow);
 		let jqFlag = "R";
-		if(deleteCheck){
-			/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
-			if(oRowData !== undefined){
-				let keys = Object.keys(oRowData);
-				/* 수정 시 */
-				if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
-					$(keys).each(function(i ,key){
-						if(key !== 'jqFlag'){
-							if(iRowData[key] !== oRowData[key]) {
-								jqFlag = 'U';
-								return false;
-							}
+		/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
+		if(oRowData !== undefined){
+			let keys = Object.keys(oRowData);
+			/* 수정 시 */
+			if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
+				$(keys).each(function(i ,key){
+					if(key !== 'jqFlag'){
+						if(iRowData[key] !== oRowData[key]) {
+							jqFlag = 'U';
+							return false;
 						}
-					});
-				}
-				else if(iRowData.jqFlag === 'D'){
-					$(keys).each(function(i ,key){
-						if(key !== 'jqFlag'){
-							if(iRowData[key] !== oRowData[key]) {
-								jqFlag = 'U';
-								return false;
-							}
-						}
-					});
-				}
-				$($t).jqGrid('setCell', iRow, 'jqFlag', jqFlag);
+					}
+				});
 			}
+			else if(iRowData.jqFlag === 'D'){
+				$(keys).each(function(i ,key){
+					if(key !== 'jqFlag'){
+						if(iRowData[key] !== oRowData[key]) {
+							jqFlag = 'U';
+							return false;
+						}
+					}
+				});
+			}
+			$($t).jqGrid('setCell', iRow, 'jqFlag', jqFlag);
 		}
 	},
 	setCell : function(rowid,colname,nData,cssp,attrp, forceupd) {
@@ -7701,6 +7702,8 @@ $.jgrid.extend({
 							var fcell = $(tcell).clone();
 							$("#"+rowid +" td", "#" + $.jgrid.jqID($t.p.id + "_frozen") ).eq( pos ).replaceWith(fcell);
 						}
+						if(colname !== 'jqFlag') 
+							$($t).jqGrid("afterSaveJqFlag", rowid, $t.p.basedata[rowid-1]);
 					}
 				}
 			}
@@ -9220,7 +9223,7 @@ $.jgrid.extend({
 				if(i > 0)
 					$($t).jqGrid("setCell", iRow+i, iCol, cellData, false, false, true);
 				
-				$($t).jqGrid("afterSaveJqFlag", iRow+i, $t.p.basedata[(iRow+i)-1], false);
+				$($t).jqGrid("afterSaveJqFlag", iRow+i, $t.p.basedata[(iRow+i)-1]);
 				//afterSaveJqFlag($t, iRow+i, $t.p.basedata[(iRow+i)-1]);
 			}
 		});
