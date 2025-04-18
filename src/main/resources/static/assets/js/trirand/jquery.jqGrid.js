@@ -5887,12 +5887,16 @@ $.fn.jqGrid = function( pin ) {
 					if(ts.p.iRow !== ts.p.savedRow[0].id && s.p.iCol !== ts.p.savedRow[0].ic)
 						$(ts).jqGrid("saveCell", ts.p.savedRow[0].id, ts.p.savedRow[0].ic);
 				}
-					
+				
+				if($(td).closest("td,th")[0].getAttribute('aria-describedby') === 'consignee-table_deletcb'){
+					$(ts).jqGrid("checKedDelRow", ptr[0].id, ts.p.iCol, $(td).closest("td,th")[0].children[0].checked);
+					return;
+				}
+				
 				if($(ptr).length === 0 || ptr[0].className.indexOf( disabled ) > -1 || ($(td,ts).closest("table.ui-jqgrid-btable").attr('id') || '').replace("_frozen","") !== ts.id ) {
 					return this;
 				}
 				var scb = $(td).filter(":enabled").hasClass("cbox");
-				var dcb = $(td).filter(":enabled").hasClass("dbox");
 				var cSel = $(ts).triggerHandler("jqGridBeforeSelectRow", [ptr[0].id, e]);
 				cSel = (cSel === false || cSel === 'stop') ? false : true;
 				
@@ -5940,6 +5944,7 @@ $.fn.jqGrid = function( pin ) {
 
 					ts.p.iCol = ci; ts.p.iRow = ptr[0].rowIndex; ts.p.iRowId = ptr[0].rowIndex;
 				}
+				
 				if(ts.p.cellEdit === true && !ts.p.ariaBody) {
 					if(ts.p.multiselect && scb && cSel){
 						$(ts).jqGrid("setSelection", ri ,true,e);
@@ -5948,7 +5953,6 @@ $.fn.jqGrid = function( pin ) {
 							$(ts).jqGrid("editCell", ptr[0].rowIndex, ci, true, e);
 						} catch (_) {}
 					}
-					
 					return;
 				}
 				if (td.length > 0) {
@@ -6010,7 +6014,7 @@ $.fn.jqGrid = function( pin ) {
 						window.getSelection().removeAllRanges();
 					}
 					selectMultiRow( ri, scb, e, false );
-				} else if ( !ts.p.multikey && !dcb ) {
+				} else if ( !ts.p.multikey) {
 					selectMultiRow( ri, scb, e, true );
 				} else {
 					if(e[ts.p.multikey]) {
@@ -6019,10 +6023,6 @@ $.fn.jqGrid = function( pin ) {
 						scb = $("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+ri).is(":checked");
 						$("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+ri)[ts.p.useProp ? 'prop' : 'attr']("checked", !scb);
 					}
-				}
-				
-				if($(td).closest("td,th")[0].getAttribute('aria-describedby') === 'consignee-table_deletcb'){
-					$(ts).jqGrid("checKedDelRow", ri, ts.p.iCol, $(td).closest("td,th")[0].children[0].checked);
 				}
 			},
 			'reloadGrid': function(e,opts) {
@@ -6822,7 +6822,7 @@ $.jgrid.extend({
 		if(checked)
 			$(t).jqGrid('setCell', iRow, 'jqFlag', 'D' );
 		else{
-			$(t).jqGrid("afterSaveJqFlag", iRow, t[0].p.basedata[iRow-1]);
+			$(t).jqGrid("afterSaveJqFlag", iRow, t[0].p.basedata[iRow-1], true);
 //			afterSaveJqFlag(t, iRow, t[0].p.basedata[iRow-1]);
 		}
 	},
@@ -7620,35 +7620,37 @@ $.jgrid.extend({
 			}
 		});
 	},
-	afterSaveJqFlag : function(iRow, oRowData) {
+	afterSaveJqFlag : function(iRow, oRowData, deleteCheck) {
 		var $t = this;
 		var iRowData = $($t).jqGrid('getRowData', iRow);
 		let jqFlag = "R";
-		/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
-		if(oRowData !== undefined){
-			let keys = Object.keys(oRowData);
-			/* 수정 시 */
-			if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
-				$(keys).each(function(i ,key){
-					if(key !== 'jqFlag'){
-						if(iRowData[key] !== oRowData[key]) {
-							jqFlag = 'U';
-							return false;
+		if(deleteCheck){
+			/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
+			if(oRowData !== undefined){
+				let keys = Object.keys(oRowData);
+				/* 수정 시 */
+				if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
+					$(keys).each(function(i ,key){
+						if(key !== 'jqFlag'){
+							if(iRowData[key] !== oRowData[key]) {
+								jqFlag = 'U';
+								return false;
+							}
 						}
-					}
-				});
-			}
-			else if(iRowData.jqFlag === 'D'){
-				$(keys).each(function(i ,key){
-					if(key !== 'jqFlag'){
-						if(iRowData[key] !== oRowData[key]) {
-							jqFlag = 'U';
-							return false;
+					});
+				}
+				else if(iRowData.jqFlag === 'D'){
+					$(keys).each(function(i ,key){
+						if(key !== 'jqFlag'){
+							if(iRowData[key] !== oRowData[key]) {
+								jqFlag = 'U';
+								return false;
+							}
 						}
-					}
-				});
+					});
+				}
+				$($t).jqGrid('setCell', iRow, 'jqFlag', jqFlag);
 			}
-			$($t).jqGrid('setCell', iRow, 'jqFlag', jqFlag);
 		}
 	},
 	setCell : function(rowid,colname,nData,cssp,attrp, forceupd) {
@@ -9218,7 +9220,7 @@ $.jgrid.extend({
 				if(i > 0)
 					$($t).jqGrid("setCell", iRow+i, iCol, cellData, false, false, true);
 				
-				$($t).jqGrid("afterSaveJqFlag", iRow+i, $t.p.basedata[(iRow+i)-1]);
+				$($t).jqGrid("afterSaveJqFlag", iRow+i, $t.p.basedata[(iRow+i)-1], false);
 				//afterSaveJqFlag($t, iRow+i, $t.p.basedata[(iRow+i)-1]);
 			}
 		});
