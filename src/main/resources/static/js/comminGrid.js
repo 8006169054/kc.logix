@@ -12,26 +12,36 @@ function ComSelectGridData(gridname, rowid, iCol){
 /**
  * 데이터 변경 시 jqFlag 상태값 체크 로직 jquery.jqGrid.js 호출 - saveCell : function (iRow, iCol, over_value)
  */
-function afterSaveJqFlag(grid, rowid, iRow, oRowData){
-	var iRowData = $(grid).getRowData(iRow);	
-	let jqFlag = "R";
-	/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
-	if(oRowData !== undefined){
-		if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
-			let keys = Object.keys(oRowData);
-			$(keys).each(function(i ,key){
-				if(key !== 'jqFlag'){
-					if(iRowData[key] !== oRowData[key]) {
-						jqFlag = 'U';
-						return false;
-					}
-				}
-			});
-			
-			$(grid).setCell(iRow, 'jqFlag', jqFlag);
-		}
-	}
-}
+//function afterSaveJqFlag(grid, iRow, oRowData){
+//	var iRowData = $(grid).getRowData(iRow);	
+//	let jqFlag = "R";
+//	/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
+//	if(oRowData !== undefined){
+//		let keys = Object.keys(oRowData);
+//		/* 수정 시 */
+//		if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
+//			$(keys).each(function(i ,key){
+//				if(key !== 'jqFlag'){
+//					if(iRowData[key] !== oRowData[key]) {
+//						jqFlag = 'U';
+//						return false;
+//					}
+//				}
+//			});
+//		}
+//		else if(iRowData.jqFlag === 'D'){
+//			$(keys).each(function(i ,key){
+//				if(key !== 'jqFlag'){
+//					if(iRowData[key] !== oRowData[key]) {
+//						jqFlag = 'U';
+//						return false;
+//					}
+//				}
+//			});
+//		}
+//		$(grid).setCell(iRow, 'jqFlag', jqFlag);
+//	}
+//}
 
 
 

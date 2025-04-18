@@ -16,9 +16,9 @@ function consigneeTableInit(){
 	   	datatype: "json",
 	   	colNames: consigneeTableColNames.split(','),
 	   	colModel: [
-			{ name: 'jqFlag', 			width: 70, 		align:'center', hidden : true},
+			{ name: 'jqFlag', 			width: 70, 		align:'center', hidden : false},
 	       	{ name: 'code', 			width: 70, 		align:'center', hidden : true},
-	       	{ name: 'name', 			width: 150, 	align:'center'},
+	       	{ name: 'name', 			width: 150, 	align:'center', editable: true},
 	       	{ name: 'contactName', 		width: 150, 	align:'center'},
 	       	{ name: 'contactPerson', 	width: 130, 	align:'center'},
 	    	{ name: 'addressOne', 		width: 180, 	align:'center'},
@@ -31,10 +31,13 @@ function consigneeTableInit(){
 	   	],
 		height: 500, 
 		width: '100%',
+		delselect: true,
 		multiselect: true,
+		//cellEdit : true,
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
-			Object.assign(consigneeData, ComRowData(this.id, iRow));
-			$('#add').click();
+//			Object.assign(consigneeData, ComRowData(this.id, iRow));
+//			$('#add').click();
+			console.log('ondblClickRow', ComMultiSelectRow('#consignee-table'));
 		}
 	});
 }

@@ -2334,6 +2334,7 @@ $.fn.jqGrid = function( pin ) {
 			scrollTimeout: 40,
 			data : [],
 			basedata : [], // 정인선 데이터 상테 체크용
+			deleteRows : [],
 			_index : {},
 			grouping : false,
 			groupingView : {
@@ -2730,6 +2731,7 @@ $.fn.jqGrid = function( pin ) {
 			return !isNaN(val) ? val : defval;
 		},
 		formatCol = function (pos, rowInd, tv, rawObject, rowId, rdata){
+			
 			var cm = ts.p.colModel[pos], cellAttrFunc,
 			ral = cm.align, result="style=\"", clas = cm.classes, nm = cm.name, celp, acp=[];
 			if(ral) { result += "text-align:"+ral+";"; }
@@ -5414,7 +5416,7 @@ $.fn.jqGrid = function( pin ) {
 		// 정인선 삭제 체크박스
 		if(this.p.delselect) {
 			this.p.colNames.unshift("Del");
-			this.p.colModel.unshift({name:'cb',width:$.jgrid.cell_width ? ts.p.multiselectWidth+ts.p.cellLayout : ts.p.multiselectWidth,sortable:false,resizable:false,hidedlg:true,search:false,align:'center',fixed:true, frozen: true, classes : "jqgrid-multibox", labelClasses: "jqgrid-multibox" });
+			this.p.colModel.unshift({name:'deletcb',width:$.jgrid.cell_width ? ts.p.multiselectWidth+ts.p.cellLayout : ts.p.multiselectWidth,sortable:false,resizable:false,hidedlg:true,search:false,align:'center',fixed:true, frozen: true, classes : "jqgrid-multibox", labelClasses: "jqgrid-multibox" });
 		}
 		if(this.p.rownumbers) {
 			this.p.colNames.unshift("");
@@ -5889,9 +5891,11 @@ $.fn.jqGrid = function( pin ) {
 				if($(ptr).length === 0 || ptr[0].className.indexOf( disabled ) > -1 || ($(td,ts).closest("table.ui-jqgrid-btable").attr('id') || '').replace("_frozen","") !== ts.id ) {
 					return this;
 				}
-				var scb = $(td).filter(":enabled").hasClass("cbox"),
-				cSel = $(ts).triggerHandler("jqGridBeforeSelectRow", [ptr[0].id, e]);
+				var scb = $(td).filter(":enabled").hasClass("cbox");
+				var dcb = $(td).filter(":enabled").hasClass("dbox");
+				var cSel = $(ts).triggerHandler("jqGridBeforeSelectRow", [ptr[0].id, e]);
 				cSel = (cSel === false || cSel === 'stop') ? false : true;
+				
 				if ($.jgrid.isFunction(ts.p.beforeSelectRow)) {
 					var allowRowSelect = ts.p.beforeSelectRow.call(ts, ptr[0].id, e);
 					if (allowRowSelect === false || allowRowSelect === 'stop') {
@@ -5902,13 +5906,12 @@ $.fn.jqGrid = function( pin ) {
 					$(e.target).prop('checked',!$(e.target).prop('checked'));
 				}
 
-				if (td.tagName === 'A' || ((td.tagName === 'INPUT' || td.tagName === 'TEXTAREA' || td.tagName === 'OPTION' || td.tagName === 'SELECT' ) &&  !scb &&  !(td.tagName === 'INPUT' && td.id.startsWith("jqs_"+ts.p.id))) )  { 
+				if (td.tagName === 'A' || ((td.tagName === 'INPUT' || td.tagName === 'TEXTAREA' || td.tagName === 'OPTION' || td.tagName === 'SELECT' ) &&  !scb && !dcb && !(td.tagName === 'INPUT' && td.id.startsWith("jqs_"+ts.p.id))) )  { 
 					if($(e.target).prop("type") === 'checkbox'){
 						if(ts.p.savedRow.length > 0){
 							$(ts).jqGrid("saveCell", ts.p.savedRow[0].id, ts.p.savedRow[0].ic);
 						}
 					}
-					//afterSaveJqFlag(ts, ts.p.id, ptr[0].rowIndex, ts.p.basedata[ptr[0].rowIndex-1]);
 					return; 
 				}
 				ri = ptr[0].id;
@@ -6007,7 +6010,7 @@ $.fn.jqGrid = function( pin ) {
 						window.getSelection().removeAllRanges();
 					}
 					selectMultiRow( ri, scb, e, false );
-				} else if ( !ts.p.multikey ) {
+				} else if ( !ts.p.multikey && !dcb ) {
 					selectMultiRow( ri, scb, e, true );
 				} else {
 					if(e[ts.p.multikey]) {
@@ -6016,6 +6019,10 @@ $.fn.jqGrid = function( pin ) {
 						scb = $("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+ri).is(":checked");
 						$("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+ri)[ts.p.useProp ? 'prop' : 'attr']("checked", !scb);
 					}
+				}
+				
+				if($(td).closest("td,th")[0].getAttribute('aria-describedby') === 'consignee-table_deletcb'){
+					$(ts).jqGrid("checKedDelRow", ri, ts.p.iCol, $(td).closest("td,th")[0].children[0].checked);
 				}
 			},
 			'reloadGrid': function(e,opts) {
@@ -6810,13 +6817,14 @@ $.jgrid.extend({
 
 		Object.assign($(t)[0].p.basedata,  $(t).jqGrid('getRowData'));
 	},
-	checKedDelRow : function() {
-		var t = this;	
-		let iRows = $(t)[0].p.selarrrow;
-		
-		$.each(iRows, function(index, iRow){
+	checKedDelRow : function(iRow, iCol, checked) {
+		var t = this;
+		if(checked)
 			$(t).jqGrid('setCell', iRow, 'jqFlag', 'D' );
-		});
+		else{
+			$(t).jqGrid("afterSaveJqFlag", iRow, t[0].p.basedata[iRow-1]);
+//			afterSaveJqFlag(t, iRow, t[0].p.basedata[iRow-1]);
+		}
 	},
 	addRowData : function(rowid, rdata, pos, src, addclass) {
 		if($.inArray( pos, ["first", "last", "before", "after"] ) === -1) {pos = "last";}
@@ -6863,8 +6871,9 @@ $.jgrid.extend({
 				}
 				// 정인선 삭제 체크박스
 				if(t.p.delselect){
-					del = $(t).jqGrid('getStyleUI',t.p.styleUI+".base",'multiBox', false, 'cbox');
+					del = $(t).jqGrid('getStyleUI',t.p.styleUI+".base",'multiBox', false, 'dbox');
 				}
+				
 				while(k < datalen) {
 					data = rdata[k];
 					row=[];
@@ -6885,26 +6894,36 @@ $.jgrid.extend({
 						prp = t.formatCol(0,1,'',null,rowid, true);
 						row[row.length] = "<td role=\"gridcell\" " + rnc +" "+prp+">0</td>";
 					}
-					if(gi) {
-						v = "<input role=\"checkbox\" type=\"checkbox\""+" id=\"jqg_"+t.p.id+"_"+rowid+"\" "+msc+"/>";
-						prp = t.formatCol(ni,1,'', null, rowid, true);
-						row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
-					}
 					
-					// 정인선 삭제 체크박스
-					if(t.p.delselect){
-						v = "<input role=\"checkbox\" type=\"checkbox\""+" id=\"jqg_"+t.p.id+"_"+rowid+"\" "+del+"/>";
-						prp = t.formatCol(ni,1,'', null, rowid, true);
-						row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
-					}
-					if(si) {
-						row[row.length] = $(t).jqGrid("addSubGridCell",gi+ni,1);
-					}
-					for(i = gi+si+ni; i < t.p.colModel.length;i++){
+					// 정인선 로직 변경으로 주석처리 6915라인 로직
+//					if(gi) {
+//						v = "<input role=\"checkbox\" type=\"checkbox\""+" id=\"jqg_"+t.p.id+"_"+rowid+"\" "+msc+"/>";
+//						prp = t.formatCol(ni,1,'', null, rowid, true);
+//						row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
+//					}
+//					if(t.p.delselect){
+//						v = "<input role=\"checkbox\" type=\"checkbox\""+" id=\"jqg_"+t.p.id+"_"+rowid+"\" "+del+"/>";
+//						prp = t.formatCol(ni,1,'', null, rowid, true);
+//						row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
+//					}
+//					정인선 용도를 몰라 주석
+//					if(si) {
+//						row[row.length] = $(t).jqGrid("addSubGridCell",gi+ni,1);
+//					}
+//					for(i = gi+si+ni; i < t.p.colModel.length;i++){
+					for(i = ni; i < t.p.colModel.length;i++){
 						cm = t.p.colModel[i];
 						nm = cm.name;
-						// 정인선 삭제 체크박스
-						if(nm !== 'cb'){
+						// 정인선 로직 변경 추가
+						if(nm === 'cb') {
+							v = "<input role=\"checkbox\" type=\"checkbox\""+" id=\"jqg_"+t.p.id+"_"+rowid+"\" "+msc+"/>";
+							prp = t.formatCol(i,1,'', null, rowid, true);
+							row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
+						}else if(nm === 'deletcb') {
+							v = "<input role=\"checkbox\" type=\"checkbox\""+" id=\"jqg_"+t.p.id+"_"+rowid+"\" "+del+"/>";
+							prp = t.formatCol(i,1,'', null, rowid, true);
+							row[row.length] = "<td role=\"gridcell\" "+prp+">"+v+"</td>";
+						}else{
 							lcdata[nm] = data[nm];
 							v = t.formatter( rowid, $.jgrid.getAccessor(data,nm), i, data );
 							prp = t.formatCol(i,1,v, data, rowid, lcdata);
@@ -7600,6 +7619,37 @@ $.jgrid.extend({
 				}
 			}
 		});
+	},
+	afterSaveJqFlag : function(iRow, oRowData) {
+		var $t = this;
+		var iRowData = $($t).jqGrid('getRowData', iRow);
+		let jqFlag = "R";
+		/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
+		if(oRowData !== undefined){
+			let keys = Object.keys(oRowData);
+			/* 수정 시 */
+			if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
+				$(keys).each(function(i ,key){
+					if(key !== 'jqFlag'){
+						if(iRowData[key] !== oRowData[key]) {
+							jqFlag = 'U';
+							return false;
+						}
+					}
+				});
+			}
+			else if(iRowData.jqFlag === 'D'){
+				$(keys).each(function(i ,key){
+					if(key !== 'jqFlag'){
+						if(iRowData[key] !== oRowData[key]) {
+							jqFlag = 'U';
+							return false;
+						}
+					}
+				});
+			}
+			$($t).jqGrid('setCell', iRow, 'jqFlag', jqFlag);
+		}
 	},
 	setCell : function(rowid,colname,nData,cssp,attrp, forceupd) {
 		return this.each(function(){
@@ -9168,7 +9218,8 @@ $.jgrid.extend({
 				if(i > 0)
 					$($t).jqGrid("setCell", iRow+i, iCol, cellData, false, false, true);
 				
-				afterSaveJqFlag($t, $t.rows[iRow].id, iRow+i, $t.p.basedata[(iRow+i)-1]);
+				$($t).jqGrid("afterSaveJqFlag", iRow+i, $t.p.basedata[(iRow+i)-1]);
+				//afterSaveJqFlag($t, iRow+i, $t.p.basedata[(iRow+i)-1]);
 			}
 		});
 	},
