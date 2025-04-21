@@ -17,13 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 import kainos.framework.core.lang.KainosBusinessException;
 import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
-import kainos.framework.core.support.jqgrid.RowSpenHandler;
 import kc.logix.apps.basic.port.dto.PostExcelReadDto;
 import kc.logix.apps.basic.port.service.PortService;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.entity.BasicPort;
 import kc.logix.common.util.MessageUtil;
 import kc.logix.common.util.excel.KainosExcelReadHandler;
+import kc.logix.common.util.excel.GridRowSpenHandler;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,7 +32,7 @@ public class PortController {
 	
 	private final PortService service;
 	private final MessageUtil message;
-	private final RowSpenHandler handler;
+	private final GridRowSpenHandler handler;
 	
 	@GetMapping(value = "/api/basic/port")
 	public ResponseEntity<BasicPort> selectPort(@RequestParam(required = false) String name) throws Exception {

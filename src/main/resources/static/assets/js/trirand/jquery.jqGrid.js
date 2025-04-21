@@ -6551,16 +6551,16 @@ $.jgrid.extend({
 					$t.p.selrow = (tpsr === undefined) ? null : tpsr;
 				}
 				// 정인선 체크박스 선택하지 않아도 체크박스 선택이되는 부분 주석처리 $("#jqg_"+$.jgrid.jqID($t.p.id)+"_"+$.jgrid.jqID(pt.id))[$t.p.useProp ? 'prop': 'attr']("checked",stat);
-				if(fid) {
-					if(isHight) {
-						if(ia === -1) {
-							$("#"+$.jgrid.jqID(selection), "#"+$.jgrid.jqID(fid)).addClass(highlight);
-						} else {
-							$("#"+$.jgrid.jqID(selection), "#"+$.jgrid.jqID(fid)).removeClass(highlight);
-						}
-					}
-					$("#jqg_"+$.jgrid.jqID($t.p.id)+"_"+$.jgrid.jqID(selection), "#"+$.jgrid.jqID(fid))[$t.p.useProp ? 'prop': 'attr']("checked",stat);
-				}
+//				if(fid) {
+//					if(isHight) {
+//						if(ia === -1) {
+//							$("#"+$.jgrid.jqID(selection), "#"+$.jgrid.jqID(fid)).addClass(highlight);
+//						} else {
+//							$("#"+$.jgrid.jqID(selection), "#"+$.jgrid.jqID(fid)).removeClass(highlight);
+//						}
+//					}
+//					$("#jqg_"+$.jgrid.jqID($t.p.id)+"_"+$.jgrid.jqID(selection), "#"+$.jgrid.jqID(fid))[$t.p.useProp ? 'prop': 'attr']("checked",stat);
+//				}
 				if( onsr ) {
 					$($t).triggerHandler("jqGridSelectRow", [pt.id, stat, e]);
 					if( $t.p.onSelectRow) { $t.p.onSelectRow.call($t, pt.id , stat, e); }

@@ -2,6 +2,7 @@ package kc.logix.common.util.excel;
 
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,8 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,7 +23,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import kainos.framework.core.support.excel.annotations.Field;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -68,20 +72,19 @@ public class KainosExcelReadHandler {
 							value = cell.getStringCellValue();
 							break;
 						case NUMERIC: // 숫자
-							if(DateUtil.isCellDateFormatted(cell)) {
-								cell.getCellStyle().setDataFormat((short)14);
-								value = cell.getDateCellValue().toString();
-								SimpleDateFormat recvSimpleFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-								SimpleDateFormat tranSimpleFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
-								Date data = recvSimpleFormat.parse(value);
-								value = tranSimpleFormat.format(data);
-							}else {
-								value = cell.getNumericCellValue() + "";
-							}
+						value = numericAndDateValue(cell);
 							break;
 						case FORMULA: // = 붙은 계산식 처리
 							FormulaEvaluator formulaEval = wb.getCreationHelper().createFormulaEvaluator();
-							value = formulaEval.evaluate(cell).formatAsString();
+							CellValue cellValue =  formulaEval.evaluate(cell);
+							switch (cell.getCachedFormulaResultType()) {
+								case NUMERIC:
+								value = numericAndDateValue(cell);
+							 		break;
+							 	default:
+									value = cellValue.getStringValue();
+								break;
+							 }
 							break;
 						case BLANK: // 빈칸
 							value = "" ;
@@ -92,6 +95,8 @@ public class KainosExcelReadHandler {
 						default:
 							break;
 					}
+					
+
 					rowMap.put(indexCell.get(cell.getColumnIndex()), value);
             	}
             	rows.add(rowMap);
@@ -112,16 +117,7 @@ public class KainosExcelReadHandler {
     	 	                	String value = null;
     	 	                	switch (cell.getCellType()) {
 	    							case NUMERIC: // 숫자
-	    								if(DateUtil.isCellDateFormatted(cell)) {
-	    									cell.getCellStyle().setDataFormat((short)14);
-	    									value = cell.getDateCellValue().toString();
-	    									SimpleDateFormat recvSimpleFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-	    									SimpleDateFormat tranSimpleFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
-	    									Date data = recvSimpleFormat.parse(value);
-	    									value = tranSimpleFormat.format(data);
-	    								}else {
-	    									value = cell.getNumericCellValue() + "";
-	    								}
+									value = numericAndDateValue(cell);
 	    								break;
 	    							default:
 	    								value = cell.toString();
@@ -147,6 +143,27 @@ public class KainosExcelReadHandler {
         }
         return KainosExcelReadHandler.this;
     }
+
+	/**
+	 * 날짜 데이터인지 numeric 인지 체크해서 데이터 리턴
+	 * @param cell
+	 * @return
+	 * @throws ParseException
+	 */
+	private String numericAndDateValue(Cell cell) throws ParseException {
+		String value;
+		if(DateUtil.isCellDateFormatted(cell)) {
+			cell.getCellStyle().setDataFormat((short)14);
+			value = cell.getDateCellValue().toString();
+			SimpleDateFormat recvSimpleFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+			SimpleDateFormat tranSimpleFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+			Date data = recvSimpleFormat.parse(value);
+			value = tranSimpleFormat.format(data);
+		}else {
+			value = cell.getNumericCellValue() + "";
+		}
+		return value;
+	}
 	
 	public List<Map<String, String>> getRows() {
 		return rows;
@@ -211,8 +228,8 @@ public class KainosExcelReadHandler {
 				Object excel = excelData.get(i);
 				java.lang.reflect.Field[] fields = excel.getClass().getDeclaredFields();
 				for (java.lang.reflect.Field field : fields) {
-					if(field.isAnnotationPresent(kainos.framework.core.support.excel.annotations.Field.class)) {
-						kainos.framework.core.support.excel.annotations.Field anno = field.getAnnotation(kainos.framework.core.support.excel.annotations.Field.class);
+					if(field.isAnnotationPresent(kc.logix.common.util.excel.Field.class)) {
+						kc.logix.common.util.excel.Field anno = field.getAnnotation(kc.logix.common.util.excel.Field.class);
 						String cell = indexCell.get(excelReadRowSpan.getColumnIndex());
 						if(cell.equalsIgnoreCase(anno.value())) {
 							field.setAccessible(true);

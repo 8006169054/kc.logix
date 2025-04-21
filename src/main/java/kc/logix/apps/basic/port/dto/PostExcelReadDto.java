@@ -1,6 +1,6 @@
 package kc.logix.apps.basic.port.dto;
 
-import kainos.framework.core.support.excel.annotations.Field;
+import kc.logix.common.util.excel.Field;
 import kainos.framework.core.support.jqgrid.dto.RowSpan;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
