@@ -1,3 +1,7 @@
+const C = '<img src="/assets/img/more.png" height="15px" value="C">';
+const U = '<img src="/assets/img/edit-button.png" height="15px" value="U">';
+const D = '<img src="/assets/img/delete.png" height="15px" value="D">';
+
 /**
 *
 * @license Guriddo jqGrid JS - v5.8.8 - 2025-02-20
@@ -6805,8 +6809,8 @@ $.jgrid.extend({
 	searchData : function(rdata, options) {
 		var t = this;	
 		$.each(rdata, function(index, data){
-			if(data.jqFlag === undefined || data.jqFlag === '')
-				data.jqFlag = "R";
+			if(data.jqFlag === undefined)
+				data.jqFlag = "";
 			
 			$(t).jqGrid('addRowData', index+1, data);
 		});
@@ -6831,7 +6835,7 @@ $.jgrid.extend({
 		if(checked){
 			/** 상태 값이 C 신규 건인지 확인 */
 			var jqFlag = $(t).jqGrid('getCell', iRow, 'jqFlag');
-			if(jqFlag === 'C'){
+			if(jqFlag === C){
 				swal({
 			      title: 'Delete',
 			      text: '새로 등록한 데이터 입니다. 삭제하시겠습니까?',
@@ -6848,7 +6852,7 @@ $.jgrid.extend({
 			    });
 			}
 			else{
-				$(t).jqGrid('setCell', iRow, 'jqFlag', 'D' );
+				$(t).jqGrid('setCell', iRow, 'jqFlag', D);
 			}
 		}
 			
@@ -6862,8 +6866,8 @@ $.jgrid.extend({
 		var success = false, nm, row, rnc="", msc="", del="", gi, si, ni,sind, i, v, prp="", aradd, cnm, data, cm, id;
 		
 		// 정인선 신규데이터 상태값 C 추가
-		if(rdata.jqFlag === undefined || rdata.jqFlag === '')
-			rdata.jqFlag = "C";
+		if(rdata.jqFlag === undefined )
+			rdata.jqFlag = C;
 		
 		if(rdata) {
 			if(Array.isArray(rdata)) {
@@ -7655,28 +7659,27 @@ $.jgrid.extend({
 		var $t = this;
 		var deleteChecked = $('#' + 'delete_' + $t[0].id + '_' + iRow).is(":checked");
 		if(deleteChecked) return;
-		console.log(deleteChecked, oRowData);
 		var iRowData = $($t).jqGrid('getRowData', iRow);
-		let jqFlag = "R";
+		let jqFlag = null;
 		/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
 		if(oRowData !== undefined){
 			let keys = Object.keys(oRowData);
 			/* 수정 시 */
-			if(oRowData.jqFlag === 'R' && iRowData.jqFlag !== 'D'){
+			if(oRowData.jqFlag === '' && iRowData.jqFlag !==D){
 				$(keys).each(function(i ,key){
 					if(key !== 'jqFlag'){
 						if(iRowData[key] !== oRowData[key]) {
-							jqFlag = 'U';
+							jqFlag = U;
 							return false;
 						}
 					}
 				});
 			}
-			else if(iRowData.jqFlag === 'D'){
+			else if(iRowData.jqFlag === D){
 				$(keys).each(function(i ,key){
 					if(key !== 'jqFlag'){
 						if(iRowData[key] !== oRowData[key]) {
-							jqFlag = 'U';
+							jqFlag = U;
 							return false;
 						}
 					}
@@ -7685,6 +7688,7 @@ $.jgrid.extend({
 			$($t).jqGrid('setCell', iRow, 'jqFlag', jqFlag);
 		}
 	},
+	
 	setCell : function(rowid,colname,nData,cssp,attrp, forceupd) {
 		return this.each(function(){
 			var $t = this, pos =-1, v, ind;

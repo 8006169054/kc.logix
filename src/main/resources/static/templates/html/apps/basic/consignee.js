@@ -41,8 +41,7 @@ function consigneeTableInit(){
 		}
 	});
 }
-
-
+        
 async function add(){
 	let rowId = $("#consignee-table").getGridParam("records");
 	$("#consignee-table").addRow(rowId);
