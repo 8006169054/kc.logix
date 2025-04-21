@@ -6817,10 +6817,41 @@ $.jgrid.extend({
 
 		Object.assign($(t)[0].p.basedata,  $(t).jqGrid('getRowData'));
 	},
+//	addRow : function(rowid, position) {
+//		console.log('addRow', rowid, position);
+//		var t = this
+//		var pos = $(t)[0].p.position;
+//		if(position !== undefined) pos = position;
+//		
+//		console.log('addRow', $(t)[0].p.initdata, pos);
+//		$($t).jqGrid('addRowData', p.rowID, $(t)[0].p.initdata, pos);
+//	},
 	checKedDelRow : function(iRow, iCol, checked) {
 		var t = this;
-		if(checked)
-			$(t).jqGrid('setCell', iRow, 'jqFlag', 'D' );
+		if(checked){
+			/** 상태 값이 C 신규 건인지 확인 */
+			var jqFlag = $(t).jqGrid('getCell', iRow, 'jqFlag');
+			if(jqFlag === 'C'){
+				swal({
+			      title: 'Delete',
+			      text: '새로 등록한 데이터 입니다. 삭제하시겠습니까?',
+			      icon: 'info',
+			      buttons: true,
+			      dangerMode: true,
+			    })
+			    .then((selection) => {
+			      if (selection)
+			      	$(t).jqGrid('delRowData', iRow);
+			      else{
+					$('#' + 'delete_' + $(t)[0].id + '_' + iRow).prop('checked', false);
+				  }
+			    });
+			}
+			else{
+				$(t).jqGrid('setCell', iRow, 'jqFlag', 'D' );
+			}
+		}
+			
 		else{
 			$(t).jqGrid("afterSaveJqFlag", iRow, t[0].p.basedata[iRow-1]);
 //			afterSaveJqFlag(t, iRow, t[0].p.basedata[iRow-1]);
@@ -7624,7 +7655,7 @@ $.jgrid.extend({
 		var $t = this;
 		var deleteChecked = $('#' + 'delete_' + $t[0].id + '_' + iRow).is(":checked");
 		if(deleteChecked) return;
-		
+		console.log(deleteChecked, oRowData);
 		var iRowData = $($t).jqGrid('getRowData', iRow);
 		let jqFlag = "R";
 		/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
@@ -17034,15 +17065,19 @@ $.jgrid.extend({
 			$($t).jqGrid('addRowData', p.rowID, p.initdata, p.position);
 			p.rowID = $t.p.idPrefix + p.rowID;
 			$("#"+$.jgrid.jqID(p.rowID), "#"+$.jgrid.jqID($t.p.id)).addClass("jqgrid-new-row");
-			if(p.useFormatter) {
-				$("#"+$.jgrid.jqID(p.rowID)+" .ui-inline-edit", "#"+$.jgrid.jqID($t.p.id)).click();
-			} else {
-				var opers = $t.p.prmNames,
-				oper = opers.oper;
-				p.addRowParams.extraparam[oper] = opers.addoper;
-				$($t).jqGrid('editRow', p.rowID, p.addRowParams);
-				$($t).jqGrid('setSelection', p.rowID);
-			}
+			
+			/**
+			 * 정인선 editRow 실행시 오류로 주석
+			 */
+//			if(p.useFormatter) {
+//				$("#"+$.jgrid.jqID(p.rowID)+" .ui-inline-edit", "#"+$.jgrid.jqID($t.p.id)).click();
+//			} else {
+//				var opers = $t.p.prmNames,
+//				oper = opers.oper;
+//				p.addRowParams.extraparam[oper] = opers.addoper;
+//				$($t).jqGrid('editRow', p.rowID, p.addRowParams);
+//				$($t).jqGrid('setSelection', p.rowID);
+//			}
 		});
 	},
 	inlineNav : function (elem, o) {

@@ -37,15 +37,9 @@ function consigneeTableInit(){
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
 //			Object.assign(consigneeData, ComRowData(this.id, iRow));
 //			$('#add').click();
-//			console.log('ondblClickRow', ComMultiSelectRow('#consignee-table'));
+			console.log('ondblClickRow', ComMultiSelectRow('#consignee-table'));
 		}
 	});
-}
-
-
-async function add(){
-	let rowId = $("#consignee-table").getGridParam("records");
-	$("#consignee-table").addRow(rowId);
 }
 
 async function deleteConsignee(){
