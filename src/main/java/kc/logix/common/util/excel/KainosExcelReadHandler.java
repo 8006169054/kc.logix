@@ -2,32 +2,23 @@ package kc.logix.common.util.excel;
 
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.binary.XSSFBSheetHandler.SheetContentsHandler;
-import org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable;
-import org.apache.poi.xssf.eventusermodel.XSSFReader;
-import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
-import org.apache.poi.xssf.model.StylesTable;
-import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
 import kainos.framework.core.support.excel.annotations.Field;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,12 +28,10 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 @SuppressWarnings("resource")
-public class KainosExcelReadHandler implements SheetContentsHandler {
+public class KainosExcelReadHandler {
 
 	@Builder.Default
 	private List<Map<String, String>> rows = new ArrayList<>();
-	@Builder.Default
-    private Map<String, String> row = new HashMap<>();
 	@Builder.Default
     private int startRowNum = 0;   
     private InputStream excel;
@@ -62,35 +51,56 @@ public class KainosExcelReadHandler implements SheetContentsHandler {
      */
 	public KainosExcelReadHandler readExcel() throws Exception {
 		IOUtils.setByteArrayMaxOverride(1000000000);
+		indexCellSetting();
         try {
-            // org.apache.poi.openxml4j.opc.OPCPackage
-            OPCPackage opc = OPCPackage.open(excel);
-            // org.apache.poi.xssf.eventusermodel.XSSFReader
-            XSSFReader xssfReader = new XSSFReader(opc);
-            // org.apache.poi.xssf.model.StylesTable
-            StylesTable styles = xssfReader.getStylesTable();
-            // org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable
-            ReadOnlySharedStringsTable strings = new ReadOnlySharedStringsTable(opc);
-            // 엑셀의 시트를 하나만 가져오기입니다.
-            InputStream inputStream = xssfReader.getSheetsData().next();
-            // org.xml.sax.InputSource
-            InputSource inputSource = new InputSource(inputStream);
-            // org.xml.sax.Contenthandler
-            ContentHandler handle = new XSSFSheetXMLHandler(styles, strings, KainosExcelReadHandler.this, false);
-            // XMLReader xmlReader = SAXHelper.newXMLReader(); // deprecated
-            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-            saxParserFactory.setNamespaceAware(true);
-            SAXParser parser    = saxParserFactory.newSAXParser();
-            XMLReader xmlReader = parser.getXMLReader();
-            xmlReader.setContentHandler(handle);
-            xmlReader.parse(inputSource);
-            
+        	OPCPackage opc = OPCPackage.open(excel);
+            XSSFWorkbook wb = new XSSFWorkbook(opc);
+            XSSFSheet sheet = wb.getSheetAt(0);
+            for (int i = startRowNum; i <= sheet.getLastRowNum(); i++) {
+            	Row row = sheet.getRow(i);
+            	Map<String, String> rowMap = new HashMap<>();
+            	Iterator<Cell> cellIterator = row.cellIterator();
+            	while (cellIterator.hasNext()) {
+            		Cell cell = cellIterator.next();
+            		String value = null;
+					switch (cell.getCellType()) {
+						case STRING: // 텍스트
+							value = cell.getStringCellValue();
+							break;
+						case NUMERIC: // 숫자
+							if(DateUtil.isCellDateFormatted(cell)) {
+								cell.getCellStyle().setDataFormat((short)14);
+								value = cell.getDateCellValue().toString();
+								SimpleDateFormat recvSimpleFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+								SimpleDateFormat tranSimpleFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+								Date data = recvSimpleFormat.parse(value);
+								value = tranSimpleFormat.format(data);
+							}else {
+								value = cell.getNumericCellValue() + "";
+							}
+							break;
+						case FORMULA: // = 붙은 계산식 처리
+							FormulaEvaluator formulaEval = wb.getCreationHelper().createFormulaEvaluator();
+							value = formulaEval.evaluate(cell).formatAsString();
+							break;
+						case BLANK: // 빈칸
+							value = "" ;
+							break;
+						case ERROR: // 에러난 처리 
+							value = cell.getErrorCellValue() +"";
+							break;
+						default:
+							break;
+					}
+					rowMap.put(indexCell.get(cell.getColumnIndex()), value);
+            	}
+            	rows.add(rowMap);
+            }
+                        
             if(rowSpan) {
-            	indexCellSetting();
-				XSSFSheet sheet = new XSSFWorkbook(opc).getSheetAt(0);
-    	        Iterator<Row> rowIterator = sheet.iterator();
-    	        while (rowIterator.hasNext()) {
-    	        	Row row = rowIterator.next();
+				
+            	for (int ii = startRowNum; ii < sheet.getLastRowNum(); ii++) {
+            		Row row = sheet.getRow(ii);
     	        	Iterator<Cell> cellIterator = row.cellIterator();
     	        	 while (cellIterator.hasNext()) {
     	        		 Cell cell = cellIterator.next();
@@ -99,20 +109,38 @@ public class KainosExcelReadHandler implements SheetContentsHandler {
     	 	        		int colIndex = region.getFirstColumn();
     	 	                int rowNum = region.getFirstRow(); 
     	 	                if (rowNum == cell.getRowIndex() && colIndex == cell.getColumnIndex()) {
+    	 	                	String value = null;
+    	 	                	switch (cell.getCellType()) {
+	    							case NUMERIC: // 숫자
+	    								if(DateUtil.isCellDateFormatted(cell)) {
+	    									cell.getCellStyle().setDataFormat((short)14);
+	    									value = cell.getDateCellValue().toString();
+	    									SimpleDateFormat recvSimpleFormat = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+	    									SimpleDateFormat tranSimpleFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+	    									Date data = recvSimpleFormat.parse(value);
+	    									value = tranSimpleFormat.format(data);
+	    								}else {
+	    									value = cell.getNumericCellValue() + "";
+	    								}
+	    								break;
+	    							default:
+	    								value = cell.toString();
+	    								break;
+    	 	                	}
+    	 	                	
     	 	                	rowSpanList.add(ExcelReadRowSpan.builder()
     	 	                			.ColumnIndex(colIndex)
     	 	                			.rowIndex(rowNum)
-    	 	                			.ColumnValue(sheet.getRow(rowNum).getCell(colIndex))
+    	 	                			.ColumnValue(value)
     	 	                			.startRowNum(region.getFirstRow() - startRowNum)
     	 	                			.rowspanCnt(region.getLastRow() - region.getFirstRow())
     	 	                			.build());
+    	 	                	
     	 	                }
     	 	        	}
     	        	 }
     	        }
             }
-            
-            inputStream.close();
             opc.close();
         } catch (Exception e) {
             throw e;
@@ -120,25 +148,6 @@ public class KainosExcelReadHandler implements SheetContentsHandler {
         return KainosExcelReadHandler.this;
     }
 	
-	@Override
-	public void endRow(int rowNum) {
-		if ( rowNum >= startRowNum ) {
-			Map<String, String> map = new HashMap<>();
-			map.putAll(row);
-			rows.add(map);
-		}
-		row.clear();
-	}
-
-	@Override
-	public void cell(String cellReference, String formattedValue, XSSFComment comment) {
-		row.put(cellReference.replaceAll("[^a-zA-Z]", "").toUpperCase(), formattedValue);
-	}
-
-	@Override
-	public void hyperlinkCell(String cellReference, String formattedValue, String url, String toolTip, XSSFComment comment) {
-	}
-
 	public List<Map<String, String>> getRows() {
 		return rows;
 	}
@@ -161,23 +170,7 @@ public class KainosExcelReadHandler implements SheetContentsHandler {
 			if ( annotation == null ) continue;
 			String index = annotation.value();
 			if(dateRow != null) {
-				try {
-					/* 포멧 변경 하겠다. */
-					String data = dateRow.get(index.toUpperCase());
-//					if(!annotation.format().equalsIgnoreCase("")) {
-//						Class<?> formatTypeCls = annotation.formatType();
-//						if(formatTypeCls.equals(Date.class)){
-//							SimpleDateFormat formatter = new SimpleDateFormat(annotation.format());
-//							Class<?> returnClss = annotation.returnType();
-//							if(returnClss.equals(Date.class))
-//								field.set(t, formatter.parse(data));
-//						}
-//					} else {
-						field.set(t, dateRow.get(index.toUpperCase()));
-//					}
-				}catch (Exception e) {
-					
-				}
+				field.set(t, dateRow.get(index.toUpperCase()));
 			}
 		}
 		return (T) t;
@@ -223,15 +216,7 @@ public class KainosExcelReadHandler implements SheetContentsHandler {
 						String cell = indexCell.get(excelReadRowSpan.getColumnIndex());
 						if(cell.equalsIgnoreCase(anno.value())) {
 							field.setAccessible(true);
-//							if(anno.formatType().equals(Date.class)){
-//								field.set(excel, excelReadRowSpan.getColumnValue().getDateCellValue());
-//							}
-//							else if(anno.formatType().equals(Double.class)){
-//								field.set(excel, excelReadRowSpan.getColumnValue().getNumericCellValue());
-//							}
-//							else {
-								field.set(excel, excelReadRowSpan.getColumnValue().toString());
-//							}
+							field.set(excel, excelReadRowSpan.getColumnValue());
 							break;
 						}
 					}
@@ -239,9 +224,6 @@ public class KainosExcelReadHandler implements SheetContentsHandler {
 			}
 		}
 	}
-	
-	@Override
-	public void startRow(int rowNum) {}
 	
 	public void rowSpan(boolean rowSpan) {
 		this.rowSpan = rowSpan;
