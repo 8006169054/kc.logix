@@ -31,7 +31,7 @@ function portTableInit(){
 	   	datatype: "json",
 	   	colNames: ['jqFlag', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', '	DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'DEM DAYS', 'TOTAL DEM', '반납DEPOT', 'DEM RCVD', 'DEM(USD)-매입', 'DEM 매출', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
-	   		{ name: 'jqFlag',				width: 70,		align:'center', 	hidden : false,	frozen:true},
+	   		{ name: 'jqFlag',				width: 70,		align:'center', 	hidden : true,	frozen:true},
 	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'arrivalNotice', 		width: 70, 		align:'center',		rowspan: true,	frozen:true},
@@ -72,8 +72,8 @@ function portTableInit(){
 	   	],
 		height: 650, 
 		width: '100%',
-		delselect: true,
-		multiselect: true,
+//		delselect: true,
+//		multiselect: true,
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
 //			Object.assign(portData, ComRowData(this.id, iRow));
 //			$('#add').click();

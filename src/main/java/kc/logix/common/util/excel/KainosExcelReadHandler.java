@@ -2,6 +2,7 @@ package kc.logix.common.util.excel;
 
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import java.util.Map;
 
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -27,7 +27,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Data
 @Builder
 @AllArgsConstructor
@@ -183,11 +185,21 @@ public class KainosExcelReadHandler {
 		java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
 		for (java.lang.reflect.Field field : fields) {
 			field.setAccessible(true);
-			Field annotation = field.getAnnotation(Field.class);
-			if ( annotation == null ) continue;
-			String index = annotation.value();
+			Field anno = field.getAnnotation(Field.class);
+			if ( anno == null ) continue;
+			String index = anno.value();
 			if(dateRow != null) {
-				field.set(t, dateRow.get(index.toUpperCase()));
+				String value = dateRow.get(index.toUpperCase());
+				if(!anno.stringFormat().equals("")) {
+					value = stringFormat(anno, value);
+				}
+				
+				if(!anno.function().equals("")) {
+					Method method = clazz.getDeclaredMethod(anno.function(), String.class);
+					value = (String) method.invoke(t, value);
+				}
+				
+				field.set(t, value);
 			}
 		}
 		return (T) t;
@@ -233,13 +245,38 @@ public class KainosExcelReadHandler {
 						String cell = indexCell.get(excelReadRowSpan.getColumnIndex());
 						if(cell.equalsIgnoreCase(anno.value())) {
 							field.setAccessible(true);
-							field.set(excel, excelReadRowSpan.getColumnValue());
+							String value = excelReadRowSpan.getColumnValue();
+							if(!anno.stringFormat().equals(""))
+								value = stringFormat(anno, value);
+							
+							if(!anno.function().equals("")) {
+								Method method = excel.getClass().getDeclaredMethod(anno.function(), String.class);
+								value = (String) method.invoke(excel, value);
+							}
+							
+							field.set(excel, value);
 							break;
 						}
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * 
+	 * @param anno
+	 * @param value
+	 * @return
+	 */
+	private String stringFormat(kc.logix.common.util.excel.Field anno, String value) {
+		try {
+			value = String.format(anno.stringFormat(), Double.valueOf(value));
+			if(!anno.prefix().equals("")) value = anno.prefix() + value;
+		}catch (Exception e) {
+//			log.error("stringFormat Error : " + anno.stringFormat() + " : " +  value);
+		}
+		return value;
 	}
 	
 	public void rowSpan(boolean rowSpan) {

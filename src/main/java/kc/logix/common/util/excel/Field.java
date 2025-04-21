@@ -14,5 +14,9 @@ public @interface Field {
 	public boolean merge() default false;
 	public boolean date() default false;
 	public boolean whitespace() default false;
+	public String stringFormat() default "";
+	public String prefix() default "";
+	public String function() default "";
+	
 	
 }

@@ -33,10 +33,10 @@ public class PostExcelReadDto {
 	@Field(value = "F", merge = true)
 	private String profitDate; //PROFIT DATE
 	
-	@Field(value = "G", merge = true)
+	@Field(value = "G", merge = true, stringFormat = "%.2f", prefix = "$")
 	private String domesticSales; //국내매출
 	
-	@Field(value = "H", merge = true)
+	@Field(value = "H", merge = true, stringFormat = "%.2f", prefix = "$")
 	private String foreignSales; //해외매출
 	
 	@Field(value = "I", merge = true)
@@ -99,14 +99,13 @@ public class PostExcelReadDto {
 	@Field(value = "AB")
 	private String estimateReturnDate; //ESTIMATE RETURN DATE
 	
-//	@Field(value = "AC", returnType = Date.class, format = "mm/dd/yy", formatType = Date.class)
 	@Field(value = "AC")
 	private String returnDate; //RETURN DATE
 	
-	@Field(value = "AD")
+	@Field(value = "AD", stringFormat = "%.0f", function = "demDaysCheck")
 	private String demDays; //DEM DAYS
 	
-	@Field(value = "AE")
+	@Field(value = "AE", stringFormat = "%.2f", prefix = "$")
 	private String totalDem; //TOTAL DEM
 	
 	@Field(value = "AF")
@@ -115,10 +114,10 @@ public class PostExcelReadDto {
 	@Field(value = "AG")
 	private String demRcvd; //DEM RCVD
 	
-	@Field(value = "AH")
+	@Field(value = "AH", stringFormat = "%.2f", prefix = "$")
 	private String demPrch; //DEM(USD)-매입
 	
-	@Field(value = "AI")
+	@Field(value = "AI", stringFormat = "%.2f", prefix = "$") // stringFormat 소주점 2자리
 	private String demSales; //DEM 매출
 	
 	@Field(value = "AJ")
@@ -170,4 +169,13 @@ public class PostExcelReadDto {
 		@Builder.Default
 		private RowSpan remark = RowSpan.builder().build();
 	};
+	
+	public String demDaysCheck(String value) {
+		try {
+			System.out.println("value : " + value);
+			int demDays = Integer.parseInt(value);
+			if(demDays < 0) return "N/A";
+		}catch (Exception e) {}
+		return value;
+	}
 }
