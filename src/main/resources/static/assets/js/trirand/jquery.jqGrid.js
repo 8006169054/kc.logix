@@ -4032,6 +4032,9 @@ $.fn.jqGrid = function( pin ) {
 			
 			// 정인선 복사 붙여넣기 이벤트 추가
 			$('#gbox_' + ts.p.id).on('paste', function(e) {
+				var type = $(':focus').attr('type');
+				if(type === 'text') return;
+				
 				e.stopPropagation();
 				e.preventDefault();
 	 
