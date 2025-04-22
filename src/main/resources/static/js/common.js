@@ -6,6 +6,19 @@ loding = async (type) => {
 };
 
 /**
+ * 달러포맷 변경
+ */
+function usMoneyConversion(start, cellvalue, end){
+	if(cellvalue.indexOf('.') > 0){
+		var cellvalues = cellvalue.split(".");
+		return start + cellvalues[0] + '.' + cellvalues[1].toString().padStart(2, '0') + end;
+	}
+	else {
+		return start + cellvalue + '.' + ''.toString().padStart(2, '0') + end;
+	}
+}
+
+/**
  * type = success , info, warning, error
  */
 function alertMessage(message, type){

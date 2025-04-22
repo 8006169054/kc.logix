@@ -1,7 +1,10 @@
 package kc.logix.apps.basic.port.dto;
 
-import kc.logix.common.util.excel.Field;
+import java.util.Date;
+
 import kainos.framework.core.support.jqgrid.dto.RowSpan;
+import kainos.framework.utils.KainosDateUtil;
+import kc.logix.common.util.excel.Field;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,10 +36,10 @@ public class PostExcelReadDto {
 	@Field(value = "F", merge = true)
 	private String profitDate; //PROFIT DATE
 	
-	@Field(value = "G", merge = true, stringFormat = "%.2f", prefix = "$")
+	@Field(value = "G", merge = true, function = "domesticSalesFn")
 	private String domesticSales; //국내매출
 	
-	@Field(value = "H", merge = true, stringFormat = "%.2f", prefix = "$")
+	@Field(value = "H", merge = true, function = "foreignSalesFn")
 	private String foreignSales; //해외매출
 	
 	@Field(value = "I", merge = true)
@@ -87,13 +90,13 @@ public class PostExcelReadDto {
 	@Field(value = "X", merge = true)
 	private String remark; //비고
 	
-	@Field(value = "Y")
+	@Field(value = "Y", function = "ftFn")
 	private String ft; //F/T
 	
-	@Field(value = "Z")
+	@Field(value = "Z", function = "demRateFn")
 	private String demRate; //DEM RATE
 	
-	@Field(value = "AA")
+	@Field(value = "AA", function = "endOfFtFn")
 	private String endOfFt; //END OF F/T
 	
 	@Field(value = "AB")
@@ -102,10 +105,10 @@ public class PostExcelReadDto {
 	@Field(value = "AC")
 	private String returnDate; //RETURN DATE
 	
-	@Field(value = "AD", stringFormat = "%.0f", function = "demDaysCheck")
+	@Field(value = "AD", function = "demDaysFn")
 	private String demDays; //DEM DAYS
 	
-	@Field(value = "AE", stringFormat = "%.2f", prefix = "$")
+	@Field(value = "AE", function = "totalDemFn")
 	private String totalDem; //TOTAL DEM
 	
 	@Field(value = "AF")
@@ -114,10 +117,10 @@ public class PostExcelReadDto {
 	@Field(value = "AG")
 	private String demRcvd; //DEM RCVD
 	
-	@Field(value = "AH", stringFormat = "%.2f", prefix = "$")
+	@Field(value = "AH", function = "demPrchFn")
 	private String demPrch; //DEM(USD)-매입
 	
-	@Field(value = "AI", stringFormat = "%.2f", prefix = "$") // stringFormat 소주점 2자리
+	@Field(value = "AI", function = "demSalesFn")
 	private String demSales; //DEM 매출
 	
 	@Field(value = "AJ")
@@ -128,6 +131,154 @@ public class PostExcelReadDto {
 	
 	@Builder.Default /* 필드명을 rowspan 해야 함 필수 */
 	private RowSpanOtion rowspan = RowSpanOtion.builder().build();
+	
+	/**
+	 * 포맷 변경
+	 * @param dateDto
+	 * @return
+	 */
+	public String foreignSalesFn(PostExcelReadDto dateDto) {
+		String value = "-";
+		try {
+			value = String.format("%.0f", Double.parseDouble(dateDto.getForeignSales()));
+		}catch (Exception e) {
+//			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	
+	/**
+	 * 포맷 변경
+	 * @param dateDto
+	 * @return
+	 */
+	public String demRateFn(PostExcelReadDto dateDto) {
+		String value = "-";
+		try {
+			value = String.format("%.0f", Double.parseDouble(dateDto.getDemRate()));
+		}catch (Exception e) {
+//			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	/**
+	 * 포맷 변경
+	 * @param dateDto
+	 * @return
+	 */
+	public String domesticSalesFn(PostExcelReadDto dateDto) {
+		String value = "-";
+		try {
+			value = String.format("%.0f", Double.parseDouble(dateDto.getDomesticSales()));
+		}catch (Exception e) {
+//			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	/**
+	 * 포맷 변경 소수점 삭제
+	 * @param dateDto
+	 * @return
+	 */
+	public String ftFn(PostExcelReadDto dateDto) {
+		String value = "-";
+		try {
+			value = String.format("%.0f", Double.parseDouble(dateDto.getFt()));
+		}catch (Exception e) {
+//			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	/**
+	 * 포맷 변경 마이너스일때 N/A 표기
+	 * @param dateDto
+	 * @return
+	 */
+	public String demDaysFn(PostExcelReadDto dateDto) {
+		String value = "N/A";
+		try {
+			if(!dateDto.getReturnDate().equals("N/A") && !dateDto.getEndOfFt().equals("N/A")) {
+				int dif = (int) ((KainosDateUtil.string2Date(dateDto.getReturnDate(), "yyyy-MM-dd").getTime()-KainosDateUtil.string2Date(dateDto.getEndOfFt(), "yyyy-MM-dd").getTime()) / (24*60*60*1000));
+//				System.out.println(dateDto.getReturnDate() + " : " + dateDto.getEndOfFt() + " : " + dif);
+				if(dif < 0) value = "N/A";
+				else value = String.valueOf(dif);
+			}
+		}catch (Exception e) {
+//			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	public String totalDemFn(PostExcelReadDto dateDto) {
+		String value = "N/A";
+		try {
+//			=IF($AC6<=$AA6,"N/A",(($AC6-$AA6)*$Z6))
+			if(!dateDto.getReturnDate().equals("N/A") && !dateDto.getEndOfFt().equals("N/A")) {
+				Date returnDate = KainosDateUtil.string2Date(dateDto.getReturnDate(), "yyyy-MM-dd");
+				Date endOfFt = KainosDateUtil.string2Date(dateDto.getEndOfFt(), "yyyy-MM-dd");
+				
+				if(returnDate.getTime() <= endOfFt.getTime()) {
+					value = "N/A";
+				}
+				else {
+					value = String.valueOf(((int)(returnDate.getTime()-endOfFt.getTime()) / (24*60*60*1000)) * Integer.parseInt(dateDto.getDemRate()));
+				}
+			}
+		}catch (Exception e) {
+//			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	public String demPrchFn(PostExcelReadDto dateDto) {
+		String value = "N/A";
+		try {
+//			=IFERROR(IF($AE7>0,$AE7*0.9,"N/A"),"N/A")
+			int totalDem = Integer.parseInt(dateDto.getTotalDem());
+			if(totalDem > 0) {
+				value = String.format("%.2f", totalDem * 0.9);
+			}
+		}catch (Exception e) {
+//			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	public String demSalesFn(PostExcelReadDto dateDto) {
+		String value = "N/A";
+		try {
+//			=IFERROR(IF(AE6>0,AE6*0.1,"N/A"),"N/A")
+			int totalDem = Integer.parseInt(dateDto.getTotalDem());
+			if(totalDem > 0) {
+				value = String.format("%.2f", totalDem * 0.1);
+			}
+		}catch (Exception e) {
+//			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	/**
+	 * 포맷 변경 (ETA 날짜보다 + (F/T-1))
+	 * @param dateDto
+	 * @return
+	 */
+	public String endOfFtFn(PostExcelReadDto dateDto) {
+		// ETA 날짜보다 + F/T
+		String value = "N/A";
+		try {
+			int ft = Integer.parseInt(dateDto.getFt());
+			value = KainosDateUtil.addDays(dateDto.getEta(), ft-1);
+		} catch (Exception e) {
+//			e.printStackTrace();
+		}
+		return value;
+	}
+	
 	
 	@Data
 	@Builder
@@ -169,13 +320,4 @@ public class PostExcelReadDto {
 		@Builder.Default
 		private RowSpan remark = RowSpan.builder().build();
 	};
-	
-	public String demDaysCheck(String value) {
-		try {
-			System.out.println("value : " + value);
-			int demDays = Integer.parseInt(value);
-			if(demDays < 0) return "N/A";
-		}catch (Exception e) {}
-		return value;
-	}
 }

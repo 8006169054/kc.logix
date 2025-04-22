@@ -97,7 +97,12 @@ public class PortController {
 						}
 					});
 			
+			
+			/* 필수 처리 */
+			excelReadHandler.objectCoypClose();
 			excelReadHandler.rowSapnCoyp(excelData);
+			excelReadHandler.customFunctionCall(excelData);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new KainosBusinessException("common.system.error");

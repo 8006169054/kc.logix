@@ -38,8 +38,8 @@ function portTableInit(){
 	       	{ name: 'invoice', 				width: 70, 		align:'center',		rowspan: true,	frozen:true},
 	    	{ name: 'concine', 				width: 150, 	align:'center',		rowspan: true,	frozen:true},
 	    	{ name: 'profitDate', 			width: 90, 		align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true},
+	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true, formatter: domesticSalesFn},
+	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true, formatter: foreignSalesFn},
 	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	    	{ name: 'partner', 				width: 120, 	align:'center',		frozen:true,	cellattr:idColorFmt},
 	    	{ name: 'tankNo', 				width: 140, 	align:'center',		frozen:true},
@@ -62,11 +62,11 @@ function portTableInit(){
 	       	{ name: 'estimateReturnDate', 	width: 160, 	align:'center'},
 	       	{ name: 'returnDate', 			width: 100, 	align:'center'},
 	       	{ name: 'demDays', 				width: 80, 		align:'center'},
-	       	{ name: 'totalDem', 			width: 100, 	align:'center'},
+	       	{ name: 'totalDem', 			width: 100, 	align:'center', formatter: totalDemFn},
 	       	{ name: 'returnDepot', 			width: 80, 		align:'center'},
 	       	{ name: 'demRcvd', 				width: 90, 		align:'center'},
-	       	{ name: 'demPrch', 				width: 100, 	align:'center'},
-	       	{ name: 'demSales', 			width: 100, 	align:'center'},
+	       	{ name: 'demPrch', 				width: 100, 	align:'center', formatter: demPrchFn},
+	       	{ name: 'demSales', 			width: 100, 	align:'center', formatter: demSalesFn},
 	       	{ name: 'depotInDate', 			width: 180, 	align:'center'},
 	       	{ name: 'repositionPrch', 		width: 120, 	align:'center'}
 	   	],
@@ -80,6 +80,46 @@ function portTableInit(){
 			console.log('ondblClickRow', ComMultiSelectRow(tableName));
 		}
 	});
+}
+
+/** 국내 매출 */
+function domesticSalesFn (cellvalue, options, rowObject ){
+	if(cellvalue !== '-'){
+		return usMoneyConversion('$', cellvalue, '');
+	} 
+	return cellvalue;
+}
+
+/** 국내 매출 */
+function foreignSalesFn (cellvalue, options, rowObject ){
+	if(cellvalue !== '-'){
+		return usMoneyConversion('$', cellvalue, '');
+	} 
+	return cellvalue;
+}
+
+/**  TOTAL DEM */
+function totalDemFn (cellvalue, options, rowObject ){
+	if(cellvalue !== 'N/A'){
+		return usMoneyConversion('US$', cellvalue, '');
+	} 
+	return cellvalue;
+}
+
+/**  DEM(USD)-매입 */
+function demPrchFn (cellvalue, options, rowObject ){
+	if(cellvalue !== 'N/A'){
+		return usMoneyConversion('US$', cellvalue, '');
+	} 
+	return cellvalue;
+}
+
+/**  DEM 매출 */
+function demSalesFn (cellvalue, options, rowObject ){
+	if(cellvalue !== 'N/A'){
+		return usMoneyConversion('US$', cellvalue, '');
+	} 
+	return cellvalue;
 }
 
 function idColorFmt( rowId, tv, rawObject, cm, rdata) {
