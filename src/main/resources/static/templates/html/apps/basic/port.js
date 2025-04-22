@@ -74,7 +74,7 @@ function portTableInit(){
 	       	{ name: 'depotInDate', 			width: 180, 	align:'center'},
 	       	{ name: 'repositionPrch', 		width: 120, 	align:'center'}
 	   	],
-		height: 650, 
+		height: 530, 
 		width: '100%',
 		dblEdit : true,
 //		delselect: true,
@@ -148,6 +148,11 @@ function idColorFmt( rowId, tv, rawObject, cm, rdata) {
 
 async function fileOpen(){
 	$('#customFile').click();
+}
+
+async function save(){
+	var saveData = $(tableName).saveGridData();
+	console.log(saveData);
 }
 
 async function deletePort(){

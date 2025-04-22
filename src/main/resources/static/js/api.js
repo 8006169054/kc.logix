@@ -1,7 +1,8 @@
 requestFileDownload = async (method, url, params, fileName) => {
+	let token = getToken();
 	let headers = {
 		'Content-Type': method?.match(/(POST|PUT|PATCH)/) ? 'application/json' : 'text/plain'
-		,'Authorization': sessionStorage.getItem("kainos") === null ? '' : 'Bearer ' + sessionStorage.getItem("kainos")
+		,'Authorization': token === null ? '' : 'Bearer ' + token
 	};
 	let body = (method || '').match(/(POST|PUT|PATCH)/) && params ? JSON.stringify(params) : null;
 
@@ -55,10 +56,9 @@ requestFileDownload = async (method, url, params, fileName) => {
 requestFormDataApi = async (method, url, formData, option) => {
 	let responseHeaders = {};
 	let responseHeaderJSON = {};
-	//let autoMessage = (option != undefined && option.message != undefined) ? option.message : true;
+	let token = getToken();
 	let headers = {
-//		'Content-Type': method?.match(/(POST|PUT|PATCH|DELETE)/) ? 'application/json' : 'text/plain',
-		'Authorization': sessionStorage.getItem("kainos") === null ? '' : 'Bearer ' + sessionStorage.getItem("kainos")
+		'Authorization': token === null ? '' : 'Bearer ' + token
 	};
 	loding(true);
 	return await fetch(`${url}`, {
@@ -76,13 +76,7 @@ requestFormDataApi = async (method, url, formData, option) => {
         for (let pair of responseHeaders.entries()) {
 			responseHeaderJSON[pair[0]] = pair[1];
 		}
-		if($.cookie('kainos') === '' || $.cookie('kainos') === undefined){
-			if(responseHeaderJSON.authorization){
-				const token = responseHeaderJSON.authorization.split('Bearer ')[1];
-				sessionStorage.setItem("kainos", token);
-				$.cookie('kainos', token);
-			}
-		}
+		setToken(responseHeaderJSON);
 		switch (response.status) {
 			case 200:
 				return response.json();
@@ -136,10 +130,10 @@ requestFormDataApi = async (method, url, formData, option) => {
 requestApi = async (method, url, params, option) => {
 	let responseHeaders = {};
 	let responseHeaderJSON = {};
-	//let autoMessage = (option != undefined && option.message != undefined) ? option.message : true;
+	let token = getToken();
 	let headers = {
 		'Content-Type': method?.match(/(POST|PUT|PATCH|DELETE)/) ? 'application/json' : 'text/plain'
-		,'Authorization': sessionStorage.getItem("kainos") === null ? '' : 'Bearer ' + sessionStorage.getItem("kainos")
+		,'Authorization': token === null ? '' : 'Bearer ' + token
 	};
 	let body = (method || '').match(/(POST|PUT|PATCH|DELETE)/) && params ? JSON.stringify(params) : null;
 
@@ -161,13 +155,7 @@ requestApi = async (method, url, params, option) => {
 			for (let pair of responseHeaders.entries()) {
 				responseHeaderJSON[pair[0]] = pair[1];
 			}
-			if($.cookie('kainos') === '' || $.cookie('kainos') === undefined){
-				if(responseHeaderJSON.authorization){
-					const token = responseHeaderJSON.authorization.split('Bearer ')[1];
-					sessionStorage.setItem("kainos", token);
-					$.cookie('kainos', token);
-				}
-			}
+			setToken(responseHeaderJSON);
 			switch (response.status) {
 				case 200:
 					return response.json();
@@ -246,6 +234,19 @@ window.storage = window.sessionStorage || (function() {
 	return fn;
 })();
 
+
+function setToken(responseHeaderJSON){
+	if(responseHeaderJSON !== undefined && responseHeaderJSON.authorization !== undefined){
+		const token = responseHeaderJSON.authorization.split('Bearer ')[1];
+		sessionStorage.setItem("kainos", token);
+		localStorage.setItem("kainos", token);
+		$.cookie('kainos', token);
+	}
+}
+
+function getToken(){
+	return sessionStorage.getItem("kainos") === null ? localStorage.getItem("kainos") : sessionStorage.getItem("kainos")
+}
 
 /** ================================================================================ */
 //priceFormatter = (price) => {

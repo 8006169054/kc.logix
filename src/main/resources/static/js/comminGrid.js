@@ -12,6 +12,16 @@ function ComSelectGridData(gridname, rowid, iCol){
 // ========================================= 기존 
 var cellEditRow;
 
+function jqFlagFn (cellvalue, options, rowObject ){
+	if(cellvalue === C)
+		return CIMG;
+	else if(cellvalue === U)
+		return UIMG;
+	else if(cellvalue === D)
+		return DIMG;
+	else
+		return '';
+}
 /**
  * 
  * @param gridName  

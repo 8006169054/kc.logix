@@ -2,6 +2,14 @@ const C = '<img src="/assets/img/more.png" height="12px" value="C">';
 const U = '<img src="/assets/img/edit-button.png" height="12px" value="U">';
 const D = '<img src="/assets/img/delete.png" height="12px" value="D">';
 
+//const C = 'C';
+//const U = 'U';
+//const D = 'D';
+//
+//const CIMG = '<img src="/assets/img/more.png" height="12px">';
+//const UIMG = '<img src="/assets/img/edit-button.png" height="12px">';
+//const DIMG = '<img src="/assets/img/delete.png" height="12px">';
+
 /**
 *
 * @license Guriddo jqGrid JS - v5.8.8 - 2025-02-20
@@ -6808,7 +6816,19 @@ $.jgrid.extend({
 		});
 		return success;
 	},
-		// 정인선 신규 함수 추가
+	// 정인선 신규 함수 추가
+	saveGridData : function() {
+		var saveData = [];
+		var t = this;
+		$.each($(t).jqGrid('getRowData'), function(index, rowData){
+			if($(rowData.jqFlag).attr('value') !== undefined){
+				rowData.jqFlag = $(rowData.jqFlag).attr('value');
+				saveData.push(rowData)
+			}
+		});
+		return saveData;
+	},
+	// 정인선 신규 함수 추가
 	searchData : function(rdata, options) {
 		var t = this;	
 		$.each(rdata, function(index, data){

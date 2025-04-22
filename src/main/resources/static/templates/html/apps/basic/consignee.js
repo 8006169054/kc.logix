@@ -1,3 +1,4 @@
+var tableName = '#consignee-table';
 $( document ).ready(function() {
    consigneeTableInit();
 });
@@ -7,12 +8,12 @@ $( document ).ready(function() {
  */
 async function search() {
 	response = await requestApi('GET', '/api/basic/consignee', {name : $('#name').val()});
-	$("#consignee-table").clearGridData();
-	$("#consignee-table").searchData(response.data);
+	$(tableName).clearGridData();
+	$(tableName).searchData(response.data);
 }
 
 function consigneeTableInit(){
-	$("#consignee-table").jqGrid({
+	$(tableName).jqGrid({
 	   	datatype: "json",
 	   	colNames: consigneeTableColNames.split(','),
 	   	colModel: [
@@ -43,17 +44,21 @@ function consigneeTableInit(){
 }
         
 async function add(){
-	let rowId = $("#consignee-table").getGridParam("records");
-	$("#consignee-table").addRow(rowId);
+	let rowId = $(tableName).getGridParam("records");
+	$(tableName).addRow(rowId);
 }
 
 async function deleteConsignee(){
-	const selectObjects = ComMultiSelectRow("#consignee-table");
+	const selectObjects = ComMultiSelectRow(tableName);
 	if(selectObjects.length === 0)
 		alertMessage(getMessage('0000'), 'info');
 	else{
 		await requestApi('DELETE', '/api/basic/consignee', selectObjects, {successFn : consigneeDeleteSaveFn, errorFn : consigneeDeleteSaveFn});
 	}
+}
+
+async function save(){
+	$(tableName).saveGridData();
 }
 
 function consigneeDeleteSaveFn(response){
