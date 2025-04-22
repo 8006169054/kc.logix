@@ -291,6 +291,7 @@ input[type="time"],
 input[type="datetime-local"],
 input[type="month"] {
   -webkit-appearance: listbox;
+  height: 27px; /* 정인선 */
 }
 
 textarea {

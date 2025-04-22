@@ -18,8 +18,8 @@ function consigneeTableInit(){
 	   	colModel: [
 			{ name: 'jqFlag', 			width: 70, 		align:'center', hidden : false},
 	       	{ name: 'code', 			width: 70, 		align:'center', hidden : true},
-	       	{ name: 'name', 			width: 150, 	align:'center', editable: true},
-	       	{ name: 'contactName', 		width: 150, 	align:'center'},
+	       	{ name: 'name', 			width: 150, 	align:'center', editable: true, edittype: "date"},
+	       	{ name: 'contactName', 		width: 150, 	align:'center', editable: true},
 	       	{ name: 'contactPerson', 	width: 130, 	align:'center'},
 	    	{ name: 'addressOne', 		width: 180, 	align:'center'},
 	    	{ name: 'addressTwo', 		width: 180, 	align:'center'},

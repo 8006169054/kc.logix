@@ -9,12 +9,16 @@ $( document ).ready(function() {
 });
 
 async function upload(customFile) {
-	var frm = new FormData();
-    frm.append('upload', customFile.files[0]);
-    response = await requestFormDataApi('POST', '/api/basic/excel-upload', frm);
-    $(tableName).clearGridData();
-	$(tableName).searchData(response.data, {frozen:true});
-	document.getElementById("customFile").value=null;
+	try{
+		var frm = new FormData();
+	    frm.append('upload', customFile.files[0]);
+	    response = await requestFormDataApi('POST', '/api/basic/excel-upload', frm);
+	    $(tableName).clearGridData();
+		$(tableName).searchData(response.data, {frozen:true, jqFlag: C});
+	}catch (error) {
+	}finally {
+	  document.getElementById("customFile").value=null;
+	}
 }
 
 /**
@@ -29,9 +33,9 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['jqFlag', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', '	DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'DEM DAYS', 'TOTAL DEM', '반납DEPOT', 'DEM RCVD', 'DEM(USD)-매입', 'DEM 매출', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['flag', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', '	DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'DEM DAYS', 'TOTAL DEM', '반납DEPOT', 'DEM RCVD', 'DEM(USD)-매입', 'DEM 매출', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
-	   		{ name: 'jqFlag',				width: 70,		align:'center', 	hidden : true,	frozen:true},
+	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
 	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'arrivalNotice', 		width: 70, 		align:'center',		rowspan: true,	frozen:true},
@@ -60,7 +64,7 @@ function portTableInit(){
 	       	{ name: 'demRate', 				width: 80, 		align:'center'},
 	       	{ name: 'endOfFt', 				width: 90, 		align:'center'},
 	       	{ name: 'estimateReturnDate', 	width: 160, 	align:'center'},
-	       	{ name: 'returnDate', 			width: 100, 	align:'center'},
+	       	{ name: 'returnDate', 			width: 100, 	align:'center', editable: true, edittype: "date"},
 	       	{ name: 'demDays', 				width: 80, 		align:'center'},
 	       	{ name: 'totalDem', 			width: 100, 	align:'center', formatter: totalDemFn},
 	       	{ name: 'returnDepot', 			width: 80, 		align:'center'},
@@ -72,12 +76,13 @@ function portTableInit(){
 	   	],
 		height: 650, 
 		width: '100%',
+		dblEdit : true,
 //		delselect: true,
 //		multiselect: true,
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
 //			Object.assign(portData, ComRowData(this.id, iRow));
 //			$('#add').click();
-			console.log('ondblClickRow', ComMultiSelectRow(tableName));
+//			console.log('ondblClickRow', ComMultiSelectRow(tableName));
 		}
 	});
 }

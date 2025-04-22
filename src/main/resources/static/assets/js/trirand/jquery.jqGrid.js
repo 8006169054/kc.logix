@@ -1,6 +1,6 @@
-const C = '<img src="/assets/img/more.png" height="15px" value="C">';
-const U = '<img src="/assets/img/edit-button.png" height="15px" value="U">';
-const D = '<img src="/assets/img/delete.png" height="15px" value="D">';
+const C = '<img src="/assets/img/more.png" height="12px" value="C">';
+const U = '<img src="/assets/img/edit-button.png" height="12px" value="U">';
+const D = '<img src="/assets/img/delete.png" height="12px" value="D">';
 
 /**
 *
@@ -5891,7 +5891,7 @@ $.fn.jqGrid = function( pin ) {
 				td = e.target;
 				ptr = $(td,ts.rows).closest("tr.jqgrow");
 				if(ts.p.savedRow.length > 0){
-					if(ts.p.iRow !== ts.p.savedRow[0].id && s.p.iCol !== ts.p.savedRow[0].ic)
+					if(ts.p.iRow !== ts.p.savedRow[0].id && ts.p.iCol !== ts.p.savedRow[0].ic)
 						$(ts).jqGrid("saveCell", ts.p.savedRow[0].id, ts.p.savedRow[0].ic);
 				}
 				if($(td).closest("td,th")[0] !== undefined)
@@ -6505,19 +6505,19 @@ $.jgrid.extend({
 			}
 			if(!$t.p.multiselect) {
 				if(tfid) {
-					$("#"+$.jgrid.jqID($t.p.selrow), "#"+$.jgrid.jqID(tfid)).removeClass(highlight);
+//					$("#"+$.jgrid.jqID($t.p.selrow), "#"+$.jgrid.jqID(tfid)).removeClass(highlight);
 				}
 				if(pt.className !== "ui-subgrid") {
 					if( $t.p.selrow !== pt.id ) {
 						if( isHight ) {
 							csr = $($t).jqGrid('getGridRowById', $t.p.selrow);
 							if( csr ) {
-								$(  csr ).removeClass(highlight).attr({"aria-selected":"false" , "tabindex" : "-1"});
+//								$(  csr ).removeClass(highlight).attr({"aria-selected":"false" , "tabindex" : "-1"});
 							}
 							//정인선 highlight 오류로 주석처리 $(pt).addClass(highlight).attr({"aria-selected":"true" ,"tabindex" : "0"});//.focus();
 							if(fid) {
-								$("#"+$.jgrid.jqID($t.p.selrow), "#"+$.jgrid.jqID(fid)).removeClass(highlight);
-								$("#"+$.jgrid.jqID(selection), "#"+$.jgrid.jqID(fid)).addClass(highlight);
+//								$("#"+$.jgrid.jqID($t.p.selrow), "#"+$.jgrid.jqID(fid)).removeClass(highlight);
+//								$("#"+$.jgrid.jqID(selection), "#"+$.jgrid.jqID(fid)).addClass(highlight);
 							}
 						}
 						stat = true;
@@ -6815,6 +6815,9 @@ $.jgrid.extend({
 			if(data.jqFlag === undefined)
 				data.jqFlag = "";
 			
+			if(options != undefined && options.jqFlag !== undefined)
+				data.jqFlag = options.jqFlag;
+				
 			$(t).jqGrid('addRowData', index+1, data);
 		});
 		
@@ -7664,8 +7667,12 @@ $.jgrid.extend({
 		if(deleteChecked) return;
 		var iRowData = $($t).jqGrid('getRowData', iRow);
 		let jqFlag = null;
+		
 		/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
 		if(oRowData !== undefined){
+			
+			if(oRowData.jqFlag === C) return ;
+			
 			let keys = Object.keys(oRowData);
 			/* 수정 시 */
 			if(oRowData.jqFlag === '' && iRowData.jqFlag !==D){
@@ -8853,6 +8860,7 @@ $.jgrid.extend({
 				$.jgrid.bindEv.call($t, elc, opt);
 				window.setTimeout(function () { $(elc).focus();},1);
 				
+				/** 정인선 */
 				$("input, select, textarea",cc).focusout(function() {
 					$($t).jqGrid("saveCell", $t.p.savedRow[0].id, $t.p.savedRow[0].ic);
 				});
@@ -8976,6 +8984,19 @@ $.jgrid.extend({
 					$t.p.onCellSelect.call($t, $t.rows[iRow].id, iCol, tmp, event);
 				}
 			}
+			
+			/** 정인선 달력 자동 오픈 추가 */
+			if(cm.edittype === 'date'){
+				setTimeout(function(){
+					const dateInput = document.getElementById(iRow + '_' + nm);
+					dateInput.addEventListener('change', function() { 
+						$($t).jqGrid("saveCell", $t.p.savedRow[0].id, $t.p.savedRow[0].ic); 
+//						$($t).jqGrid("setCell", iRow, iCol, $(this).val(), false, false, true);
+						}, false );
+					dateInput.showPicker();
+				},100);
+			}
+			
 			$t.p.iCol = iCol; $t.p.iRow = iRow; $t.p.iRowId = $t.rows[iRow].id;
 		});
 	},
@@ -8998,52 +9019,56 @@ $.jgrid.extend({
 				p = $(cc).offset();
 
 				if( over_value === undefined ) {
-				switch (cm.edittype) {
-					case "select":
-						if(!cm.editoptions.multiple) {
-							v = $("#"+iRow+"_"+nmjq+" option:selected", trow ).val();
-							v2 = $("#"+iRow+"_"+nmjq+" option:selected", trow).text();
-						} else {
-							var sel = $("#"+iRow+"_"+nmjq, trow), selectedText = [];
-							v = $(sel).val();
-							if(v) { v.join(",");} else { v=""; }
-							$("option:selected",sel).each(
-								function(i,selected){
-									selectedText[i] = $(selected).text();
-								}
-							);
-							v2 = selectedText.join(",");
-						}
-						if(cm.formatter) { v2 = v; }
-						break;
-					case "checkbox":
-						var cbv  = ["Yes","No"];
-						if(cm.editoptions && cm.editoptions.value){
-							cbv = cm.editoptions.value.split(":");
-						}
-						v = $("#"+iRow+"_"+nmjq, trow).is(":checked") ? cbv[0] : cbv[1];
-						v2=v;
-						break;
-					case "password":
-					case "text":
-					case "textarea":
-					case "button" :
-						v = $("#"+iRow+"_"+nmjq, trow).val();
-						v2=v;
-						break;
-					case 'custom' :
-						try {
-							if(cm.editoptions && $.jgrid.isFunction(cm.editoptions.custom_value)) {
-								v = cm.editoptions.custom_value.call($t, $(".customelement",cc),'get');
-								if (v===undefined) { throw "e2";} else { v2=v; }
-							} else { throw "e1"; }
-						} catch (e) {
-							if (e==="e1") { $.jgrid.info_dialog(errors.errcap, "function 'custom_value' " + edit.msg.nodefined, edit.bClose, {styleUI : $t.p.styleUI }); }
-							else if (e==="e2") { $.jgrid.info_dialog(errors.errcap, "function 'custom_value' " + edit.msg.novalue, edit.bClose, {styleUI : $t.p.styleUI }); }
-							else {$.jgrid.info_dialog(errors.errcap, e.message, edit.bClose, {styleUI : $t.p.styleUI }); }
-						}
-						break;
-				}
+					switch (cm.edittype) {
+						case "date":
+							v = $("#"+iRow+"_"+nmjq, trow).val();
+							v2=v;
+							break;
+						case "select":
+							if(!cm.editoptions.multiple) {
+								v = $("#"+iRow+"_"+nmjq+" option:selected", trow ).val();
+								v2 = $("#"+iRow+"_"+nmjq+" option:selected", trow).text();
+							} else {
+								var sel = $("#"+iRow+"_"+nmjq, trow), selectedText = [];
+								v = $(sel).val();
+								if(v) { v.join(",");} else { v=""; }
+								$("option:selected",sel).each(
+									function(i,selected){
+										selectedText[i] = $(selected).text();
+									}
+								);
+								v2 = selectedText.join(",");
+							}
+							if(cm.formatter) { v2 = v; }
+							break;
+						case "checkbox":
+							var cbv  = ["Yes","No"];
+							if(cm.editoptions && cm.editoptions.value){
+								cbv = cm.editoptions.value.split(":");
+							}
+							v = $("#"+iRow+"_"+nmjq, trow).is(":checked") ? cbv[0] : cbv[1];
+							v2=v;
+							break;
+						case "password":
+						case "text":
+						case "textarea":
+						case "button" :
+							v = $("#"+iRow+"_"+nmjq, trow).val();
+							v2=v;
+							break;
+						case 'custom' :
+							try {
+								if(cm.editoptions && $.jgrid.isFunction(cm.editoptions.custom_value)) {
+									v = cm.editoptions.custom_value.call($t, $(".customelement",cc),'get');
+									if (v===undefined) { throw "e2";} else { v2=v; }
+								} else { throw "e1"; }
+							} catch (e) {
+								if (e==="e1") { $.jgrid.info_dialog(errors.errcap, "function 'custom_value' " + edit.msg.nodefined, edit.bClose, {styleUI : $t.p.styleUI }); }
+								else if (e==="e2") { $.jgrid.info_dialog(errors.errcap, "function 'custom_value' " + edit.msg.novalue, edit.bClose, {styleUI : $t.p.styleUI }); }
+								else {$.jgrid.info_dialog(errors.errcap, e.message, edit.bClose, {styleUI : $t.p.styleUI }); }
+							}
+							break;
+					}
 				} else  {
 					if (cm.editable===true && !cc.hasClass("not-editable-cell") && (!$.jgrid.isFunction($t.p.isCellEditable) || $t.p.isCellEditable.call($t,nm,iRow,iCol))) {
 						v = over_value;
