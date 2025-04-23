@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kainos.framework.core.KainosKey;
-import kainos.framework.core.lang.KainosBusinessException;
+import kc.logix.apps.basic.port.dto.PortDto;
 import kc.logix.apps.basic.port.repository.PortRepository;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.entity.BasicPort;
+import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,48 +30,19 @@ public class PortService {
 		return repository.selectPort(paramDto, false);
 	}
 	
-	/**
-	 * 
-	 * @param paramDto
-	 * @param session
-	 * @throws Exception
-	 */
 	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
-	public void insertPort(BasicPort paramDto, SessionDto session)throws Exception {
-		if(repository.selectPort(paramDto, true).size() > 0) {
-			throw new KainosBusinessException("basic.port.insert.duplicated");
-		}
-		else {
-			paramDto.setUpdateUserId(session.getUserName());
-			repository.insertPort(paramDto);
+	public void savePort(List<PortDto> paramList, SessionDto session)throws Exception {
+		for (int i = 0; i < paramList.size(); i++) {
+			PortDto dto = paramList.get(i);
+			dto.setUserId(session.getUserId());
+			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
+				repository.insertWebsiteTerminalCode(dto);
+			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Update)) {
+				repository.updateWebsiteTerminalCode(dto);
+			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Delete)) {
+				repository.deleteWebsiteTerminalCode(dto.getUuid());
+			}
 		}
 	}
 	
-	/**
-	 * 
-	 * @param paramDto
-	 * @param session
-	 * @throws Exception
-	 */
-	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
-	public void updatePort(BasicPort paramDto, SessionDto session)throws Exception {
-		paramDto.setUpdateUserId(session.getUserName());
-		repository.updatePort(paramDto);
-	}
-	
-	/**
-	 * 
-	 * @param paramDtos
-	 * @param session
-	 * @throws Exception
-	 */
-	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
-	public void deletePort(List<BasicPort> paramDtos, SessionDto session)throws Exception {
-		for (int i = 0; i < paramDtos.size(); i++) {
-			BasicPort paramDto = paramDtos.get(i);
-			paramDto.setUpdateUserId(session.getUserName());
-			repository.deletePort(paramDto);
-		}
-		
-	}
 }

@@ -1,6 +1,7 @@
 package kc.logix.apps.basic.port;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,14 @@ import org.springframework.web.multipart.MultipartFile;
 import kainos.framework.core.lang.KainosBusinessException;
 import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
+import kc.logix.apps.basic.port.dto.PortDto;
 import kc.logix.apps.basic.port.dto.PostExcelReadDto;
 import kc.logix.apps.basic.port.service.PortService;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.entity.BasicPort;
 import kc.logix.common.util.MessageUtil;
-import kc.logix.common.util.excel.KainosExcelReadHandler;
 import kc.logix.common.util.excel.GridRowSpenHandler;
+import kc.logix.common.util.excel.KainosExcelReadHandler;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -41,40 +43,17 @@ public class PortController {
 				.close();
 	}
 	
-	@PostMapping(value = "/api/basic/port")
-	public ResponseEntity<Void> insertPort(@RequestBody BasicPort paramDto, @KainosSession SessionDto session) throws Exception {
+	@PostMapping(value = "/api/basic/save-port")
+	public ResponseEntity<Void> savePort(@RequestBody List<PortDto> paramList, @KainosSession SessionDto session) throws Exception {
 		try {
-			service.insertPort(paramDto, session);
+			service.savePort(paramList, session);
 		} catch (KainosBusinessException e) {
 			throw e;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new KainosBusinessException("common.system.error");
 		}
 		return message.getInsertMessage(KainosResponseEntity.builder().build()).close();
-	}
-	
-	@PatchMapping(value = "/api/basic/port")
-	public ResponseEntity<Void> updatePort(@RequestBody BasicPort paramDto, @KainosSession SessionDto session) throws Exception {
-		try {
-			service.updatePort(paramDto, session);
-		} catch (KainosBusinessException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new KainosBusinessException("common.system.error");
-		}
-		return message.getUpdateMessage(KainosResponseEntity.builder().build()).close();
-	}
-	
-	@DeleteMapping(value = "/api/basic/port")
-	public ResponseEntity<Void> deletePort(@RequestBody List<BasicPort> paramDto, @KainosSession SessionDto session) throws Exception {
-		try {
-			service.deletePort(paramDto, session);
-		} catch (KainosBusinessException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new KainosBusinessException("common.system.error");
-		}
-		return message.getDeleteMessage(KainosResponseEntity.builder().build()).close();
 	}
 	
 	@PostMapping(value = "/api/basic/excel-upload")
@@ -102,6 +81,12 @@ public class PortController {
 			excelReadHandler.objectCoypClose();
 			excelReadHandler.rowSapnCoyp(excelData);
 			excelReadHandler.customFunctionCall(excelData);
+			
+			List<PostExcelReadDto> removeIndex = new ArrayList<> ();
+			for (int i = 0; i < excelData.size(); i++)
+				if(excelData.get(i).getHblNo() == null || excelData.get(i).getHblNo().equalsIgnoreCase("")) removeIndex.add(excelData.get(i));
+			
+			if(removeIndex.size() > 0) excelData.removeAll(removeIndex);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

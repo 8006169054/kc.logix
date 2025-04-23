@@ -23,7 +23,7 @@ kainos:
   datasource:
     primary:
       driver-class-name: org.postgresql.Driver
-      jdbcUrl: jdbc:postgresql://127.0.0.1:5432/kclogix
+      jdbcUrl: jdbc:postgresql://127.0.0.1:5420/postgres
       username: postgres
       password: qwer1234
       maximumPoolSize: 3

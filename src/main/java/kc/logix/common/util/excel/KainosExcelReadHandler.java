@@ -63,79 +63,44 @@ public class KainosExcelReadHandler {
             for (int i = startRowNum; i <= sheet.getLastRowNum(); i++) {
             	Row row = sheet.getRow(i);
             	Map<String, String> rowMap = new HashMap<>();
-            	Iterator<Cell> cellIterator = row.cellIterator();
-            	while (cellIterator.hasNext()) {
-            		Cell cell = cellIterator.next();
-            		String value = null;
-					switch (cell.getCellType()) {
-						case STRING: // 텍스트
-							value = cell.getStringCellValue();
-							break;
-						case NUMERIC: // 숫자
-						value = numericAndDateValue(cell);
-							break;
-						case FORMULA: // = 붙은 계산식 처리
-							FormulaEvaluator formulaEval = wb.getCreationHelper().createFormulaEvaluator();
-							CellValue cellValue =  formulaEval.evaluate(cell);
-							switch (cell.getCachedFormulaResultType()) {
-								case NUMERIC:
-								value = numericAndDateValue(cell);
-							 		break;
-							 	default:
-									value = cellValue.getStringValue();
-								break;
-							 }
-							break;
-						case BLANK: // 빈칸
-							value = "" ;
-							break;
-						case ERROR: // 에러난 처리 
-							value = cell.getErrorCellValue() +"";
-							break;
-						default:
-							break;
-					}
-					
-
-					rowMap.put(indexCell.get(cell.getColumnIndex()), value);
+            	if(row != null) {
+                   	Iterator<Cell> cellIterator = row.cellIterator();
+                	while (cellIterator.hasNext()) {
+                		Cell cell = cellIterator.next();
+                		String value = null;
+    					value = getExcelCellValue(wb, cell, value);
+    					rowMap.put(indexCell.get(cell.getColumnIndex()), value);
+                	}
+                	rows.add(rowMap);
             	}
-            	rows.add(rowMap);
             }
                         
             if(rowSpan) {
-				
-            	for (int ii = startRowNum; ii < sheet.getLastRowNum(); ii++) {
-            		Row row = sheet.getRow(ii);
-    	        	Iterator<Cell> cellIterator = row.cellIterator();
-    	        	 while (cellIterator.hasNext()) {
-    	        		 Cell cell = cellIterator.next();
-    	        		 for (int i = 0; i < sheet.getNumMergedRegions(); i++) {
-    	 	        		CellRangeAddress region = sheet.getMergedRegion(i);
-    	 	        		int colIndex = region.getFirstColumn();
-    	 	                int rowNum = region.getFirstRow(); 
-    	 	                if (rowNum == cell.getRowIndex() && colIndex == cell.getColumnIndex()) {
-    	 	                	String value = null;
-    	 	                	switch (cell.getCellType()) {
-	    							case NUMERIC: // 숫자
-									value = numericAndDateValue(cell);
-	    								break;
-	    							default:
-	    								value = cell.toString();
-	    								break;
-    	 	                	}
-    	 	                	
-    	 	                	rowSpanList.add(ExcelReadRowSpan.builder()
-    	 	                			.ColumnIndex(colIndex)
-    	 	                			.rowIndex(rowNum)
-    	 	                			.ColumnValue(value)
-    	 	                			.startRowNum(region.getFirstRow() - startRowNum)
-    	 	                			.rowspanCnt(region.getLastRow() - region.getFirstRow())
-    	 	                			.build());
-    	 	                	
-    	 	                }
-    	 	        	}
-    	        	 }
-    	        }
+            	for (int i = 0; i < sheet.getNumMergedRegions(); i++) {
+    				CellRangeAddress region = sheet.getMergedRegion(i);
+    				int colIndex = region.getFirstColumn();
+ 	                int rowNum = region.getFirstRow(); 
+ 	                Row row = sheet.getRow(rowNum);
+ 	                Cell cell = row.getCell(colIndex);
+ 	                if (rowNum == cell.getRowIndex() && colIndex == cell.getColumnIndex()) {
+	                	String value = null;
+	                	switch (cell.getCellType()) {
+							case NUMERIC: // 숫자
+							value = numericAndDateValue(cell);
+								break;
+							default:
+								value = cell.toString();
+								break;
+	                	}
+	                	rowSpanList.add(ExcelReadRowSpan.builder()
+	                			.ColumnIndex(colIndex)
+	                			.rowIndex(rowNum)
+	                			.ColumnValue(value)
+	                			.startRowNum(region.getFirstRow() - startRowNum)
+	                			.rowspanCnt(region.getLastRow() - region.getFirstRow())
+	                			.build());
+	                }
+    			}
             }
             opc.close();
         } catch (Exception e) {
@@ -145,6 +110,46 @@ public class KainosExcelReadHandler {
 		}
         return KainosExcelReadHandler.this;
     }
+
+	/**
+	 * 
+	 * @param wb
+	 * @param cell
+	 * @param value
+	 * @return
+	 * @throws ParseException
+	 */
+	private String getExcelCellValue(XSSFWorkbook wb, Cell cell, String value) throws ParseException {
+		switch (cell.getCellType()) {
+			case STRING: // 텍스트
+				value = cell.getStringCellValue();
+				break;
+			case NUMERIC: // 숫자
+			value = numericAndDateValue(cell);
+				break;
+			case FORMULA: // = 붙은 계산식 처리
+				FormulaEvaluator formulaEval = wb.getCreationHelper().createFormulaEvaluator();
+				CellValue cellValue =  formulaEval.evaluate(cell);
+				switch (cell.getCachedFormulaResultType()) {
+					case NUMERIC:
+					value = numericAndDateValue(cell);
+				 		break;
+				 	default:
+						value = cellValue.getStringValue();
+					break;
+				 }
+				break;
+			case BLANK: // 빈칸
+				value = "" ;
+				break;
+			case ERROR: // 에러난 처리 
+				value = cell.getErrorCellValue() +"";
+				break;
+			default:
+				break;
+		}
+		return value;
+	}
 
 	/**
 	 * 날짜 데이터인지 numeric 인지 체크해서 데이터 리턴

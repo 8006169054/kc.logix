@@ -77,6 +77,7 @@ function portTableInit(){
 		height: 530, 
 		width: '100%',
 		dblEdit : true,
+		rownumbers : true,
 //		delselect: true,
 //		multiselect: true,
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
@@ -152,8 +153,17 @@ async function fileOpen(){
 
 async function save(){
 	var saveData = $(tableName).saveGridData();
-	console.log(saveData);
+	if(saveData.length === 0)
+		alertMessage(getMessage('0001'), 'info');
+	else{
+		await requestApi('POST', '/api/basic/save-port', saveData, {successFn : portSaveFn, errorFn : portSaveFn});
+	}
 }
+
+function portSaveFn(response){
+	console.log('portSaveFn', response);
+}
+
 
 async function deletePort(){
 	const selectObjects = ComMultiSelectRow(tableName);

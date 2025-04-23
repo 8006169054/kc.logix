@@ -18,6 +18,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PostExcelReadDto {
 
+	private String jqFlag;
+	
 	@Field(value = "A", merge = true) 
 	private String sales; //매출
 	
@@ -146,7 +148,6 @@ public class PostExcelReadDto {
 		}
 		return value;
 	}
-	
 	
 	/**
 	 * 포맷 변경

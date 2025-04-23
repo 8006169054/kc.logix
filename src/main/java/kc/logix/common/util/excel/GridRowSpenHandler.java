@@ -94,7 +94,8 @@ public class GridRowSpenHandler {
 				Field subDataField = datas.get(j).getClass().getDeclaredField(field.getName());
 				subDataField.setAccessible(true);
 				Object subValue = mainDataField.get(datas.get(j));
-				if(!mainValue.equals(subValue)) {
+				
+				if(mainValue != null && !mainValue.equals(subValue)) {
 					break;
 				}
 				loopIndex++;
