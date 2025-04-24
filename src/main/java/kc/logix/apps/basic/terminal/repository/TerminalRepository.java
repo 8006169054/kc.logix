@@ -1,10 +1,16 @@
 package kc.logix.apps.basic.terminal.repository;
 
 import static kc.logix.common.entity.QTerminal.terminal;
+
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.stereotype.Repository;
+
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosStringUtils;
 import kc.logix.apps.basic.terminal.dto.TerminalDto;
@@ -19,14 +25,30 @@ public class TerminalRepository extends KainosRepositorySupport {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Terminal> selectTerminal(TerminalDto paramDto) throws Exception {
+	public List<TerminalDto> selectTerminal(TerminalDto paramDto) throws Exception {
 		BooleanBuilder where = new BooleanBuilder();
 		if(!KainosStringUtils.isEmpty(paramDto.getCode()))
 			where.and(terminal.code.contains(paramDto.getCode()));
 		else if(!KainosStringUtils.isEmpty(paramDto.getName()))
 			where.and(terminal.name.contains(paramDto.getName()));
 		
-		return selectFrom(terminal).where(where).fetch();
+		return select(Projections.bean(TerminalDto.class,
+				terminal.code,
+				terminal.name,
+				terminal.region,
+				terminal.type,
+				terminal.parkingLotCode,
+				terminal.homepage,
+				terminal.createUserId,
+				Expressions.stringTemplate("to_char({0}, {1})", terminal.createDate, "YYYY-MM-DD").as("createDate"),
+				terminal.updateUserId,
+				Expressions.stringTemplate("to_char({0}, {1})", terminal.updateDate, "YYYY-MM-DD").as("updateDate")
+				))
+				.from(terminal)
+				.where(where)
+				.fetch();
+		
+//		return selectFrom(terminal).where(where).fetch();
 	}
 	
 	/**

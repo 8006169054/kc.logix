@@ -9,7 +9,6 @@ import kainos.framework.core.KainosKey;
 import kc.logix.apps.basic.terminal.dto.TerminalDto;
 import kc.logix.apps.basic.terminal.repository.TerminalRepository;
 import kc.logix.common.dto.SessionDto;
-import kc.logix.common.entity.Terminal;
 import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +25,7 @@ public class TerminalService {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public List<Terminal> selectTerminal(TerminalDto paramDto) throws Exception {
+	public List<TerminalDto> selectTerminal(TerminalDto paramDto) throws Exception {
 		return repository.selectTerminal(paramDto);
 	}
 	

@@ -18,7 +18,6 @@ import kainos.framework.core.session.annotation.KainosSession;
 import kc.logix.apps.basic.terminal.dto.TerminalDto;
 import kc.logix.apps.basic.terminal.service.TerminalService;
 import kc.logix.common.dto.SessionDto;
-import kc.logix.common.entity.BasicShipping;
 import kc.logix.common.util.MessageUtil;
 import kc.logix.common.util.excel.KainosExcelReadHandler;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ public class TerminalController {
 	private final MessageUtil message;
 	
 	@GetMapping(value = "/api/basic/terminal")
-	public ResponseEntity<BasicShipping> selectTerminal(@RequestParam(required = false) String name) throws Exception {
+	public ResponseEntity<TerminalDto> selectTerminal(@RequestParam(required = false) String name) throws Exception {
 		return KainosResponseEntity.builder().build()
 				.addData(service.selectTerminal(TerminalDto.builder().name(name).build()))
 				.close();

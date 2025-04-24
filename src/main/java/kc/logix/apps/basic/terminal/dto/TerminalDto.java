@@ -1,7 +1,5 @@
 package kc.logix.apps.basic.terminal.dto;
 
-import java.util.Date;
-
 import kc.logix.common.util.excel.Field;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,8 +28,8 @@ public class TerminalDto {
 	@Field(value = "F") 
 	private String homepage;
 	private String createUserId;
-	private Date createDate;
+	private String createDate;
 	private String updateUserId;
-	private Date updateDate;
+	private String updateDate;
 	
 }

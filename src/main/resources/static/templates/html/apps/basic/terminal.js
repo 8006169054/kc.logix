@@ -14,15 +14,15 @@ function tableInit(){
 	   	colModel: [
 	   		{ name: 'jqFlag',			width: 40,		align:'center'},
 	   		{ name: 'region', 			width: 100, 	align:'left', editable: true},
-	       	{ name: 'type', 			width: 100, 	align:'left', editable: true},
-	       	{ name: 'code', 			width: 100, 	align:'left', editable: false},
+	       	{ name: 'type', 			width: 100, 	align:'center', editable: true},
+	       	{ name: 'code', 			width: 100, 	align:'center', editable: false},
 	       	{ name: 'name', 			width: 250, 	align:'left', editable: true},
-	       	{ name: 'parkingLotCode', 	width: 120, 	align:'center', editable: true},
-	    	{ name: 'homepage', 		width: 500, 	align:'left', editable: true},
-	    	{ name: 'createUserId', 	width: 80, 		align:'left', editable: true},
-	    	{ name: 'createDate', 		width: 100, 	align:'left', editable: true},
-	    	{ name: 'updateUserId', 	width: 80, 		align:'left', editable: true},
-	    	{ name: 'updateDate', 		width: 100, 	align:'left', editable: true}
+	       	{ name: 'parkingLotCode', 	width: 80, 		align:'center', editable: true},
+	    	{ name: 'homepage', 		width: 600, 	align:'left', editable: true},
+	    	{ name: 'createUserId', 	width: 80, 		align:'center', editable: true},
+	    	{ name: 'createDate', 		width: 80, 		align:'center', editable: true},
+	    	{ name: 'updateUserId', 	width: 80, 		align:'center', editable: true},
+	    	{ name: 'updateDate', 		width: 80, 		align:'center', editable: true}
 	    	
 	   	],
 		height: 530, 
