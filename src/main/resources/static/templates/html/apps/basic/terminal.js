@@ -13,12 +13,17 @@ function tableInit(){
 	   	colNames: tableColNames.split(','),
 	   	colModel: [
 	   		{ name: 'jqFlag',			width: 40,		align:'center'},
-	   		{ name: 'region', 			width: 140, 	align:'left', editable: true},
-	       	{ name: 'type', 			width: 140, 	align:'left', editable: true},
-	       	{ name: 'code', 			width: 140, 	align:'left', editable: false},
-	       	{ name: 'name', 			width: 300, 	align:'left', editable: true},
+	   		{ name: 'region', 			width: 100, 	align:'left', editable: true},
+	       	{ name: 'type', 			width: 100, 	align:'left', editable: true},
+	       	{ name: 'code', 			width: 100, 	align:'left', editable: false},
+	       	{ name: 'name', 			width: 250, 	align:'left', editable: true},
 	       	{ name: 'parkingLotCode', 	width: 120, 	align:'center', editable: true},
-	    	{ name: 'homepage', 		width: 700, 	align:'left', editable: true}
+	    	{ name: 'homepage', 		width: 500, 	align:'left', editable: true},
+	    	{ name: 'createUserId', 	width: 80, 		align:'left', editable: true},
+	    	{ name: 'createDate', 		width: 100, 	align:'left', editable: true},
+	    	{ name: 'updateUserId', 	width: 80, 		align:'left', editable: true},
+	    	{ name: 'updateDate', 		width: 100, 	align:'left', editable: true}
+	    	
 	   	],
 		height: 530, 
 		width: '100%',
