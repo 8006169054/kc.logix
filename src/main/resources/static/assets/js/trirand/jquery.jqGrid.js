@@ -372,7 +372,7 @@ $.extend($.jgrid,{
 		return String(sid).replace(/[!"#$%&'()*+,.\/:; <=>?@\[\\\]\^`{|}~]/g,"\\$&");
 	},
 	guid : 1,
-	uidPref: 'jqg',
+	uidPref: '', // jpg << 정인선 삭제
 	randId : function( prefix )	{
 		return (prefix || $.jgrid.uidPref) + ($.jgrid.guid++);
 	},
@@ -4036,19 +4036,16 @@ $.fn.jqGrid = function( pin ) {
 			if(dnd && ts.p.jqgdnd) { $(ts).jqGrid('gridDnD','updateDnD');}
 			$(ts).triggerHandler("jqGridGridComplete");
 			if($.jgrid.isFunction(ts.p.gridComplete)) {ts.p.gridComplete.call(ts);}
-			$(ts).triggerHandler("jqGridAfterGridComplete");
+			$(ts).triggerHandler("jqGridAfterGridComplete");	
 			
 			// 정인선 복사 붙여넣기 이벤트 추가
-			$('#gbox_' + ts.p.id).on('paste', function(e) {
+			$('#gview_' + ts.p.id).on('paste', function(e) {
+				e.preventDefault();
+				console.log('paste');
 				var type = $(':focus').attr('type');
 				if(type === 'text') return;
-				
-				e.stopPropagation();
-				e.preventDefault();
-	 
 				if(!e) e = window.event; // || event
 				if(e.srcElement) e.target = e.srcElement;
-	     
 				var clipboardData;
 				if (window.clipboardData && window.clipboardData.getData){ // IE
 					clipboardData = window.clipboardData.getData("Text");
@@ -4058,14 +4055,10 @@ $.fn.jqGrid = function( pin ) {
 				}
 				clipboardData = clipboardData.split("	");
 				for ( var i = 0 ; i < clipboardData.length ; i++ ) {
-					$("#" + selectGridData.gridname).setCell(selectGridData.rowid, (selectGridData.iCol+i), clipboardData[i]);
+					$(ts).jqGrid("setCell", $.jgrid.jqID(ts.p.selrow), (selectGridData.iCol+i), clipboardData[i]);
 				}
 			}); 
-			/*
-			$('#gbox_' + ts.p.id).on('copy', function(e) {
-				
-			});
-			*/		
+			
 		},
 		beginReq = function() {
 			ts.grid.hDiv.loading = true;

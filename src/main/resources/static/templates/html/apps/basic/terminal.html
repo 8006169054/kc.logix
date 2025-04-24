@@ -4,25 +4,23 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
-<!-- 팝업 사용방법 -->
-<th:block th:replace="html/apps/basic/popup/port-popup :: Popup"></th:block>
 
 <!-- Page Specific JS File -->
 <script th:inline="javascript">
-var portTableColNames = [[#{basic.port.table.cols}]];
+var tableColNames = [[#{basic.terminal.table.cols}]];
 </script>
-<script src="/templates/html/apps/basic/port.js"></script>
+<script src="/templates/html/apps/basic/terminal.js"></script>
 <!-- Main Content -->
 <div class="main-content">
 	<section class="section">
 		<div class="section-header">
-			<h1 th:text="#{common.maincontent.basic.port.title}"></h1>
+			<h1 th:text="#{common.maincontent.basic.terminal.title}"></h1>
 			<div class="section-header-breadcrumb">
 				<div class="breadcrumb-item active">
 					<a href="/" th:text="#{common.sidebar.hmoe.name}"></a>
 				</div>
 				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.name}"></div>
-				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.port.name}"></div>
+				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.terminal.name}"></div>
 			</div>
 		</div>
 		<div class="section-body">
@@ -34,10 +32,9 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 						</div>
 						<div class="card-body">
 							<div class="form-group row">
-<!-- 								<label th:text="#{basic.port.label.name}" class="col-form-label text-md-left col-md-10"></label> -->
-								<label class="col-form-label text-md-left col-md-5">HBL NO.</label>
+								<label class="col-form-label text-md-left col-md-5" th:text="#{basic.terminal.label.terminalName}"></label>
 								<div class="col-md-15">
-									<input type="text" id="hblNo" name="hblNo" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
+									<input type="text" id="name" name="name" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
 								</div>
 							</div>
 						</div>
@@ -49,12 +46,13 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 					<div class="card">
 						<div class="card-header text-right">
 							<input type="file" id="customFile" name="customFile" style="visibility:hidden; width: 10px;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-		                     <button class="btn btn-info" onclick="fileOpen()" th:text="#{common.button.label.upload}"></button>
-		                     <button class="btn btn-success" onclick="save()" th:text="#{common.button.label.save}"></button>
+		                    <button class="btn btn-info" onclick="fileOpen()" th:text="#{common.button.label.upload}"></button>
+		                    <button class="btn btn-primary" onclick="add()" th:text="#{common.button.label.add}"></button>
+		                    <button class="btn btn-success" onclick="save()" th:text="#{common.button.label.save}"></button>
 						</div>
 						<div class="card-body p-0">
 							<div class="table-responsive" style="overflow: hidden;">
-								<table id="port-table"></table>
+								<table id="terminal-table"></table>
 							</div>
 						</div>
 					</div>
