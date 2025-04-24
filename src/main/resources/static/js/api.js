@@ -113,14 +113,14 @@ requestFormDataApi = async (method, url, formData, option) => {
 					return response;
 
 			default:
-				throw Error(`${response.status} , messages : ${response.error}`);
+				return response;
 		}
 	})
 	.catch(function(error) {
 		console.log('error : ', error);
 		//      oLoader(false);
 		//      Swal.fire("", Error(`${error}`).message, "error");
-		throw Error(`${error}`).message;
+//		throw Error(`${error}`).message;
 	})
 	.finally(function() { loding(false); });
 };
@@ -192,14 +192,14 @@ requestApi = async (method, url, params, option) => {
 						return response;
 
 				default:
-					throw Error(`${response.status} , messages : ${response.error}`);
+					return response;
 			}
 		})
 		.catch(function(error) {
 			console.log('error : ', error);
 			//      oLoader(false);
 			//      Swal.fire("", Error(`${error}`).message, "error");
-			throw Error(`${error}`).message;
+//			throw Error(`${error}`).message;
 		})
 		.finally(function() { loding(false); });
 };

@@ -25,17 +25,18 @@ async function upload(customFile) {
  * 조회
  */
 async function search() {
-	response = await requestApi('GET', '/api/basic/port', {name : $('#name').val()});
+	response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#hblNo').val()});
 	$(tableName).clearGridData();
-	$(tableName).searchData(response.data);
+	$(tableName).searchData(response.data, {frozen:true});
 }
 
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['flag', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', '	DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'DEM DAYS', 'TOTAL DEM', '반납DEPOT', 'DEM RCVD', 'DEM(USD)-매입', 'DEM 매출', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['flag','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', '	DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'DEM DAYS', 'TOTAL DEM', '반납DEPOT', 'DEM RCVD', 'DEM(USD)-매입', 'DEM 매출', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
 	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
+	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true,	frozen:true},
 	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'arrivalNotice', 		width: 70, 		align:'center',		rowspan: true,	frozen:true},
@@ -91,7 +92,7 @@ function portTableInit(){
 /** 국내 매출 */
 function domesticSalesFn (cellvalue, options, rowObject ){
 	if(cellvalue !== '-'){
-		return usMoneyConversion('$', cellvalue, '');
+		return usMoneyConversion('US$', cellvalue, '');
 	} 
 	return cellvalue;
 }
@@ -99,7 +100,7 @@ function domesticSalesFn (cellvalue, options, rowObject ){
 /** 국내 매출 */
 function foreignSalesFn (cellvalue, options, rowObject ){
 	if(cellvalue !== '-'){
-		return usMoneyConversion('$', cellvalue, '');
+		return usMoneyConversion('US$', cellvalue, '');
 	} 
 	return cellvalue;
 }
@@ -161,7 +162,9 @@ async function save(){
 }
 
 function portSaveFn(response){
-	console.log('portSaveFn', response);
+	if(response.common.status === 'S'){
+ 		search();
+ 	}
 }
 
 

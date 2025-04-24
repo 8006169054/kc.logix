@@ -1,13 +1,10 @@
 package kc.logix.apps.basic.port;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +19,6 @@ import kc.logix.apps.basic.port.dto.PortDto;
 import kc.logix.apps.basic.port.dto.PostExcelReadDto;
 import kc.logix.apps.basic.port.service.PortService;
 import kc.logix.common.dto.SessionDto;
-import kc.logix.common.entity.BasicPort;
 import kc.logix.common.util.MessageUtil;
 import kc.logix.common.util.excel.GridRowSpenHandler;
 import kc.logix.common.util.excel.KainosExcelReadHandler;
@@ -36,10 +32,11 @@ public class PortController {
 	private final MessageUtil message;
 	private final GridRowSpenHandler handler;
 	
-	@GetMapping(value = "/api/basic/port")
-	public ResponseEntity<BasicPort> selectPort(@RequestParam(required = false) String name) throws Exception {
+	@GetMapping(value = "/api/basic/website-terminal-code")
+	public ResponseEntity<PortDto> selectWebsiteTerminalCode(@RequestParam(required = false) String hblNo) throws Exception {
+		List<PortDto> PortList = service.selectWebsiteTerminalCode(PortDto.builder().hblNo(hblNo).build());
 		return KainosResponseEntity.builder().build()
-				.addData(service.selectPort(BasicPort.builder().name(name).build()))
+				.addData(handler.GenerationRowSpen(PortList, PortDto.class))
 				.close();
 	}
 	
