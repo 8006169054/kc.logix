@@ -14,7 +14,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosStringUtils;
 import kc.logix.apps.basic.terminal.dto.TerminalDto;
-import kc.logix.common.entity.Terminal;
 
 @Repository
 public class TerminalRepository extends KainosRepositorySupport {

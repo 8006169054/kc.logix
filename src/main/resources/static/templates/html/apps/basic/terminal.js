@@ -19,10 +19,10 @@ function tableInit(){
 	       	{ name: 'name', 			width: 250, 	align:'left', editable: true},
 	       	{ name: 'parkingLotCode', 	width: 80, 		align:'center', editable: true},
 	    	{ name: 'homepage', 		width: 600, 	align:'left', editable: true},
-	    	{ name: 'createUserId', 	width: 80, 		align:'center', editable: true},
-	    	{ name: 'createDate', 		width: 80, 		align:'center', editable: true},
-	    	{ name: 'updateUserId', 	width: 80, 		align:'center', editable: true},
-	    	{ name: 'updateDate', 		width: 80, 		align:'center', editable: true}
+	    	{ name: 'createUserId', 	width: 80, 		align:'center'},
+	    	{ name: 'createDate', 		width: 80, 		align:'center'},
+	    	{ name: 'updateUserId', 	width: 80, 		align:'center'},
+	    	{ name: 'updateDate', 		width: 80, 		align:'center'}
 	    	
 	   	],
 		height: 530, 
