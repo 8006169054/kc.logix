@@ -37,6 +37,7 @@ public class PortController {
 		List<PortDto> PortList = service.selectWebsiteTerminalCode(PortDto.builder().hblNo(hblNo).build());
 		return KainosResponseEntity.builder().build()
 				.addData(handler.GenerationRowSpen(PortList, PortDto.class))
+//				.addData(PortList)
 				.close();
 	}
 	

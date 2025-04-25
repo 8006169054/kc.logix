@@ -47,10 +47,29 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 			<div class="row">
 				<div class="col-100">
 					<div class="card">
-						<div class="card-header text-right">
+						<div class="card-header">
+						<div class="form-group row">
+							<div class="col-md-25">
+								<select class="form-control selectric" id="frozenCel" name="frozenCel" multiple="multiple" onchange="frozenCelHide(this)">
+									<option value=""></option>
+			                        <option value="sales">매출</option>
+			                        <option value="carryoverSales">이월매출</option>
+			                        <option value="arrivalNotice">A/N%EDI</option>
+			                        <option value="invoice">INVOICE</option>
+			                        <option value="concine">CNEE</option>
+			                        <option value="profitDate">PROFIT DATE</option>
+			                        <option value="domesticSales">국내매출</option>
+			                        <option value="foreignSales">해외매출</option>
+			                        <option value="quantity">Q'ty</option>
+		                      	</select>
+							</div>
+							<div class="col-md-74 text-right">
 							<input type="file" id="customFile" name="customFile" style="visibility:hidden; width: 10px;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-		                     <button class="btn btn-info" onclick="fileOpen()" th:text="#{common.button.label.upload}"></button>
-		                     <button class="btn btn-success" onclick="save()" th:text="#{common.button.label.save}"></button>
+							<button class="btn btn btn-light" onclick="gridClear()" th:text="#{ommon.button.label.clear}"></button>
+							<button class="btn btn-info" onclick="fileOpen()" th:text="#{common.button.label.upload}"></button>
+							<button class="btn btn-success" onclick="save()" th:text="#{common.button.label.save}"></button>
+							</div>
+							</div>
 						</div>
 						<div class="card-body p-0">
 							<div class="table-responsive" style="overflow: hidden;">

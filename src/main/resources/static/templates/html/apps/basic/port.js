@@ -1,11 +1,10 @@
 var tableName = '#port-table';
 $( document ).ready(function() {
-   portTableInit();
-   
+   	portTableInit();
     $('input[type="file"]').change(function() { 
     	upload(this);
 	});
-
+	
 });
 
 async function upload(customFile) {
@@ -25,9 +24,10 @@ async function upload(customFile) {
  * 조회
  */
 async function search() {
-	response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#hblNo').val()});
 	$(tableName).clearGridData();
+	let response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#hblNo').val()});
 	$(tableName).searchData(response.data, {frozen:true});
+	response = null;
 }
 
 function portTableInit(){
@@ -43,10 +43,10 @@ function portTableInit(){
 	       	{ name: 'invoice', 				width: 70, 		align:'center',		rowspan: true,	frozen:true},
 	    	{ name: 'concine', 				width: 150, 	align:'center',		rowspan: true,	frozen:true},
 	    	{ name: 'profitDate', 			width: 90, 		align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true, formatter: domesticSalesFn},
-	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true, formatter: foreignSalesFn},
+	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true},
+	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true},
 	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'partner', 				width: 120, 	align:'center',		frozen:true,	cellattr:idColorFmt},
+	    	{ name: 'partner', 				width: 120, 	align:'center',		frozen:true},
 	    	{ name: 'tankNo', 				width: 140, 	align:'center',		frozen:true},
 	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true},
 	    	{ name: 'item', 				width: 250, 	align:'center',		rowspan: true},
@@ -58,7 +58,7 @@ function portTableInit(){
 	    	{ name: 'pod', 					width: 100, 	align:'center'},
 	    	{ name: 'terminal', 			width: 150, 	align:'center'},
 	    	{ name: 'etd', 					width: 90, 		align:'center'},
-	    	{ name: 'eta', 					width: 90, 		align:'center',	cellattr:idColorFmt},
+	    	{ name: 'eta', 					width: 90, 		align:'center'},
 	       	{ name: 'ata', 					width: 90, 		align:'center'},
 	       	{ name: 'remark', 				width: 250, 	align:'center',		rowspan: true},
 	       	{ name: 'ft', 					width: 70, 		align:'center'},
@@ -67,11 +67,11 @@ function portTableInit(){
 	       	{ name: 'estimateReturnDate', 	width: 160, 	align:'center'},
 	       	{ name: 'returnDate', 			width: 100, 	align:'center', editable: true, edittype: "date"},
 	       	{ name: 'demDays', 				width: 80, 		align:'center'},
-	       	{ name: 'totalDem', 			width: 100, 	align:'center', formatter: totalDemFn},
+	       	{ name: 'totalDem', 			width: 100, 	align:'center'},
 	       	{ name: 'returnDepot', 			width: 80, 		align:'center'},
 	       	{ name: 'demRcvd', 				width: 90, 		align:'center'},
-	       	{ name: 'demPrch', 				width: 100, 	align:'center', formatter: demPrchFn},
-	       	{ name: 'demSales', 			width: 100, 	align:'center', formatter: demSalesFn},
+	       	{ name: 'demPrch', 				width: 100, 	align:'center'},
+	       	{ name: 'demSales', 			width: 100, 	align:'center'},
 	       	{ name: 'depotInDate', 			width: 180, 	align:'center'},
 	       	{ name: 'repositionPrch', 		width: 120, 	align:'center'}
 	   	],
@@ -167,18 +167,19 @@ function portSaveFn(response){
  	}
 }
 
-
-async function deletePort(){
-	const selectObjects = ComMultiSelectRow(tableName);
-	if(selectObjects.length === 0)
-		alertMessage(getMessage('0000'), 'info');
-	else{
-		await requestApi('DELETE', '/api/basic/port', selectObjects, {successFn : portDeleteSaveFn, errorFn : portDeleteSaveFn});
-	}
+function frozenCelHide(){
+	var frozenCelNotVal = [];
+	var frozenCelVal = $('#frozenCel').val();
+	$("#frozenCel > option").each(function() {
+		frozenCelNotVal.push(this.value);
+	});
+	frozenCelNotVal = frozenCelNotVal.filter(x => !frozenCelVal.includes(x));
+	$(tableName).hideCol(frozenCelVal);
+	$(tableName).showCol(frozenCelNotVal);
 }
 
-function portDeleteSaveFn(response){
-	if(response.common.status === 'S'){
- 		search();
- 	}
+
+function gridClear(){
+	console.log('clear');
+	$(tableName).clearGridData();
 }
