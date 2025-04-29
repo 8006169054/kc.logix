@@ -6860,7 +6860,7 @@ $.jgrid.extend({
 	searchData : function(rdata, options) {
 		var t = this;	
 		$.each(rdata, function(index, data){
-			if(data.jqFlag === undefined)
+			if(data.jqFlag === undefined || data.jqFlag === null)
 				data.jqFlag = "";
 			
 			if(options != undefined && options.jqFlag !== undefined)
@@ -6979,7 +6979,7 @@ $.jgrid.extend({
 						id = rowid;
 						rowid  = t.p.idPrefix + rowid;
 						if(ni) {
-							addRowData('addRowData1');
+//							addRowData('addRowData1');
 							prp = t.formatCol(0,1,'',null,rowid, true);
 							row[row.length] = "<td role=\"gridcell\" " + rnc +" "+prp+">0</td>";
 						}

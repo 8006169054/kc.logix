@@ -235,6 +235,14 @@ public class PortRepository extends KainosRepositorySupport {
 	
 	/**
 	 * 
+	 * @throws Exception
+	 */
+	public void excelUploadHblNoDelete(String mblNo) throws Exception {
+		delete(websiteTerminalCode).where(websiteTerminalCode.mblNo.eq(mblNo)).execute();
+	}
+	
+	/**
+	 * 
 	 * @param uuid
 	 * @throws Exception
 	 */

@@ -28,7 +28,6 @@ function tableInit(){
 		height: 530, 
 		width: '100%',
 		dblEdit : true,
-		rownumbers : true,
 //		delselect: true,
 //		multiselect: true,
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
@@ -64,7 +63,7 @@ async function add(){
 async function search() {
 	response = await requestApi('GET', '/api/basic/terminal', {name : $('#name').val()});
 	$(tableName).clearGridData();
-	$(tableName).searchData(response.data);
+	$(tableName).searchData(response.data, {editor: true});
 }
 
 async function save(){
