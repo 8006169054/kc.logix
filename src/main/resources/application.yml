@@ -49,17 +49,3 @@ kainos:
   message:
     enabled: true
     path: classpath:/messages/*.yml ## 파일 사용할 경우
-    
-kclogc:
-  mail:
-    host: smtp.hmm21.com
-    properties:
-      mail:
-        port: 25
-        transport: smtp
-        debug: false
-        smtp:
-          auth: false
-          starttls:
-            enable: true
-      

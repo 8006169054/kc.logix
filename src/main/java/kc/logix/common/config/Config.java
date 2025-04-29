@@ -1,57 +1,38 @@
 package kc.logix.common.config;
 
-import java.util.Map;
 import java.util.Properties;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import kainos.framework.core.autoconfigure.properties.KainosMailProperties;
-
 @Configuration
-@ConditionalOnProperty(prefix = "kclogc.mail", name = "host")
-@EnableConfigurationProperties(KainosMailProperties.class)
 public class Config {
 
+	private static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
+	private static final String MAIL_DEBUG = "mail.smtp.debug";
+	private static final String MAIL_CONNECTION_TIMEOUT = "mail.smtp.connectiontimeout";
+	private static final String MAIL_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable";
+
 	@Bean
-	JavaMailSenderImpl mailSender(KainosMailProperties properties) {
-		JavaMailSenderImpl sender = new JavaMailSenderImpl();
-		applyProperties(properties, sender);
-		return sender;
-	}
-	
-	/**
-	 * 
-	 * @param properties
-	 * @param sender
-	 */
-	private void applyProperties(KainosMailProperties properties, JavaMailSenderImpl sender) {
-		sender.setHost(properties.getHost());
-		if (properties.getPort() != null) {
-			sender.setPort(properties.getPort());
-		}
-		sender.setUsername(properties.getUsername());
-		sender.setPassword(properties.getPassword());
-		sender.setProtocol(properties.getProtocol());
-		if (properties.getDefaultEncoding() != null) {
-			sender.setDefaultEncoding(properties.getDefaultEncoding().name());
-		}
-		if (!properties.getProperties().isEmpty()) {
-			sender.setJavaMailProperties(asProperties(properties.getProperties()));
-		}
+	JavaMailSender javaMailService() {
+		JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+		javaMailSender.setHost("smtp.office365.com");
+		javaMailSender.setUsername("");
+		javaMailSender.setPassword("");
+		javaMailSender.setPort(587);
+
+		Properties properties = javaMailSender.getJavaMailProperties();
+		properties.put(MAIL_SMTP_AUTH, true);
+		properties.put(MAIL_DEBUG, true);
+//	        properties.put(MAIL_CONNECTION_TIMEOUT, connectionTimeout);
+		properties.put(MAIL_SMTP_STARTTLS_ENABLE, true);
+
+		javaMailSender.setJavaMailProperties(properties);
+		javaMailSender.setDefaultEncoding("UTF-8");
+
+		return javaMailSender;
 	}
 
-	/**
-	 * 
-	 * @param source
-	 * @return
-	 */
-	private Properties asProperties(Map<String, String> source) {
-		Properties properties = new Properties();
-		properties.putAll(source);
-		return properties;
-	}
 }

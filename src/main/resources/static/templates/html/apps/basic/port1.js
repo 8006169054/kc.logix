@@ -79,7 +79,7 @@ function arrivalNoticeFn (cellvalue, options, rowObject ){
 
 /** 국내 매출 */
 function domesticSalesFn (cellvalue, options, rowObject ){
-	if(cellvalue !== '-'){
+	if(cellvalue !== '-' && cellvalue !== ''){
 		return usMoneyConversion('US$', cellvalue, '');
 	} 
 	return cellvalue;
@@ -87,7 +87,7 @@ function domesticSalesFn (cellvalue, options, rowObject ){
 
 /** 국내 매출 */
 function foreignSalesFn (cellvalue, options, rowObject ){
-	if(cellvalue !== '-'){
+	if(cellvalue !== '-' && cellvalue !== ''){
 		return usMoneyConversion('US$', cellvalue, '');
 	} 
 	return cellvalue;
@@ -95,7 +95,7 @@ function foreignSalesFn (cellvalue, options, rowObject ){
 
 /**  TOTAL DEM */
 function totalDemFn (cellvalue, options, rowObject ){
-	if(cellvalue !== 'N/A'){
+	if(cellvalue !== 'N/A' && cellvalue !== ''){
 		return usMoneyConversion('US$', cellvalue, '');
 	} 
 	return cellvalue;
@@ -103,7 +103,7 @@ function totalDemFn (cellvalue, options, rowObject ){
 
 /**  DEM(USD)-매입 */
 function demPrchFn (cellvalue, options, rowObject ){
-	if(cellvalue !== 'N/A'){
+	if(cellvalue !== 'N/A' && cellvalue !== ''){
 		return usMoneyConversion('US$', cellvalue, '');
 	} 
 	return cellvalue;
@@ -111,7 +111,7 @@ function demPrchFn (cellvalue, options, rowObject ){
 
 /**  DEM 매출 */
 function demSalesFn (cellvalue, options, rowObject ){
-	if(cellvalue !== 'N/A'){
+	if(cellvalue !== 'N/A' && cellvalue !== ''){
 		return usMoneyConversion('US$', cellvalue, '');
 	} 
 	return cellvalue;
