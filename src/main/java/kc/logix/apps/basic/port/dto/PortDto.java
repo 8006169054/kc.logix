@@ -1,7 +1,5 @@
 package kc.logix.apps.basic.port.dto;
 
-import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
-
 import kainos.framework.core.support.jqgrid.dto.RowSpan;
 import kc.logix.common.util.excel.Field;
 import lombok.AllArgsConstructor;
@@ -108,13 +106,13 @@ public class PortDto {
 	private String returnDate; //RETURN DATE
 	
 	@Field(value = "AD")
-	private String demDays; //DEM DAYS
+	private String returnDepot; //RETURN DEPOT
 	
 	@Field(value = "AE")
 	private String totalDem; //TOTAL DEM
 	
 	@Field(value = "AF")
-	private String returnDepot; //반납DEPOT
+	private String demReceived; //DEM RECEIVED
 	
 	@Field(value = "AG")
 	private String demRcvd; //DEM RCVD
@@ -131,6 +129,7 @@ public class PortDto {
 	@Field(value = "AK")
 	private String repositionPrch; //REPOSITION 매입
 	
+	private String homepage;
 	private String createUserId;
 	private String createDate;
 	private String updateUserId;

@@ -1,6 +1,7 @@
 package kc.logix.apps.basic.port.repository;
 
 import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
+import static kc.logix.common.entity.QTerminal.terminal;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,9 @@ public class PortRepository extends KainosRepositorySupport {
 		if(!KainosStringUtils.isEmpty(paramDto.getHblNo()))
 			where.and(websiteTerminalCode.hblNo.contains(paramDto.getHblNo()));
 		
+		if(!KainosStringUtils.isEmpty(paramDto.getArrivalNotice()) && (paramDto.getArrivalNotice().equals("1") || paramDto.getArrivalNotice().equals("0")))
+			where.and(websiteTerminalCode.arrivalNotice.contains(paramDto.getArrivalNotice()));
+		
 		return select(Projections.bean(PortDto.class,
 					websiteTerminalCode.uuid,
 					websiteTerminalCode.sales,
@@ -46,13 +50,14 @@ public class PortRepository extends KainosRepositorySupport {
 					websiteTerminalCode.tankNo,
 					websiteTerminalCode.term,
 					websiteTerminalCode.item,
-					websiteTerminalCode.vslVoy,
+					websiteTerminalCode.vesselVoyage,
 					websiteTerminalCode.carrier,
 					websiteTerminalCode.mblNo,
 					websiteTerminalCode.hblNo,
 					websiteTerminalCode.pol,
 					websiteTerminalCode.pod,
 					websiteTerminalCode.terminal,
+					terminal.homepage,
 					websiteTerminalCode.etd,
 					websiteTerminalCode.eta,
 					websiteTerminalCode.ata,
@@ -62,7 +67,7 @@ public class PortRepository extends KainosRepositorySupport {
 					websiteTerminalCode.endOfFt,
 					websiteTerminalCode.estimateReturnDate,
 					websiteTerminalCode.returnDate,
-					websiteTerminalCode.demDays,
+					websiteTerminalCode.demReceived,
 					websiteTerminalCode.totalDem,
 					websiteTerminalCode.returnDepot,
 					websiteTerminalCode.demRcvd,
@@ -75,6 +80,7 @@ public class PortRepository extends KainosRepositorySupport {
 					websiteTerminalCode.updateUserId,
 					Expressions.stringTemplate("to_char({0}, {1})", websiteTerminalCode.updateDate, "YYYY-MM-DD").as("updateDate")
 				)).from(websiteTerminalCode)
+				.leftJoin(terminal).on(terminal.code.eq(websiteTerminalCode.terminal).or(terminal.region.eq(websiteTerminalCode.pod)))
 				.where(where)
 				.orderBy(websiteTerminalCode.uuid.asc())
 				.fetch();
@@ -102,7 +108,7 @@ public class PortRepository extends KainosRepositorySupport {
 			websiteTerminalCode.tankNo,
 			websiteTerminalCode.term,
 			websiteTerminalCode.item,
-			websiteTerminalCode.vslVoy,
+			websiteTerminalCode.vesselVoyage,
 			websiteTerminalCode.carrier,
 			websiteTerminalCode.mblNo,
 			websiteTerminalCode.hblNo,
@@ -118,7 +124,7 @@ public class PortRepository extends KainosRepositorySupport {
 			websiteTerminalCode.endOfFt,
 			websiteTerminalCode.estimateReturnDate,
 			websiteTerminalCode.returnDate,
-			websiteTerminalCode.demDays,
+			websiteTerminalCode.demReceived,
 			websiteTerminalCode.totalDem,
 			websiteTerminalCode.returnDepot,
 			websiteTerminalCode.demRcvd,
@@ -161,7 +167,7 @@ public class PortRepository extends KainosRepositorySupport {
 			paramDto.getEndOfFt(),
 			paramDto.getEstimateReturnDate(),
 			paramDto.getReturnDate(),
-			paramDto.getDemDays(),
+			paramDto.getDemReceived(),
 			paramDto.getTotalDem().replaceAll("US\\$", ""),
 			paramDto.getReturnDepot(),
 			paramDto.getDemRcvd(),
@@ -196,7 +202,7 @@ public class PortRepository extends KainosRepositorySupport {
 			.set(websiteTerminalCode.tankNo,              paramDto.getTankNo())
 			.set(websiteTerminalCode.term,                paramDto.getTerm())
 			.set(websiteTerminalCode.item,                paramDto.getItem())
-			.set(websiteTerminalCode.vslVoy,         	paramDto.getVesselVoyage())
+			.set(websiteTerminalCode.vesselVoyage,        paramDto.getVesselVoyage())
 			.set(websiteTerminalCode.carrier,             paramDto.getCarrier())
 			.set(websiteTerminalCode.mblNo,               paramDto.getMblNo())
 			.set(websiteTerminalCode.hblNo,               paramDto.getHblNo())
@@ -212,7 +218,7 @@ public class PortRepository extends KainosRepositorySupport {
 			.set(websiteTerminalCode.endOfFt,             paramDto.getEndOfFt())
 			.set(websiteTerminalCode.estimateReturnDate,  paramDto.getEstimateReturnDate())
 			.set(websiteTerminalCode.returnDate,          paramDto.getReturnDate())
-			.set(websiteTerminalCode.demDays,             paramDto.getDemDays())
+			.set(websiteTerminalCode.demReceived,         paramDto.getDemReceived())
 			.set(websiteTerminalCode.totalDem,            paramDto.getTotalDem().replaceAll("US\\$", ""))
 			.set(websiteTerminalCode.returnDepot,         paramDto.getReturnDepot())
 			.set(websiteTerminalCode.demRcvd,             paramDto.getDemRcvd())

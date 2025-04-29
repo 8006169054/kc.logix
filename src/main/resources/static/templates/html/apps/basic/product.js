@@ -17,20 +17,28 @@ function productTableInit(){
 	   	datatype: "json",
 	   	colNames: productTableColNames.split(','),
 	   	colModel: [
-			{ name: 'jqFlag', 			width: 70, 		align:'center', hidden : true},
+			{ name: 'jqFlag', 			width: 70, 		align:'center', hidden : false},
 	       	{ name: 'code', 			width: 70, 		align:'center', hidden : true},
-	       	{ name: 'name', 			width: 500, 	align:'left'},
+	       	{ name: 'name', 			width: 500, 	align:'left', editable: true, cellattr: terminalFn},
 	    	{ name: 'updateUserId', 	width: 100, 	align:'center'},
 	    	{ name: 'updateDate',		width: 140,		align:'center'}
 	   	],
 		height: 500, 
 		width: '100%',
+		dblEdit : true,
 		multiselect: true,
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
-			Object.assign(productData, ComRowData(this.id, iRow));
-			$('#add').click();
+//			Object.assign(productData, ComRowData(this.id, iRow));
+//			$('#add').click();
 		}
 	});
+}
+
+/**  터미널 링크 */
+function terminalFn (rowId, tv, rawObject, cm, rdata){
+//	return "<a href='" + rowObject.homepage + "' target='_blank'>" + cellvalue + "</a>";
+console.log(rowId, tv, rawObject, cm, rdata);
+	return tv;
 }
 
 async function deleteProduct(){

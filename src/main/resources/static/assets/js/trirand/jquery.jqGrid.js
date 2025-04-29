@@ -1319,7 +1319,6 @@ $.extend($.jgrid,{
 					$("#"+gID).trigger(eee);
 					break;
 				case 'ArrowDown' :
-					//console.log(eee);
 					eee.keyCode = 40;
 					$("#"+gID).trigger(eee);
 					break;
@@ -2702,6 +2701,7 @@ $.fn.jqGrid = function( pin ) {
 				$.extend(true, $.jgrid.styleUI.Bootstrap5, $.jgrid.iconSet[ts.p.iconSet]);
 			}
 		}
+		
 		var getstyle = $.jgrid.getMethod("getStyleUI"),
 		stylemodule = ts.p.styleUI + ".common",
 		disabled = getstyle(stylemodule,'disabled', true),
@@ -2752,7 +2752,7 @@ $.fn.jqGrid = function( pin ) {
 				result += "width: "+grid.headers[pos].width+"px;";
 			} else if ( $.jgrid.isFunction(cm.cellattr) || (typeof cm.cellattr === "string" && !$.jgrid.isNull( $.jgrid.cellattr ) && $.jgrid.isFunction($.jgrid.cellattr[cm.cellattr]))) {
 				cellAttrFunc = $.jgrid.isFunction(cm.cellattr) ? cm.cellattr : $.jgrid.cellattr[cm.cellattr];
-				celp = cellAttrFunc.call(ts, rowId, tv, rawObject, cm, rdata);
+				celp = cellAttrFunc.call(ts, rowInd, tv, rawObject, cm, rdata);
 				if(celp && typeof celp === "string") {
 					if(celp.indexOf('title') > -1) { cm.title=false;}
 					if(celp.indexOf('class') > -1) { clas = undefined;}
@@ -3672,12 +3672,10 @@ $.fn.jqGrid = function( pin ) {
 				transaction.onerror = function(event) {
 					endReq();
 					reject(event.target);
-					//console.log(event.target);
 				};
 				const store = transaction.objectStore(ts.p.dbconfig.dbtable);
 				const index = store.index( INDEX_NAME );
 				index.count(range).onsuccess = (e) => {
-					//console.log(e);
 					if(ts.p.search && srules.rules.length) {
 						total = 0;
 					} else  {
@@ -3706,7 +3704,6 @@ $.fn.jqGrid = function( pin ) {
 					}
 				};
 				res.onerror = function(event) {
-					console.log(event);
 				};
 			};
 		});},
@@ -3945,131 +3942,131 @@ $.fn.jqGrid = function( pin ) {
 			return  retresult;
 		},
 		updatepager = function(rn, dnd) {
-			var cp, last, base, from,to,tot,fmt, pgboxes = "", sppg,
-			pgid = ts.p.pager ? ts.p.pager.substring(1) : "",
-			tspg = pgid ? "_"+pgid : "",
-			tspg_t = ts.p.toppager ? "_"+ts.p.toppager.slice(1) : "";
-			base = parseInt(ts.p.page,10)-1;
-			if(base < 0) { base = 0; }
-			base = base*parseInt(ts.p.rowNum,10);
-			to = base + ts.p.reccount;
-			
-			try{
-				if (ts.p.scroll) {
-					var rows = $("tbody", ts.grid.bDiv).first().find("> tr").slice( 1 );
-					if(to > ts.p.records) {
-						to = ts.p.records;
-					}
-					base = to - rows.length;
-					ts.p.reccount = rows.length;
-					var rh = rows.outerHeight() || ts.grid.prevRowHeight;
-					if (rh) {
-						var top = base * rh;
-						var height = parseInt(ts.p.records,10) * rh;
-						$(ts.grid.bDiv).find(">div").first().css({height : height}).children("div").first().css({height:top,display:top?"":"none"});
-						if (ts.grid.bDiv.scrollTop === 0 && ts.p.page > 1) {
-							ts.grid.bDiv.scrollTop = ts.p.rowNum * (ts.p.page - 1) * rh;
-						}
-					}
-					ts.grid.bDiv.scrollLeft = ts.grid.hDiv.scrollLeft;
-				}
-				pgboxes = ts.p.pager || "";
-				pgboxes += ts.p.toppager ?  (pgboxes ? "," + ts.p.toppager : ts.p.toppager) : "";
-				if(pgboxes) {
-					fmt = $.jgrid.getRegional(ts, "formatter.integer");
-					cp = intNum(ts.p.page);
-					last = intNum(ts.p.lastpage);
-					$(".selbox",pgboxes)[ this.p.useProp ? 'prop' : 'attr' ]("disabled",false);
-					if(ts.p.pginput===true) {
-						$('.ui-pg-input',pgboxes)[$('.ui-pg-input',pgboxes).first().is(':input')?'val':'html']( (last < cp) ? ts.p.lastpage : ts.p.page);
-						sppg = ts.p.toppager ? '#sp_1'+tspg+",#sp_1"+tspg_t : '#sp_1'+tspg;
-						$(sppg).html($.fmatter ? $.fmatter.util.NumberFormat(ts.p.lastpage,fmt):ts.p.lastpage);
-					}
-					if (ts.p.viewrecords){
-						if(ts.p.reccount === 0) {
-							$(".ui-paging-info",pgboxes).html($.jgrid.getRegional(ts, "defaults.emptyrecords", ts.p.emptyrecords ));
-						} else {
-							from = base+1;
-							tot=ts.p.records;
-							if($.fmatter) {
-								from = $.fmatter.util.NumberFormat(from,fmt);
-								to = $.fmatter.util.NumberFormat(to,fmt);
-								tot = $.fmatter.util.NumberFormat(tot,fmt);
-							}
-							var rt = $.jgrid.getRegional(ts, "defaults.recordtext", ts.p.recordtext);
-							$(".ui-paging-info",pgboxes).html($.jgrid.template( rt ,from,to,tot));
-						}
-					}
-					if(ts.p.pgbuttons===true) {
-						if(cp<=0) {cp = last = 0;}
-						if(cp===1 || cp === 0) {
-							$("#first"+tspg+", #prev"+tspg).addClass( disabled ).removeClass( hover );
-							if(ts.p.toppager) { $("#first_t"+tspg_t+", #prev_t"+tspg_t).addClass( disabled ).removeClass( hover ); }
-						} else {
-							$("#first"+tspg+", #prev"+tspg).removeClass( disabled );
-							if(ts.p.toppager) { $("#first_t"+tspg_t+", #prev_t"+tspg_t).removeClass( disabled ); }
-						}
-						if(cp===last || cp === 0) {
-							$("#next"+tspg+", #last"+tspg).addClass( disabled ).removeClass( hover );
-							if(ts.p.toppager) { $("#next_t"+tspg_t+", #last_t"+tspg_t).addClass( disabled ).removeClass( hover ); }
-						} else {
-							$("#next"+tspg+", #last"+tspg).removeClass( disabled );
-							if(ts.p.toppager) { $("#next_t"+tspg_t+", #last_t"+tspg_t).removeClass( disabled ); }
-						}
-					}
-				}
-				if(rn===true && ts.p.rownumbers === true) {
-					$(">td.jqgrid-rownum",ts.rows).each(function(i){
-						$(this).html(base+1+i);
-					});
-				}
-				if(ts.p.reccount === 0 ) {
-					var classes = ts.p.emptyRecordRow ?
-						getstyle(stylemodule, 'rowBox', true, 'jqgrow ui-row-'+ ts.p.direction+' not-editable-row not-editable-cell '+ disabled) :
-						'jqgfirstrow not-editable-row not-editable-cell',
-					tstr = constructTr("norecs", false, classes, {}, "");
-			
-					tstr += ts.p.emptyRecordRow ? 
-					"<td style='text-align:center;' colspan='"+grid.headers.length+"'>"+$.jgrid.getRegional(ts, "defaults.emptyrecords", ts.p.emptyrecords )+"</td>" :
-					"<td style='height:0.1px;visibility:hidden;' colspan='"+grid.headers.length+"'>&nbsp;</td>";
-					tstr += "</tr>";
-					$(grid.bDiv).find("table").first().append(tstr);
-					classes = null;
-				}
-				if(dnd && ts.p.jqgdnd) { $(ts).jqGrid('gridDnD','updateDnD');}
-				$(ts).triggerHandler("jqGridGridComplete");
-				if($.jgrid.isFunction(ts.p.gridComplete)) {ts.p.gridComplete.call(ts);}
-				$(ts).triggerHandler("jqGridAfterGridComplete");	
-				
-				// 정인선 복사 붙여넣기 이벤트 추가
-				$('#gview_' + ts.p.id).on('paste', function(e) {
-					e.preventDefault();
-					var type = $(':focus').attr('type');
-					if(type === 'text') return;
-					if(!e) e = window.event; // || event
-					if(e.srcElement) e.target = e.srcElement;
-					var clipboardData;
-					if (window.clipboardData && window.clipboardData.getData){ // IE
-						clipboardData = window.clipboardData.getData("Text");
-					}else{
-						var oe = (e.originalEvent || e).clipboardData;
-						clipboardData = oe.getData("text/plain");
-					}
-					clipboardData = clipboardData.split("	");
-					for ( var i = 0 ; i < clipboardData.length ; i++ ) {
-						$(ts).jqGrid("setCell", $.jgrid.jqID(ts.p.selrow), (selectGridData.iCol+i), clipboardData[i]);
-					}
-					type=null,clipboardData=null;
-				}); 
-			}catch(err){
-				
-			}finally{
-				cp = null, last = null, base = null, from = null, to = null, tot = null, fmt = null, pgboxes = null, sppg = null,
-						pgid = null,
-						tspg = null,
-						tspg_t = null;
-						base = null;
-			}	
+//			var cp, last, base, from,to,tot,fmt, pgboxes = "", sppg,
+//			pgid = ts.p.pager ? ts.p.pager.substring(1) : "",
+//			tspg = pgid ? "_"+pgid : "",
+//			tspg_t = ts.p.toppager ? "_"+ts.p.toppager.slice(1) : "";
+//			base = parseInt(ts.p.page,10)-1;
+//			if(base < 0) { base = 0; }
+//			base = base*parseInt(ts.p.rowNum,10);
+//			to = base + ts.p.reccount;
+//			
+//			try{
+//				if (ts.p.scroll) {
+//					var rows = $("tbody", ts.grid.bDiv).first().find("> tr").slice( 1 );
+//					if(to > ts.p.records) {
+//						to = ts.p.records;
+//					}
+//					base = to - rows.length;
+//					ts.p.reccount = rows.length;
+//					var rh = rows.outerHeight() || ts.grid.prevRowHeight;
+//					if (rh) {
+//						var top = base * rh;
+//						var height = parseInt(ts.p.records,10) * rh;
+//						$(ts.grid.bDiv).find(">div").first().css({height : height}).children("div").first().css({height:top,display:top?"":"none"});
+//						if (ts.grid.bDiv.scrollTop === 0 && ts.p.page > 1) {
+//							ts.grid.bDiv.scrollTop = ts.p.rowNum * (ts.p.page - 1) * rh;
+//						}
+//					}
+//					ts.grid.bDiv.scrollLeft = ts.grid.hDiv.scrollLeft;
+//				}
+//				pgboxes = ts.p.pager || "";
+//				pgboxes += ts.p.toppager ?  (pgboxes ? "," + ts.p.toppager : ts.p.toppager) : "";
+//				if(pgboxes) {
+//					fmt = $.jgrid.getRegional(ts, "formatter.integer");
+//					cp = intNum(ts.p.page);
+//					last = intNum(ts.p.lastpage);
+//					$(".selbox",pgboxes)[ this.p.useProp ? 'prop' : 'attr' ]("disabled",false);
+//					if(ts.p.pginput===true) {
+//						$('.ui-pg-input',pgboxes)[$('.ui-pg-input',pgboxes).first().is(':input')?'val':'html']( (last < cp) ? ts.p.lastpage : ts.p.page);
+//						sppg = ts.p.toppager ? '#sp_1'+tspg+",#sp_1"+tspg_t : '#sp_1'+tspg;
+//						$(sppg).html($.fmatter ? $.fmatter.util.NumberFormat(ts.p.lastpage,fmt):ts.p.lastpage);
+//					}
+//					if (ts.p.viewrecords){
+//						if(ts.p.reccount === 0) {
+//							$(".ui-paging-info",pgboxes).html($.jgrid.getRegional(ts, "defaults.emptyrecords", ts.p.emptyrecords ));
+//						} else {
+//							from = base+1;
+//							tot=ts.p.records;
+//							if($.fmatter) {
+//								from = $.fmatter.util.NumberFormat(from,fmt);
+//								to = $.fmatter.util.NumberFormat(to,fmt);
+//								tot = $.fmatter.util.NumberFormat(tot,fmt);
+//							}
+//							var rt = $.jgrid.getRegional(ts, "defaults.recordtext", ts.p.recordtext);
+//							$(".ui-paging-info",pgboxes).html($.jgrid.template( rt ,from,to,tot));
+//						}
+//					}
+//					if(ts.p.pgbuttons===true) {
+//						if(cp<=0) {cp = last = 0;}
+//						if(cp===1 || cp === 0) {
+//							$("#first"+tspg+", #prev"+tspg).addClass( disabled ).removeClass( hover );
+//							if(ts.p.toppager) { $("#first_t"+tspg_t+", #prev_t"+tspg_t).addClass( disabled ).removeClass( hover ); }
+//						} else {
+//							$("#first"+tspg+", #prev"+tspg).removeClass( disabled );
+//							if(ts.p.toppager) { $("#first_t"+tspg_t+", #prev_t"+tspg_t).removeClass( disabled ); }
+//						}
+//						if(cp===last || cp === 0) {
+//							$("#next"+tspg+", #last"+tspg).addClass( disabled ).removeClass( hover );
+//							if(ts.p.toppager) { $("#next_t"+tspg_t+", #last_t"+tspg_t).addClass( disabled ).removeClass( hover ); }
+//						} else {
+//							$("#next"+tspg+", #last"+tspg).removeClass( disabled );
+//							if(ts.p.toppager) { $("#next_t"+tspg_t+", #last_t"+tspg_t).removeClass( disabled ); }
+//						}
+//					}
+//				}
+//				if(rn===true && ts.p.rownumbers === true) {
+//					$(">td.jqgrid-rownum",ts.rows).each(function(i){
+//						$(this).html(base+1+i);
+//					});
+//				}
+//				if(ts.p.reccount === 0 ) {
+//					var classes = ts.p.emptyRecordRow ?
+//						getstyle(stylemodule, 'rowBox', true, 'jqgrow ui-row-'+ ts.p.direction+' not-editable-row not-editable-cell '+ disabled) :
+//						'jqgfirstrow not-editable-row not-editable-cell',
+//					tstr = constructTr("norecs", false, classes, {}, "");
+//			
+//					tstr += ts.p.emptyRecordRow ? 
+//					"<td style='text-align:center;' colspan='"+grid.headers.length+"'>"+$.jgrid.getRegional(ts, "defaults.emptyrecords", ts.p.emptyrecords )+"</td>" :
+//					"<td style='height:0.1px;visibility:hidden;' colspan='"+grid.headers.length+"'>&nbsp;</td>";
+//					tstr += "</tr>";
+//					$(grid.bDiv).find("table").first().append(tstr);
+//					classes = null;
+//				}
+//				if(dnd && ts.p.jqgdnd) { $(ts).jqGrid('gridDnD','updateDnD');}
+//				$(ts).triggerHandler("jqGridGridComplete");
+//				if($.jgrid.isFunction(ts.p.gridComplete)) {ts.p.gridComplete.call(ts);}
+//				$(ts).triggerHandler("jqGridAfterGridComplete");	
+//				
+//				// 정인선 복사 붙여넣기 이벤트 추가
+//				$('#gview_' + ts.p.id).on('paste', function(e) {
+//					e.preventDefault();
+//					var type = $(':focus').attr('type');
+//					if(type === 'text') return;
+//					if(!e) e = window.event; // || event
+//					if(e.srcElement) e.target = e.srcElement;
+//					var clipboardData;
+//					if (window.clipboardData && window.clipboardData.getData){ // IE
+//						clipboardData = window.clipboardData.getData("Text");
+//					}else{
+//						var oe = (e.originalEvent || e).clipboardData;
+//						clipboardData = oe.getData("text/plain");
+//					}
+//					clipboardData = clipboardData.split("	");
+//					for ( var i = 0 ; i < clipboardData.length ; i++ ) {
+//						$(ts).jqGrid("setCell", $.jgrid.jqID(ts.p.selrow), (selectGridData.iCol+i), clipboardData[i]);
+//					}
+//					type=null,clipboardData=null;
+//				}); 
+//			}catch(err){
+//				
+//			}finally{
+//				cp = null, last = null, base = null, from = null, to = null, tot = null, fmt = null, pgboxes = null, sppg = null,
+//						pgid = null,
+//						tspg = null,
+//						tspg_t = null;
+//						base = null;
+//			}	
 		},
 		beginReq = function() {
 			ts.grid.hDiv.loading = true;
@@ -4298,6 +4295,27 @@ $.fn.jqGrid = function( pin ) {
 				}
 				ts.p._sort = false;
 			}
+			
+			// 정인선 복사 붙여넣기 이벤트 추가
+			$('#gview_' + ts.p.id).on('paste', function(e) {
+				e.preventDefault();
+				var type = $(':focus').attr('type');
+				if(type === 'text') return;
+				if(!e) e = window.event; // || event
+				if(e.srcElement) e.target = e.srcElement;
+				var clipboardData;
+				if (window.clipboardData && window.clipboardData.getData){ // IE
+					clipboardData = window.clipboardData.getData("Text");
+				}else{
+					var oe = (e.originalEvent || e).clipboardData;
+					clipboardData = oe.getData("text/plain");
+				}
+				clipboardData = clipboardData.split("	");
+				for ( var i = 0 ; i < clipboardData.length ; i++ ) {
+					$(ts).jqGrid("setCell", $.jgrid.jqID(ts.p.selrow), (selectGridData.iCol+i), clipboardData[i]);
+				}
+				type=null,clipboardData=null;
+			});
 		},
 		setHeadCheckBox = function ( checked ) {
 			$('#cb_'+$.jgrid.jqID(ts.p.id),ts.grid.hDiv)[ts.p.useProp ? 'prop': 'attr']("checked", checked);
@@ -5119,7 +5137,6 @@ $.fn.jqGrid = function( pin ) {
 						filters += "]";
 						i++;
 					} else {
-						//console.log('empty object');
 					}
 				}
 			}
@@ -6855,17 +6872,16 @@ $.jgrid.extend({
 		if(options !== undefined && options.frozen !== undefined && options.frozen)
 			$(t).jqGrid('setFrozenColumns'); 
 		
-		Object.assign($(t)[0].p.basedata,  $(t)[0].p.data);
-
+		if(options != undefined && options.editor)
+			$(t)[0].p.basedata = rdata;
+//		Object.assign($(t)[0].p.basedata,  rdata);
 		t = null;
 	},
 //	addRow : function(rowid, position) {
-//		console.log('addRow', rowid, position);
 //		var t = this
 //		var pos = $(t)[0].p.position;
 //		if(position !== undefined) pos = position;
 //		
-//		console.log('addRow', $(t)[0].p.initdata, pos);
 //		$($t).jqGrid('addRowData', p.rowID, $(t)[0].p.initdata, pos);
 //	},
 	checKedDelRow : function(iRow, iCol, checked) {
@@ -6963,6 +6979,7 @@ $.jgrid.extend({
 						id = rowid;
 						rowid  = t.p.idPrefix + rowid;
 						if(ni) {
+							addRowData('addRowData1');
 							prp = t.formatCol(0,1,'',null,rowid, true);
 							row[row.length] = "<td role=\"gridcell\" " + rnc +" "+prp+">0</td>";
 						}
@@ -7069,7 +7086,7 @@ $.jgrid.extend({
 					if(t.p.datatype === 'local') {
 						t.refreshIndex();
 					}
-					t.updatepager(true,true);
+//					t.updatepager(true,true);
 					success = true;
 					k = null, classes = null, lcdata = null,
 					t = null, datalen = null;
@@ -7287,21 +7304,17 @@ $.jgrid.extend({
 					$($t).jqGrid("setGridWidth",$t.p.shrinkToFit === true ? $t.p.tblwidth - (!isNaN($t.p.height) ? parseInt($t.p.scrollOffset,10) : 0) : $t.p.width );
 				}
 				/*
-				console.log(4);
 				if( gh && gHead)  {
 					for(var k =0; k < gHead.length; k++) {
 						$($t).jqGrid('setGroupHeaders', gHead[k]);
 					}
 				}
-				console.log(5);
 				if($t.p.colSpanHeader.length) {
 					$($t).jqGrid('setColSpanHeader', $t.p.colSpanHeader);
 				}
-				console.log(6);
 				if(frozen) {
 					$($t).jqGrid("setFrozenColumns");
 				}
-				console.log(7);
 				*/
 			}catch(err){
 			}finally{
@@ -7721,15 +7734,13 @@ $.jgrid.extend({
 		if(deleteChecked) return;
 		var iRowData = $($t).jqGrid('getRowData', iRow);
 		let jqFlag = null;
-		
 		/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
 		if(oRowData !== undefined){
 			
 			if(oRowData.jqFlag === C) return ;
-			
 			let keys = Object.keys(oRowData);
 			/* 수정 시 */
-			if(oRowData.jqFlag === '' && iRowData.jqFlag !==D){
+			if((oRowData.jqFlag === '' || oRowData.jqFlag === null) && iRowData.jqFlag !==D){
 				$(keys).each(function(i ,key){
 					if(key !== 'jqFlag'){
 						if(iRowData[key] !== oRowData[key]) {
@@ -7801,8 +7812,9 @@ $.jgrid.extend({
 							var fcell = $(tcell).clone();
 							$("#"+rowid +" td", "#" + $.jgrid.jqID($t.p.id + "_frozen") ).eq( pos ).replaceWith(fcell);
 						}
-						if(colname !== 'jqFlag') 
-							$($t).jqGrid("afterSaveJqFlag", rowid, $t.p.basedata[rowid-1]);
+//						if(colname !== 'jqFlag') {
+//							$($t).jqGrid("afterSaveJqFlag", rowid, $t.p.basedata[rowid-1]);
+//						}
 					}
 				}
 			}
@@ -7974,7 +7986,8 @@ $.jgrid.extend({
 			$t.p.data = []; $t.p._index = {};
 			$t.p.basedata = [];
 			$t.p.groupingView._locgr = false;
-			$t.updatepager(true,false);
+			$("#"+$.jgrid.jqID($t.p.id)+"_frozen").remove();
+//			$t.updatepager(true,false);
 		});
 	},
 	getInd : function(rowid,rc){
@@ -8239,16 +8252,16 @@ $.jgrid.extend({
 			pixelfix = borderbox ? 1 : 0;
 			try{
 				// TODO treeGrid and grouping  Support
-				if($t.p.subGrid === true ||
-					$t.p.treeGrid === true ||
-					$t.p.cellEdit === true ||
-					/*$t.p.sortable ||*/ 
-					$t.p.scroll ||
-					$t.p.frozenColumns
-					/* $t.p.grouping === true*/)
-				{
-					return;
-				}
+//				if($t.p.subGrid === true ||
+//					$t.p.treeGrid === true ||
+//					$t.p.cellEdit === true ||
+//					/*$t.p.sortable ||*/ 
+//					$t.p.scroll ||
+//					$t.p.frozenColumns
+//					/* $t.p.grouping === true*/)
+//				{
+//					return;
+//				}
 				// get the max index of frozen col
 				$t.p.frozenColCount = -1;
 				while(i<len)
@@ -8368,87 +8381,95 @@ $.jgrid.extend({
 					if($t.p.hoverrows === true) {
 						$("#"+$.jgrid.jqID($t.p.id)).off('mouseover mouseout');
 					}
-					//var hasscroll; 정인선 메모리 사용량 증가로 주석
-//					$($t).on('jqGridAfterGridComplete.setFrozenColumns', function () {
-//						var mh = [], btbl, bhtop, hrtbl, bttop,	ftbl;
-//						try{
-//							$("#"+$.jgrid.jqID($t.p.id)+"_frozen").remove();
-//							$($t.grid.fbDiv).height( $($t.grid.bDiv)[0].clientHeight ); //- (hasscroll ? 0 : $t.p.scrollOffset-3));
-//							$("#"+$.jgrid.jqID($t.p.id) + " tr[role=row].jqgrow").each(function(){
-//								mh.push( $(this).height() );
-//							});
-//							btbl = $("#"+$.jgrid.jqID($t.p.id)).clone(true);
-//							$("tr[role=row]",btbl).each(function(){
-//								$("td[role=gridcell]", this).slice( $t.p.frozenColCount + 1).remove();
-//							});
-//							$(btbl).width(1).attr("id",$t.p.id+"_frozen");
-//							$($t.grid.fbDiv).append(btbl);
-//							// set the height
-//							$("tr[role=row].jqgrow",btbl).each(function(i, n){
-//								$(this).height( mh[i] );
-//								if( Math.abs($(this).height() - mh[i]) >= 0.3  ) {
-//									var tt = $("td:visible", this).first();
-//									tt.height(mh[i] - Math.round(parseFloat(tt.css("border-bottom-width")) ));
-//								}
-//							});
-//							if($t.rows[1] && $t.rows[1].id === 'norecs') {
-//								$("#norecs td", btbl).html("");
-//							}
-//							$($t.grid.fbDiv)[0].scrollTop = $($t.grid.bDiv)[0].scrollTop;
-//							if($t.p.hoverrows === true) {
-//								$("tr.jqgrow", btbl).hover(
-//									function(){ 
-//										$(this).addClass( hover ); 
-//										$("#"+$.jgrid.jqID(this.id), "#"+$.jgrid.jqID($t.p.id)).addClass( hover ); 
-//									},function(){ 
-//										$(this).removeClass( hover ); 
-//										$("#"+$.jgrid.jqID(this.id), "#"+$.jgrid.jqID($t.p.id)).removeClass( hover ); 
-//									}
-//								);
-//								$("tr.jqgrow", "#"+$.jgrid.jqID($t.p.id)).hover(
-//									function(){ 
-//										$(this).addClass( hover ); 
-//										if($t != null)
-//											$("#"+$.jgrid.jqID(this.id), "#"+$.jgrid.jqID($t.p.id)+"_frozen").addClass( hover );
-//									
-//									},
-//									function(){ 
-//										$(this).removeClass( hover );
-//										if($t != null)
-//											$("#"+$.jgrid.jqID(this.id), "#"+$.jgrid.jqID($t.p.id)+"_frozen").removeClass( hover ); 
-//									}
-//								);
-//							}
-//							if($t.p.headerrow) {
-//								bhtop = $($t.grid.hrDiv).position();
-//								$("table",$t.grid.fhrDiv).remove();
-//								hrtbl = $(".ui-jqgrid-hrtable","#gview_"+$.jgrid.jqID($t.p.id)).clone(true);
-//								$("tr",hrtbl).each(function(){
-//									$("td", this).slice( $t.p.frozenColCount + 1 ).remove();
-//								});
-//								$(hrtbl).width(1);
-//								$($t.grid.fhrDiv).css("top", bhtop.top+"px").append(hrtbl);
-//							}				
-//							if($t.p.footerrow) {
-//								bttop = $($t.grid.sDiv).position();
-//								$("table",$t.grid.fsDiv).remove();
-//								ftbl = $(".ui-jqgrid-ftable","#gview_"+$.jgrid.jqID($t.p.id)).clone(true);
-//								$("tr",ftbl).each(function(){
-//									$("td", this).slice( $t.p.frozenColCount + 1 ).remove();
-//								});
-//								$(ftbl).width(1);
-//								$($t.grid.fsDiv).css("top", bttop.top+"px").append(ftbl);
-//							}
-//						}catch(err){
-//						}finally{
-//							mh=null, btbl=null, bhtop=null, hrtbl=null, bttop=null,	ftbl=null;
-//						}
-//					});
+					if($t.p.frozenColumns === undefined){
+						//var hasscroll; 정인선 메모리 사용량 증가로 주석
+						$($t).on('jqGridAfterGridComplete.setFrozenColumns', function () {
+	//						var mh = [], btbl, bhtop, hrtbl, bttop,	ftbl;
+							var btbl;
+							try{
+								$("#"+$.jgrid.jqID($t.p.id)+"_frozen").remove();
+								$($t.grid.fbDiv).height( $($t.grid.bDiv)[0].clientHeight ); //- (hasscroll ? 0 : $t.p.scrollOffset-3));
+	//							$("#"+$.jgrid.jqID($t.p.id) + " tr[role=row].jqgrow").each(function(){
+	//								mh.push( $(this).height() );
+	//							});
+								btbl = $("#"+$.jgrid.jqID($t.p.id)).clone(true);
+								
+								$("tr[role=row]",btbl).each(function(){
+									$("td[role=gridcell]", this).slice( $t.p.frozenColCount + 1).remove();
+								});
+								
+								$(btbl).width(1).attr("id",$t.p.id+"_frozen");
+								$($t.grid.fbDiv).append(btbl);
+	//							// set the height
+	//							$("tr[role=row].jqgrow",btbl).each(function(i, n){
+	//								$(this).height( mh[i] );
+	//								if( Math.abs($(this).height() - mh[i]) >= 0.3  ) {
+	//									var tt = $("td:visible", this).first();
+	//									tt.height(mh[i] - Math.round(parseFloat(tt.css("border-bottom-width")) ));
+	//								}
+	//							});
+	//							if($t.rows[1] && $t.rows[1].id === 'norecs') {
+	//								$("#norecs td", btbl).html("");
+	//							}
+	//							$($t.grid.fbDiv)[0].scrollTop = $($t.grid.bDiv)[0].scrollTop;
+	
+	//							if($t.p.hoverrows === true) {
+	//								$("tr.jqgrow", btbl).hover(
+	//									function(){ 
+	//										$(this).addClass( hover ); 
+	//										$("#"+$.jgrid.jqID(this.id), "#"+$.jgrid.jqID($t.p.id)).addClass( hover ); 
+	//									},function(){ 
+	//										$(this).removeClass( hover ); 
+	//										$("#"+$.jgrid.jqID(this.id), "#"+$.jgrid.jqID($t.p.id)).removeClass( hover ); 
+	//									}
+	//								);
+	//								$("tr.jqgrow", "#"+$.jgrid.jqID($t.p.id)).hover(
+	//									function(){ 
+	//										$(this).addClass( hover ); 
+	//										if($t != null)
+	//											$("#"+$.jgrid.jqID(this.id), "#"+$.jgrid.jqID($t.p.id)+"_frozen").addClass( hover );
+	//									
+	//									},
+	//									function(){ 
+	//										$(this).removeClass( hover );
+	//										if($t != null)
+	//											$("#"+$.jgrid.jqID(this.id), "#"+$.jgrid.jqID($t.p.id)+"_frozen").removeClass( hover ); 
+	//									}
+	//								);
+	//							}
+	//							if($t.p.headerrow) {
+	//								bhtop = $($t.grid.hrDiv).position();
+	//								$("table",$t.grid.fhrDiv).remove();
+	//								hrtbl = $(".ui-jqgrid-hrtable","#gview_"+$.jgrid.jqID($t.p.id)).clone(true);
+	//								$("tr",hrtbl).each(function(){
+	//									$("td", this).slice( $t.p.frozenColCount + 1 ).remove();
+	//								});
+	//								$(hrtbl).width(1);
+	//								$($t.grid.fhrDiv).css("top", bhtop.top+"px").append(hrtbl);
+	//							}				
+	//							if($t.p.footerrow) {
+	//								bttop = $($t.grid.sDiv).position();
+	//								$("table",$t.grid.fsDiv).remove();
+	//								ftbl = $(".ui-jqgrid-ftable","#gview_"+$.jgrid.jqID($t.p.id)).clone(true);
+	//								$("tr",ftbl).each(function(){
+	//									$("td", this).slice( $t.p.frozenColCount + 1 ).remove();
+	//								});
+	//								$(ftbl).width(1);
+	//								$($t.grid.fsDiv).css("top", bttop.top+"px").append(ftbl);
+	//							}
+							}catch(err){
+							}finally{
+	//							mh=null, btbl=null, bhtop=null, hrtbl=null, bttop=null,	ftbl=null;
+								btbl=null;
+							}
+						});
+					}
+					
 					if(!$t.grid.hDiv.loading) {
 						$($t).triggerHandler("jqGridAfterGridComplete.setFrozenColumns");
 					}
 					$t.p.frozenColumns = true;
-					$($t).triggerHandler("onFrozenColumnsCall");
+//					$($t).triggerHandler("onFrozenColumnsCall");
 				}
 			}catch(err){
 				
@@ -20987,7 +21008,7 @@ $.extend($.jgrid,{
 				v = cm.formatter.call($t,cellval,opts,rwdat);
 				}
 			} else if($.fmatter){
-				if(adf) {
+				if(adf) { 
 				v = $.fn.fmatter.call($t,cm.formatter,cellval,opts,rwdat);
 			}
 		}
@@ -24584,7 +24605,6 @@ $.jgrid.extend({
 								data = $.jgrid.getAccessor(data, options.reader);
 							}
 						} catch(error) {
-							console.log("Error:" +error);
 							return;
 						}
 						if($.jgrid.isFunction(options.beforeInsertData)) {
@@ -24647,7 +24667,6 @@ $.jgrid.extend({
 								const objectStoreRequest = oS.clear();
 								objectStoreRequest.onsuccess = (event) => {
 									// report the success of our request
-									console.log("All records are cleared");
 									db.close();
 									getIndexedDbData( true );
 								};
@@ -24697,14 +24716,12 @@ $.jgrid.extend({
 						const transaction = db.transaction(dbcfg.dbtable, "readwrite");
 						transaction.oncomplete = (event) => {
 							resolve(event);
-							console.log("Transaction completed succefully");
 						};
 						transaction.onerror = (event) => {
 							reject(event);
 							try {
 								$.jgrid.info_dialog.call("Error", event.target.error, "Close", {styleUI : ts.p.styleUI});
 							} catch (e) {
-								console.log(event.target.error);
 							}
 						};
 						const objectStore = transaction.objectStore(dbcfg.dbtable);
@@ -24730,7 +24747,6 @@ $.jgrid.extend({
 								}
 								};
 							req2.onerror = (e) => {
-								console.log(e.target.error);
 							};
 						}
 					};
@@ -24756,14 +24772,12 @@ $.jgrid.extend({
 						const transaction = db.transaction(dbcfg.dbtable, "readwrite");
 						transaction.oncomplete = (event) => {
 							resolve(event);
-							console.log("Transaction completed succefully");
 						};
 						transaction.onerror = (event) => {
 							reject(event);
 							try {
 								$.jgrid.info_dialog.call("Error", event.target.error, "Close", {styleUI : ts.p.styleUI});
 							} catch (e) {
-								console.log(event.target.error);
 							}
 						};
 						const objectStore = transaction.objectStore(dbcfg.dbtable);
@@ -24773,7 +24787,6 @@ $.jgrid.extend({
 							}
 							var objectStoreRequest = objectStore.add(data[i]);
 							objectStoreRequest.onsuccess = (event) => {
-								//console.log(event.type, objectStoreRequest.result);
 							};
 						}
 					};
@@ -24805,21 +24818,18 @@ $.jgrid.extend({
 						const transaction = db.transaction(dbcfg.dbtable, "readwrite");
 						transaction.oncomplete = (event) => {
 							resolve(event);
-							console.log("Transaction completed succefully");
 						};
 						transaction.onerror = (event) => {
 							reject(event);
 							try {
 								$.jgrid.info_dialog.call("Error", event.target.error, "Close", {styleUI : ts.p.styleUI});
 							} catch (e) {
-								console.log(event.target.error);
 							}
 						};
 						const objectStore = transaction.objectStore(dbcfg.dbtable);
 						for(let i=0;i<data.length;i++) {
 							var objectStoreRequest = objectStore.delete(test[i][keyName]);
 							objectStoreRequest.onsuccess = (event) => {
-								console.log("Deleted record: " + data[i]);
 							};							
 						}
 					};

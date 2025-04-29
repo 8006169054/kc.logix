@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostExcelReadDto {
+public class PostExcelReadDto2 {
 
 	private String jqFlag;
 	
@@ -107,23 +107,23 @@ public class PostExcelReadDto {
 	@Field(value = "AC")
 	private String returnDate; //RETURN DATE
 	
-	@Field(value = "AD")
-	private String returnDepot; //RETURN DEPOT
+	@Field(value = "AD", function = "demDaysFn")
+	private String demDays; //DEM DAYS
 	
 	@Field(value = "AE", function = "totalDemFn")
 	private String totalDem; //TOTAL DEM
 	
 	@Field(value = "AF")
-	private String demReceived; //DEM RECEIVED
+	private String returnDepot; //반납DEPOT
 	
 	@Field(value = "AG")
 	private String demRcvd; //DEM RCVD
 	
 	@Field(value = "AH", function = "demPrchFn")
-	private String demPrch; //COMMISSION DEDUCTED
+	private String demPrch; //DEM(USD)-매입
 	
 	@Field(value = "AI", function = "demSalesFn")
-	private String demSales; //DEM COMMISSION
+	private String demSales; //DEM 매출
 	
 	@Field(value = "AJ")
 	private String depotInDate; //DEPOT IN DATE
@@ -139,7 +139,7 @@ public class PostExcelReadDto {
 	 * @param dateDto
 	 * @return
 	 */
-	public String foreignSalesFn(PostExcelReadDto dateDto) {
+	public String foreignSalesFn(PostExcelReadDto2 dateDto) {
 		String value = "-";
 		try {
 			value = String.format("%.0f", Double.parseDouble(dateDto.getForeignSales()));
@@ -154,7 +154,7 @@ public class PostExcelReadDto {
 	 * @param dateDto
 	 * @return
 	 */
-	public String demRateFn(PostExcelReadDto dateDto) {
+	public String demRateFn(PostExcelReadDto2 dateDto) {
 		String value = "-";
 		try {
 			value = String.format("%.0f", Double.parseDouble(dateDto.getDemRate()));
@@ -169,7 +169,7 @@ public class PostExcelReadDto {
 	 * @param dateDto
 	 * @return
 	 */
-	public String domesticSalesFn(PostExcelReadDto dateDto) {
+	public String domesticSalesFn(PostExcelReadDto2 dateDto) {
 		String value = "-";
 		try {
 			value = String.format("%.0f", Double.parseDouble(dateDto.getDomesticSales()));
@@ -184,7 +184,7 @@ public class PostExcelReadDto {
 	 * @param dateDto
 	 * @return
 	 */
-	public String ftFn(PostExcelReadDto dateDto) {
+	public String ftFn(PostExcelReadDto2 dateDto) {
 		String value = "-";
 		try {
 			value = String.format("%.0f", Double.parseDouble(dateDto.getFt()));
@@ -199,7 +199,7 @@ public class PostExcelReadDto {
 	 * @param dateDto
 	 * @return
 	 */
-	public String demDaysFn(PostExcelReadDto dateDto) {
+	public String demDaysFn(PostExcelReadDto2 dateDto) {
 		String value = "N/A";
 		try {
 			if(!dateDto.getReturnDate().equals("N/A") && !dateDto.getEndOfFt().equals("N/A")) {
@@ -214,7 +214,7 @@ public class PostExcelReadDto {
 		return value;
 	}
 	
-	public String totalDemFn(PostExcelReadDto dateDto) {
+	public String totalDemFn(PostExcelReadDto2 dateDto) {
 		String value = "N/A";
 		try {
 //			=IF($AC6<=$AA6,"N/A",(($AC6-$AA6)*$Z6))
@@ -232,11 +232,10 @@ public class PostExcelReadDto {
 		}catch (Exception e) {
 //			e.printStackTrace();
 		}
-		
 		return value;
 	}
 	
-	public String demPrchFn(PostExcelReadDto dateDto) {
+	public String demPrchFn(PostExcelReadDto2 dateDto) {
 		String value = "N/A";
 		try {
 //			=IFERROR(IF($AE7>0,$AE7*0.9,"N/A"),"N/A")
@@ -250,7 +249,7 @@ public class PostExcelReadDto {
 		return value;
 	}
 	
-	public String demSalesFn(PostExcelReadDto dateDto) {
+	public String demSalesFn(PostExcelReadDto2 dateDto) {
 		String value = "N/A";
 		try {
 //			=IFERROR(IF(AE6>0,AE6*0.1,"N/A"),"N/A")
@@ -269,7 +268,7 @@ public class PostExcelReadDto {
 	 * @param dateDto
 	 * @return
 	 */
-	public String endOfFtFn(PostExcelReadDto dateDto) {
+	public String endOfFtFn(PostExcelReadDto2 dateDto) {
 		// ETA 날짜보다 + F/T
 		String value = "N/A";
 		try {

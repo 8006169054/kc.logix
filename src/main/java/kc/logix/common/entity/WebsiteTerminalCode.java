@@ -33,7 +33,7 @@ public class WebsiteTerminalCode {
 	private String tankNo;
 	private String term;
 	private String item;
-	private String vslVoy;
+	private String vesselVoyage;
 	private String carrier;
 	private String mblNo;
 	private String hblNo;
@@ -49,7 +49,7 @@ public class WebsiteTerminalCode {
 	private String endOfFt;
 	private String estimateReturnDate;
 	private String returnDate;
-	private String demDays;
+	private String demReceived;
 	private String totalDem;
 	private String returnDepot;
 	private String demRcvd;

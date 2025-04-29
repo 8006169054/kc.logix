@@ -28,7 +28,7 @@ function jqFlagFn (cellvalue, options, rowObject ){
  * @param rowId
  */
 function ComRowData(gridName, rowId){
-	var rowData = $("#" + gridName).getRowData(rowId);
+	var rowData = $(gridName).getRowData(rowId);
 	return rowData;
 }
 
