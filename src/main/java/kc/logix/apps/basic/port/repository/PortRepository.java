@@ -1,7 +1,7 @@
 package kc.logix.apps.basic.port.repository;
 
-import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
 import static kc.logix.common.entity.QTerminal.terminal;
+import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
 
 import java.util.Date;
 import java.util.List;
@@ -10,8 +10,10 @@ import org.apache.commons.math3.random.RandomDataGenerator;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosDateUtil;
@@ -57,7 +59,7 @@ public class PortRepository extends KainosRepositorySupport {
 					websiteTerminalCode.pol,
 					websiteTerminalCode.pod,
 					websiteTerminalCode.terminal,
-					terminal.homepage,
+//					ExpressionUtils.as(JPAExpressions.select(terminal.homepage).from(terminal).where(websiteTerminalCode.pod.eq(terminal.region)), "homepage"),
 					websiteTerminalCode.etd,
 					websiteTerminalCode.eta,
 					websiteTerminalCode.ata,
@@ -80,7 +82,6 @@ public class PortRepository extends KainosRepositorySupport {
 					websiteTerminalCode.updateUserId,
 					Expressions.stringTemplate("to_char({0}, {1})", websiteTerminalCode.updateDate, "YYYY-MM-DD").as("updateDate")
 				)).from(websiteTerminalCode)
-				.leftJoin(terminal).on(terminal.code.eq(websiteTerminalCode.terminal).or(terminal.region.eq(websiteTerminalCode.pod)))
 				.where(where)
 				.orderBy(websiteTerminalCode.uuid.asc())
 				.fetch();
@@ -140,12 +141,12 @@ public class PortRepository extends KainosRepositorySupport {
 			(KainosDateUtil.getCurrentDay("yyyyMMddHHmmssSSS") + new RandomDataGenerator().nextSecureHexString(3)),
 			paramDto.getSales(),
 			paramDto.getCarryoverSales(),
-			paramDto.getArrivalNotice(),
-			paramDto.getInvoice(),
+			(paramDto.getArrivalNotice().equals("OK") ? "1" : "0"),
+			paramDto.getInvoice() == "OK" ? "1" : "0",
 			paramDto.getConcine(),
-			paramDto.getProfitDate(),
-			paramDto.getDomesticSales().replaceAll("US\\$", ""),
-			paramDto.getForeignSales().replaceAll("US\\$", ""),
+			paramDto.getProfitDate().replaceAll("-", ""),
+			paramDto.getDomesticSales().replaceAll("-", ""),
+			paramDto.getForeignSales().replaceAll("-", ""),
 			paramDto.getQuantity(),
 			paramDto.getPartner(),
 			paramDto.getTankNo(),
@@ -154,7 +155,7 @@ public class PortRepository extends KainosRepositorySupport {
 			paramDto.getVesselVoyage(),
 			paramDto.getCarrier(),
 			paramDto.getMblNo(),
-			paramDto.getHblNo(),
+			paramDto.getHblNo().replaceAll("-", ""),
 			paramDto.getPol(),
 			paramDto.getPod(),
 			paramDto.getTerminal(),
@@ -162,17 +163,17 @@ public class PortRepository extends KainosRepositorySupport {
 			paramDto.getEta(),
 			paramDto.getAta(),
 			paramDto.getRemark(),
-			paramDto.getFt(),
-			paramDto.getDemRate(),
-			paramDto.getEndOfFt(),
-			paramDto.getEstimateReturnDate(),
-			paramDto.getReturnDate(),
-			paramDto.getDemReceived(),
-			paramDto.getTotalDem().replaceAll("US\\$", ""),
-			paramDto.getReturnDepot(),
-			paramDto.getDemRcvd(),
-			paramDto.getDemPrch().replaceAll("US\\$", ""),
-			paramDto.getDemSales().replaceAll("US\\$", ""),
+			paramDto.getFt().replaceAll("-", ""),
+			paramDto.getDemRate().replaceAll("-", ""),
+			paramDto.getEndOfFt().replaceAll("N/A", ""),
+			paramDto.getEstimateReturnDate().replaceAll("-", ""),
+			paramDto.getReturnDate().replaceAll("-", ""),
+			paramDto.getDemReceived().replaceAll("N/A", ""),
+			paramDto.getTotalDem().replaceAll("N/A", ""),
+			paramDto.getReturnDepot().replaceAll("-", ""),
+			paramDto.getDemRcvd().replaceAll("N/A", ""),
+			paramDto.getDemPrch().replaceAll("N/A", ""),
+			paramDto.getDemSales().replaceAll("N/A", ""),
 			paramDto.getDepotInDate(),
 			paramDto.getRepositionPrch(),
 			paramDto.getCreateUserId(),

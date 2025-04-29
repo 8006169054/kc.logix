@@ -28,8 +28,10 @@ public class TerminalRepository extends KainosRepositorySupport {
 		BooleanBuilder where = new BooleanBuilder();
 		if(!KainosStringUtils.isEmpty(paramDto.getCode()))
 			where.and(terminal.code.contains(paramDto.getCode()));
-		else if(!KainosStringUtils.isEmpty(paramDto.getName()))
+		if(!KainosStringUtils.isEmpty(paramDto.getName()))
 			where.and(terminal.name.contains(paramDto.getName()));
+		if(!KainosStringUtils.isEmpty(paramDto.getRegion()))
+			where.and(terminal.region.contains(paramDto.getRegion()));
 		
 		return select(Projections.bean(TerminalDto.class,
 				terminal.code,

@@ -4,14 +4,11 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
-<!-- 팝업 사용방법 -->
-<th:block th:replace="html/apps/basic/popup/port-popup :: Popup"></th:block>
-
 <!-- Page Specific JS File -->
 <script th:inline="javascript">
 var portTableColNames = [[#{basic.port.table.cols}]];
 </script>
-<script src="/templates/html/apps/basic/port.js"></script>
+<script src="/templates/html/apps/basic/port1.js"></script>
 <!-- Main Content -->
 <div class="main-content">
 	<section class="section">
@@ -44,7 +41,7 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 									<select class="form-control selectric" id="arrivalNotice" name="arrivalNotice">
 										<option value=""></option>
 				                        <option value="1">Sent Completed</option>
-				                        <option value="0">Not Completed</option>
+				                        <option value="0" selected>Not Completed</option>
 			                      	</select>
 								</div>
 							</div>
@@ -72,11 +69,7 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 		                      	</select>
 							</div>
 							<div class="col-md-74 text-right">
-							<input type="file" id="customFile" name="customFile" style="visibility:hidden; width: 10px;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-							<a id="downloadlink" style="display: none">Download</a>
 							<button class="btn btn-primary" onclick="anSend()">A/N Send</button>
-<!-- 							<button class="btn btn-light" onclick="gridClear()" th:text="#{ommon.button.label.clear}"></button> -->
-							<button class="btn btn-info" onclick="fileOpen()" th:text="#{common.button.label.upload}"></button>
 							<button class="btn btn-success" onclick="save()" th:text="#{common.button.label.save}"></button>
 							</div>
 							</div>
@@ -92,5 +85,6 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 		</div>
 	</section>
 </div>
-
+<!-- 팝업 사용방법 -->
+<th:block th:replace="html/apps/popup/terminal-popup :: Popup"></th:block>
 </html>

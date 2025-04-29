@@ -30,9 +30,13 @@ public class TerminalController {
 	private final MessageUtil message;
 	
 	@GetMapping(value = "/api/basic/terminal")
-	public ResponseEntity<TerminalDto> selectTerminal(@RequestParam(required = false) String name) throws Exception {
+	public ResponseEntity<TerminalDto> selectTerminal(
+			@RequestParam(required = false) String name,
+			@RequestParam(required = false) String code,
+			@RequestParam(required = false) String region
+			) throws Exception {
 		return KainosResponseEntity.builder().build()
-				.addData(service.selectTerminal(TerminalDto.builder().name(name).build()))
+				.addData(service.selectTerminal(TerminalDto.builder().name(name).code(code).region(region).build()))
 				.close();
 	}
 	
