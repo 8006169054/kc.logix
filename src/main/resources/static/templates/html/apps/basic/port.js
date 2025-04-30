@@ -13,7 +13,7 @@ async function upload(customFile) {
 		var frm = new FormData();
 	    frm.append('upload', customFile.files[0]);
 	    response = await requestFormDataApi('POST', '/api/basic/excel-upload', frm);
-		$(tableName).searchData(response.data, {frozen:true, jqFlag: C});
+		$(tableName).searchData(response.data, {jqFlag: C});
 	}catch (error) {
 	}finally {
 	  document.getElementById("customFile").value=null;
@@ -68,6 +68,7 @@ function portTableInit(){
 		height: 530, 
 		width: '100%',
 		dblEdit : true,
+		frozen: true,
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
 		}
 	});

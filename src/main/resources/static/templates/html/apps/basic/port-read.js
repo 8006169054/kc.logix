@@ -9,7 +9,7 @@ $( document ).ready(function() {
 async function search() {
 	$(tableName).clearGridData();
 	let response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#hblNo').val(), arrivalNotice : $('#arrivalNotice').val()});
-	$(tableName).searchData(response.data, {frozen:true});
+	$(tableName).searchData(response.data);
 	response = null;
 }
 
@@ -18,7 +18,7 @@ function portTableInit(){
 	   	datatype: "json",
 	   	colNames: ['flag','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
-	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : true,	frozen:true},
+	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
 	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true,	frozen:true},
 	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true},
@@ -59,6 +59,7 @@ function portTableInit(){
 	       	{ name: 'repositionPrch', 		width: 120, 	align:'center'}
 	   	],
 		height: 530, 
+//		frozen: true,
 		width: '100%'
 	});
 }

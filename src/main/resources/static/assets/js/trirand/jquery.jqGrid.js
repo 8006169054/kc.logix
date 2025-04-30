@@ -2345,6 +2345,7 @@ $.fn.jqGrid = function( pin ) {
 			scrollTimeout: 40,
 			data : [],
 			basedata : [], // 정인선 데이터 상테 체크용
+			frozen: false, // 정인선 틀고정 재개발
 			deleteRows : [],
 			_index : {},
 			grouping : false,
@@ -5539,7 +5540,8 @@ $.fn.jqGrid = function( pin ) {
 			if(!tmpcm.hasOwnProperty('colmenu')) {
 				tmpcm.colmenu = (tmpcm.name === "rn" || tmpcm.name === "cb" || tmpcm.name === "subgrid") ? false : true;
 			}
-			thead += "<th id='"+ts.p.id+"_" + tmpcm.name+"' role='columnheader'  scope='col' "+getstyle(stylemodule,'headerBox',false, "ui-th-column ui-th-" + dir + " " + ( tmpcm.labelClasses || "") ) +  tooltip+">";
+			
+			thead += "<th id='"+ts.p.id+"_" + tmpcm.name+"' role='columnheader'  scope='col' "+getstyle(stylemodule,'headerBox',false, "ui-th-column ui-th-" + dir + " " + ( tmpcm.labelClasses || "")) +  tooltip+">";
 			idn = tmpcm.index || tmpcm.name;
 			// 정인선 해더 체크박스 style='padding-top: 3px;' 추가
 			let style = "";
@@ -5665,8 +5667,13 @@ $.fn.jqGrid = function( pin ) {
 		// header font for full autosize
 		hdr_font = $.jgrid.getFont( $("th",thr).first()[0] );
 		ts.p.disableClick=false;
+		
+		let frozenWidth = 0;
+		let frozenIndex = 0;
+		
 		$("th",thr).each(function ( j ) {
 			tmpcm = ts.p.colModel[j];
+			
 			w = tmpcm.width;
 			if(tmpcm.resizable === undefined) {
 				tmpcm.resizable = true;
@@ -5679,6 +5686,7 @@ $.fn.jqGrid = function( pin ) {
 			} else {
 				res = "";
 			}
+			
 			$(this).css("width",w+"px").prepend(res);
 			res = null;
 			var hdcol = "", clcol ="";
@@ -6412,9 +6420,38 @@ $.fn.jqGrid = function( pin ) {
 				}
 			});
 		}
+		if(ts.p.frozen){
+			$(ts).jqGrid('setFrozenHeaders');
+		}
+		
 	});
 };
 $.jgrid.extend({
+	setFrozenHeaders : function() {
+		var t = this[0];
+		var ts = $('#gbox_' + t.p.id)[0];
+		var thead = $(ts).find("thead").first().get(0);
+		var thr = $(thead).find("tr").first()
+		let frozenWidth = 0;
+		let frozenIndex = 0;
+		let width = 0
+		$("th",thr).each(function ( j ) {
+			var tmpcm = t.p.colModel[j];
+			if(tmpcm.frozen && !tmpcm.hidden){
+				if(frozenIndex === 0)
+					width = $(this).outerWidth();
+				else {
+					frozenWidth = frozenWidth + width
+					width = $(this).outerWidth();
+				}
+				$(this).css("position", 'sticky');
+				$(this).css("z-index", '99');
+				$(this).css("background-color", '#f4f6f9');
+				$(this).css("left", frozenWidth + 'px');
+				frozenIndex++;
+			}
+		});
+	},
 	getGridParam : function(name, grid_module) {
 		var $t = this[0], ret;
 		if (!$t || !$t.grid) {return;}
@@ -6869,8 +6906,9 @@ $.jgrid.extend({
 			$(t).jqGrid('addRowData', index+1, data);
 		});
 		/* 셀고정 설정 */
-		if(options !== undefined && options.frozen !== undefined && options.frozen)
-			$(t).jqGrid('setFrozenColumns'); 
+		if($(t)[0].p.frozen){
+			$(t).jqGrid('customFrozenColumns'); 
+		}
 		
 		if(options != undefined && options.editor)
 			$(t)[0].p.basedata = rdata;
@@ -8240,6 +8278,47 @@ $.jgrid.extend({
 				$t.p.gridstate = 'visible';
 			}
 
+		});
+	},
+	customFrozenColumns: function () {
+		return this.each(function() {
+			if ( !this.grid ) {return;}
+			var ts = this;
+			var tbody = $(this).find("tbody").first().get(0);
+			$("tr",tbody).each(function ( j ) {
+				let frozenWidth = 0;
+				let frozenIndex = 0;
+				let width = 0
+				$("td",this).each(function ( i ) {
+					if(ts.p.colModel[i] !== undefined){
+						var tmpcm = ts.p.colModel[i];
+						if(tmpcm.frozen && !tmpcm.hidden){
+							if(frozenIndex === 0)
+								width = tmpcm.width;
+							else {
+								frozenWidth = frozenWidth + width
+								width = tmpcm.width;
+							}
+							$(this).css("position", 'sticky');
+//							$(this).css("z-index", '99'); 정인선
+							var currentColor = $(this).css("background");
+							if(currentColor.indexOf('rgba(0, 0, 0, 0)') > -1){
+								$(this).css("background", '#ffffff');
+							}
+							else{
+								$(this).css("background", currentColor);
+							}
+							$(this).css("left", frozenWidth + 'px');
+							frozenIndex++;
+						}
+						tmpcm = null;
+					}
+				});
+				frozenWidth = null;
+				frozenIndex = null;
+				width = null;
+			});
+//			ts = null, tbody= null;
 		});
 	},
 	setFrozenColumns : function () {

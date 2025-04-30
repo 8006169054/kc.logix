@@ -9,7 +9,7 @@ $( document ).ready(function() {
 async function search() {
 	$(tableName).clearGridData();
 	let response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#hblNo').val(), arrivalNotice : $('#arrivalNotice').val()});
-	$(tableName).searchData(response.data, {frozen:true, editor: true});
+	$(tableName).searchData(response.data, {editor: true});
 	response = null;
 }
 
@@ -61,6 +61,7 @@ function portTableInit(){
 		height: 530, 
 		width: '100%',
 		dblEdit : true,
+		frozen: true,
 //		delselect: true,
 		onCellSelect : function(rowid, iCol, cellcontent, e) {
 			consoel.log(rowid, iCol, cellcontent, e);

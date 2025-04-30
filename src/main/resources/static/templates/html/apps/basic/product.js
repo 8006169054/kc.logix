@@ -19,7 +19,7 @@ function productTableInit(){
 	   	colModel: [
 			{ name: 'jqFlag', 			width: 70, 		align:'center', hidden : false},
 	       	{ name: 'code', 			width: 70, 		align:'center', hidden : true},
-	       	{ name: 'name', 			width: 500, 	align:'left', editable: true, cellattr: terminalFn},
+	       	{ name: 'name', 			width: 500, 	align:'left', editable: true, cellattr:idColorFmt},
 	    	{ name: 'updateUserId', 	width: 100, 	align:'center'},
 	    	{ name: 'updateDate',		width: 140,		align:'center'}
 	   	],
@@ -32,6 +32,10 @@ function productTableInit(){
 //			$('#add').click();
 		}
 	});
+}
+
+function idColorFmt( rowId, tv, rawObject, cm, rdata) {
+		return 'style="background:rgb(0 176 240)"';
 }
 
 /**  터미널 링크 */

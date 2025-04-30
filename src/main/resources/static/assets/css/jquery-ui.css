@@ -933,6 +933,7 @@ a:visited.ui-button,
 	background: #ededed;
 	font-weight: normal;
 	color: #2b2b2b;
+	z-index: 100;
 }
 .ui-state-hover a,
 .ui-state-hover a:hover,
