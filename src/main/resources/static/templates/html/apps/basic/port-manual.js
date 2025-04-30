@@ -181,6 +181,7 @@ function frozenCelHide(){
 	frozenCelNotVal = frozenCelNotVal.filter(x => !frozenCelVal.includes(x));
 	$(tableName).hideCol(frozenCelVal);
 	$(tableName).showCol(frozenCelNotVal);
+	$(tableName).refreshFrozen();
 }
 
 function gridClear(){
