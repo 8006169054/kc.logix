@@ -31,13 +31,13 @@ public class PortService {
 	
 	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
 	public void savePort(List<PortDto> paramList, SessionDto session)throws Exception {
-		String mbl = null;
+		String hbl = null;
 		for (int i = 0; i < paramList.size(); i++) {
 			PortDto dto = paramList.get(i);
-			if(mbl == null || !dto.getMblNo().equals(mbl)) {
+			if(hbl == null || !dto.getHblNo().equals(hbl)) {
 				// BL No 삭제
-				mbl = dto.getMblNo();
-				repository.excelUploadHblNoDelete(dto.getMblNo());
+				hbl = dto.getHblNo();
+				repository.excelUploadHblNoDelete(dto.getHblNo());
 			}
 			dto.setCreateUserId(session.getUserId());
 			dto.setUpdateUserId(session.getUserId());
