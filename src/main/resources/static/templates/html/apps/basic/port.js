@@ -9,10 +9,10 @@ $( document ).ready(function() {
 
 async function upload(customFile) {
 	try{
+		$(tableName).clearGridData();
 		var frm = new FormData();
 	    frm.append('upload', customFile.files[0]);
 	    response = await requestFormDataApi('POST', '/api/basic/excel-upload', frm);
-	    $(tableName).clearGridData();
 		$(tableName).searchData(response.data, {frozen:true, jqFlag: C});
 	}catch (error) {
 	}finally {

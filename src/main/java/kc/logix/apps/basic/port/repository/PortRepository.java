@@ -1,6 +1,5 @@
 package kc.logix.apps.basic.port.repository;
 
-import static kc.logix.common.entity.QTerminal.terminal;
 import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
 
 import java.util.Date;
@@ -10,10 +9,8 @@ import org.apache.commons.math3.random.RandomDataGenerator;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosDateUtil;
