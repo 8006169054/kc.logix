@@ -5605,7 +5605,7 @@ $.fn.jqGrid = function( pin ) {
 								ts.p.selrow = this.id;
 								if(froz) {
 									$("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+$.jgrid.jqID(this.id), ts.grid.fbDiv )[ts.p.useProp ? 'prop': 'attr']("checked",true);
-									$("#"+$.jgrid.jqID(this.id), ts.grid.fbDiv).addClass(highlight);
+								//	$("#"+$.jgrid.jqID(this.id), ts.grid.fbDiv).addClass(highlight);
 								}
 							}
 						}
@@ -5780,7 +5780,7 @@ $.fn.jqGrid = function( pin ) {
 			}
 			return false;
 		}).click(function(e) {
-			
+			console.log('================ click');
 			if (ts.p.disableClick) {
 				ts.p.disableClick = false;
 				return false;
@@ -5977,7 +5977,7 @@ $.fn.jqGrid = function( pin ) {
 						var therow = $(ts).jqGrid('getGridRowById', ts.p.iRowId);
 						$(therow).removeClass("selected-row " + hover).find("td").eq( ts.p.iCol ).removeClass(highlight);
 					}
-					
+					/*
 					if(e.target.children.length === 0 ) $(ts.rows[ptr[0].rowIndex].cells[ci]).addClass(highlight);
 					else {
 						for (const child of e.target.children) {
@@ -5986,7 +5986,7 @@ $.fn.jqGrid = function( pin ) {
 							}
 						}
 					}
-
+*/
 					ts.p.iCol = ci; ts.p.iRow = ptr[0].rowIndex; ts.p.iRowId = ptr[0].rowIndex;
 				}
 				
@@ -6538,7 +6538,7 @@ $.jgrid.extend({
 	},
 	setSelection : function(selection, onsr, e, isHight) {
 		return this.each(function(){
-			var $t = this, stat,pt, ner, ia, tpsr, fid, csr, tfid,
+			var $t = this, stat,pt, ner, ia, tpsr, fid, tfid,
 			getstyle = $.jgrid.getMethod("getStyleUI"),
 			// 정인선 선택 시 전체로우 색상 선택 주석처리 highlight = getstyle($t.p.styleUI+'.common','highlight', true),
 			disabled = getstyle($t.p.styleUI+'.common','disabled', true);
@@ -6581,17 +6581,17 @@ $.jgrid.extend({
 				}
 				if(pt.className !== "ui-subgrid") {
 					if( $t.p.selrow !== pt.id ) {
-						if( isHight ) {
-							csr = $($t).jqGrid('getGridRowById', $t.p.selrow);
-							if( csr ) {
+//						if( isHight ) {
+//							csr = $($t).jqGrid('getGridRowById', $t.p.selrow);
+//							if( csr ) {
 //								$(  csr ).removeClass(highlight).attr({"aria-selected":"false" , "tabindex" : "-1"});
-							}
-							//정인선 highlight 오류로 주석처리 $(pt).addClass(highlight).attr({"aria-selected":"true" ,"tabindex" : "0"});//.focus();
-							if(fid) {
+//							}
+							//정인선 highlight 오류로 주석처리 $(pt).addClass(highlight).attr({"aria-selected":"true" ,"tabindex" : "0"});//.focus();//
+							//if(fid) {
 //								$("#"+$.jgrid.jqID($t.p.selrow), "#"+$.jgrid.jqID(fid)).removeClass(highlight);
 //								$("#"+$.jgrid.jqID(selection), "#"+$.jgrid.jqID(fid)).addClass(highlight);
-							}
-						}
+//							}
+//						}
 						stat = true;
 					} else {
 						stat = false;
@@ -8997,7 +8997,7 @@ $.jgrid.extend({
 				$(therow).removeClass("selected-row " + hover).find("td").eq( $t.p.iCol ).removeClass("edit-cell " + highlight);
 			}
 			
-			cc.addClass("edit-cell " + highlight);
+			//cc.addClass("edit-cell " + highlight);
 			$($t.rows[iRow]).addClass("selected-row " + hover);
 
 			if (cm.editable===true && ed===true && !cc.hasClass("not-editable-cell") && (!$.jgrid.isFunction($t.p.isCellEditable) || $t.p.isCellEditable.call($t,nm,iRow,iCol))) {
