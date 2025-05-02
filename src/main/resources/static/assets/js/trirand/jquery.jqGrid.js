@@ -5780,7 +5780,6 @@ $.fn.jqGrid = function( pin ) {
 			}
 			return false;
 		}).click(function(e) {
-			console.log('================ click');
 			if (ts.p.disableClick) {
 				ts.p.disableClick = false;
 				return false;
