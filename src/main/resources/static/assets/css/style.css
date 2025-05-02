@@ -197,8 +197,8 @@ p, ul:not(.list-unstyled), ol {
 select.form-control:not([size]):not([multiple]),
 .form-control:not(.form-control-sm):not(.form-control-lg) {
   font-size: 14px;
-  padding: 10px 15px;
-  height: 42px;
+/*   padding: 10px 15px; 정인선*/
+/*   height: 42px; */
 }
 
 textarea.form-control {
@@ -248,7 +248,8 @@ select.form-control:not([size]):not([multiple]) {
 
 .form-group {
   /* margin-bottom: 25px;*/
- margin-bottom: 10px;
+ 	margin-bottom: 3px;
+    margin-top: 3px;
 }
 .form-group .control-label,
 .form-group > label {
@@ -735,9 +736,9 @@ select.form-control:not([size]):not([multiple]) {
 }
 .card .card-header, .card .card-body, .card .card-footer {
   background-color: transparent;
-  padding: 20px 25px;
-  padding-top: 10px;
-  padding-bottom: 1px;
+/*   padding: 20px 25px; */
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 .card .navbar {
   position: static;
@@ -761,16 +762,16 @@ select.form-control:not([size]):not([multiple]) {
 }
 .card .card-header {
   border-bottom-color: #f9f9f9;
-  line-height: 30px;
+/*   line-height: 30px; */
   align-self: center;
   width: 100%;
-  min-height: 40px;
+/*   min-height: 40px; */
   padding: 5px 25px;
 /*  정인선 버튼 우축정열 display: flex; */
   align-items: center;
 }
 .card .card-header .btn {
-  margin-top: 1px;
+  margin-top: 3px;
   padding: 2px 15px;
 }
 .card .card-header .btn:not(.note-btn) {

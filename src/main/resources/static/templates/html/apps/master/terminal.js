@@ -28,7 +28,7 @@ function tableInit(){
 		height: 530, 
 		width: '100%',
 		dblEdit : true,
-//		delselect: true,
+		delselect: true,
 //		multiselect: true,
 		ondblClickRow : function(rowid, iRow, iCol,	e) {
 //			Object.assign(portData, ComRowData(this.id, iRow));

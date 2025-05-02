@@ -76,7 +76,7 @@ public class TerminalRepository extends KainosRepositorySupport {
 			paramDto.getName(),
 			paramDto.getRegion(),
 			paramDto.getType(),
-			paramDto.getParkingLotCode(),
+			paramDto.getParkingLotCode().trim(),
 			paramDto.getHomepage(),
 			userId,
 			new Date(),
@@ -96,7 +96,7 @@ public class TerminalRepository extends KainosRepositorySupport {
 			.set(terminal.name, paramDto.getName())
 			.set(terminal.region, paramDto.getRegion())
 			.set(terminal.type, paramDto.getType())
-			.set(terminal.parkingLotCode, paramDto.getParkingLotCode())
+			.set(terminal.parkingLotCode, paramDto.getParkingLotCode().trim())
 			.set(terminal.homepage, paramDto.getHomepage())
 			.set(terminal.updateUserId, userId)
 			.set(terminal.updateDate, new Date())

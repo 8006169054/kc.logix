@@ -906,7 +906,7 @@ tr:first-child > td > .fc-day-grid-event {
 .selectric {
   background-color: #fdfdff;
   border-color: #e4e6fc;
-  min-height: 42px;
+/*   min-height: 42px; */
   border-radius: 3px;
 /*   padding-left: 10px; */
 /*   padding-right: 10px; */
@@ -922,13 +922,13 @@ tr:first-child > td > .fc-day-grid-event {
 .selectric .label {
   font-size: 13px;
   background-color: transparent;
-  line-height: 44px;
-  min-height: 40px;
+/*   line-height: 44px; */
+/*   min-height: 40px; */
 }
 .selectric .button {
   background-color: transparent;
   line-height: 44px;
-  min-height: 42px;
+/*   min-height: 42px; */
 }
 
 .selectric-open .selectric {
