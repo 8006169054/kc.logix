@@ -10,7 +10,7 @@ $( document ).ready(function() {
 function tableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: tableColNames.split(','),
+	   	colNames: ['','지역','타입','코드명','터미널명','장치장코드','Url','Link','생성자','생성날짜','수정자','수정날짜'],
 	   	colModel: [
 	   		{ name: 'jqFlag',			width: 40,		align:'center'},
 	   		{ name: 'region', 			width: 100, 	align:'left', editable: true},
@@ -18,7 +18,8 @@ function tableInit(){
 	       	{ name: 'code', 			width: 100, 	align:'center', editable: false},
 	       	{ name: 'name', 			width: 250, 	align:'left', editable: true},
 	       	{ name: 'parkingLotCode', 	width: 80, 		align:'center', editable: true},
-	    	{ name: 'homepage', 		width: 600, 	align:'left', editable: true},
+	    	{ name: 'homepage', 		width: 540, 	align:'left', editable: true},
+	    	{ name: 'popupicon', 		width: 60, 		align:'center', formatter: terminalFn},
 	    	{ name: 'createUserId', 	width: 80, 		align:'center'},
 	    	{ name: 'createDate', 		width: 80, 		align:'center'},
 	    	{ name: 'updateUserId', 	width: 80, 		align:'center'},
@@ -36,6 +37,13 @@ function tableInit(){
 //			console.log('ondblClickRow', ComMultiSelectRow(tableName));
 		}
 	});
+	
+	$(tableName).jqGrid('setGroupHeaders', {
+				useColSpanStyle: true,
+				groupHeaders: [
+                                {startColumnName:'homepage', numberOfColumns: 2, titleText: 'Homepage' },
+                              ]
+		});
 }
 
 async function upload(customFile) {
@@ -55,6 +63,16 @@ async function upload(customFile) {
 async function add(){
 	$(tableName).addRow();
 }
+
+function terminalFn (cellvalue, options, rowObject ){
+	if(rowObject.homepage === '' || rowObject.homepage === undefined)
+		return '';
+	else
+		return '<a href="' + rowObject.homepage + '" target="_blank"><img src="/assets/img/popup.png" height="22px"></a>';
+}
+
+
+
 
 /**
  * 조회
