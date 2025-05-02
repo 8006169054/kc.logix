@@ -62,22 +62,16 @@ function portTableInit(){
 		width: '100%',
 //		dblEdit : true,
 //		frozen: true,
-		multiselect: true,
+		multiselect : true, // 그리드 왼쪽부분에 체크 박스가 생겨 다중선택이 가능해진다.
+ 		multiboxonly : true, // 다중선택을 단일 선택으로 제한
 //		delselect: true,
 		onCellSelect : function(rowid, iCol, cellcontent, e) {
+//			console.log('onCellSelect');
 		}
 	});
 }
 
-function arrivalNoticeFn (cellvalue, options, rowObject ){
-	if(cellvalue === '1')
-		return 'OK';
-	else{
-		return '<input type="radio" id="jqArrivalNotice" name="jqArrivalNotice" value="' + options.rowId + '" />';
-	}
-}
-
 async function anSend(){
-	var rowData = ComRowData(tableName, $('#jqArrivalNotice').val());
+	var rowData = ComSelectRow(tableName);
 	await requestFileDownload('POST', '/api/basic/arrival-notice-send-mail', rowData, 'ArrivalNoticeTemplate_' + rowData.hblNo + '.eml');
 }

@@ -5447,7 +5447,12 @@ $.fn.jqGrid = function( pin ) {
 		if(this.p.multiselect) {
 			var allRowsSelectTitle=$.jgrid.getRegional(ts, "defaults.selectAllLines");
 			allRowsSelectTitle=allRowsSelectTitle ? allRowsSelectTitle : $.jgrid.regional['en'].defaults.selectAllLines;
-			this.p.colNames.unshift("<input role='checkbox' id='cb_"+this.p.id+"' class='cbox' type='checkbox' title='"+allRowsSelectTitle+"'/>");
+			
+			var hcheckbox = "checkbox";
+			if(this.p.multiboxonly) // 싱글 체크박스가 아니면 해더에 체크박스 생성
+				hcheckbox = "hidden";
+				
+			this.p.colNames.unshift("<input role='checkbox' id='cb_"+this.p.id+"' class='cbox' type='" + hcheckbox + "' title='"+allRowsSelectTitle+"'/>");
 			this.p.colModel.unshift({name:'cb',width:$.jgrid.cell_width ? ts.p.multiselectWidth+ts.p.cellLayout : ts.p.multiselectWidth,sortable:false,resizable:false,hidedlg:true,search:false,align:'center',fixed:true, frozen: true, classes : "jqgrid-multibox", labelClasses: "jqgrid-multibox" });
 		}
 		
@@ -5894,35 +5899,51 @@ $.fn.jqGrid = function( pin ) {
 				}
 			});
 		}
-		var ri,ci, tdHtml;
+		var ri,ci;
 		function selectMultiRow(ri, scb, e, selection) {
-			if((ts.p.multiselect && ts.p.multiboxonly) || ts.p.multimail ) {
-				if(scb){
-					$(ts).jqGrid("setSelection", ri, selection, e);
-				} else if(  ts.p.multiboxonly && ts.p.multimail) {
-					// execute onSelectRow
-					$(ts).triggerHandler("jqGridSelectRow", [ri, false, e]);
-					if( ts.p.onSelectRow) { ts.p.onSelectRow.call(ts, ri, false, e); }
-				} else {
-					var frz = ts.p.frozenColumns ? ts.p.id+"_frozen" : "";
+			if(scb){
+				if(ts.p.multiselect && ts.p.multiboxonly) {
 					$(ts.p.selarrrow).each(function(i,n){
-						var trid = $(ts).jqGrid('getGridRowById',n);
-						if(trid) {
-							$( trid ).removeClass(highlight);
-						}
-						$("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+$.jgrid.jqID(n))[ts.p.useProp ? 'prop': 'attr']("checked", false);
-						if(frz) {
-							$("#"+$.jgrid.jqID(n), "#"+$.jgrid.jqID(frz)).removeClass(highlight);
-							$("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+$.jgrid.jqID(n), "#"+$.jgrid.jqID(frz))[ts.p.useProp ? 'prop': 'attr']("checked", false);
+						if(n !== ri){
+							$("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+$.jgrid.jqID(n))[ts.p.useProp ? 'prop': 'attr']("checked", false);
+							$(ts).jqGrid("setSelection", n, selection, e);
 						}
 					});
-					ts.p.selarrrow = [];
-					$(ts).jqGrid("setSelection", ri, selection, e);
 				}
-			} else {
 				$(ts).jqGrid("setSelection", ri, selection, e);
 			}
 		}
+//		function selectMultiRow(ri, scb, e, selection) { 정인선 위에 함수 다시만듬
+//			if((ts.p.multiselect && ts.p.multiboxonly) || ts.p.multimail ) {
+//				if(scb){
+//					$(ts).jqGrid("setSelection", ri, selection, e);
+//				} else if(  ts.p.multiboxonly && ts.p.multimail) {
+//					// execute onSelectRow
+//					$(ts).triggerHandler("jqGridSelectRow", [ri, false, e]);
+//					if( ts.p.onSelectRow) {
+//						console.log(4);
+//						 ts.p.onSelectRow.call(ts, ri, false, e); 
+//					}
+//				} else {
+//					var frz = ts.p.frozenColumns ? ts.p.id+"_frozen" : "";
+//					$(ts.p.selarrrow).each(function(i,n){
+//						var trid = $(ts).jqGrid('getGridRowById',n);
+//						if(trid) {
+//							$( trid ).removeClass(highlight);
+//						}
+//						$("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+$.jgrid.jqID(n))[ts.p.useProp ? 'prop': 'attr']("checked", false);
+//						if(frz) {
+//							$("#"+$.jgrid.jqID(n), "#"+$.jgrid.jqID(frz)).removeClass(highlight);
+//							$("#jqg_"+$.jgrid.jqID(ts.p.id)+"_"+$.jgrid.jqID(n), "#"+$.jgrid.jqID(frz))[ts.p.useProp ? 'prop': 'attr']("checked", false);
+//						}
+//					});
+//					ts.p.selarrrow = [];
+//					$(ts).jqGrid("setSelection", ri, selection, e);
+//				}
+//			} else {
+//				$(ts).jqGrid("setSelection", ri, selection, e);
+//			}
+//		}
 		$(ts).before(grid.hDiv).on({
 			'click': function(e) {
 				td = e.target;
@@ -5999,7 +6020,7 @@ $.fn.jqGrid = function( pin ) {
 					return;
 				}
 				if (td.length > 0) {
-					tdHtml = $(td).closest("td,th").html();
+					var tdHtml = $(td).closest("td,th").html();
 					$(ts).triggerHandler("jqGridCellSelect", [ri,ci,tdHtml,e]);
 					// 정인선 더블클릭 수정 후 다른곳를 선택 시 저장된다.
 					if(ts.p.savedRow.length > 0){
