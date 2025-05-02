@@ -4,25 +4,22 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
-<!-- 팝업 사용방법 -->
-<th:block th:replace="html/apps/basic/popup/partner-popup :: Popup"></th:block>
-
 <!-- Page Specific JS File -->
 <script th:inline="javascript">
-var partnerTableColNames = [[#{basic.partner.table.cols}]];
+var portTableColNames = [[#{basic.port.table.cols}]];
 </script>
-<script src="/templates/html/apps/basic/partner.js"></script>
+<script src="/templates/html/apps/management/arrival-notice.js"></script>
 <!-- Main Content -->
 <div class="main-content">
 	<section class="section">
 		<div class="section-header">
-			<h1 th:text="#{common.maincontent.basic.partner.title}"></h1>
+			<h1 th:text="#{common.maincontent.basic.port.title}"></h1>
 			<div class="section-header-breadcrumb">
 				<div class="breadcrumb-item active">
 					<a href="/" th:text="#{common.sidebar.hmoe.name}"></a>
 				</div>
 				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.name}"></div>
-				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.partner.name}"></div>
+				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.port.name}"></div>
 			</div>
 		</div>
 		<div class="section-body">
@@ -34,9 +31,18 @@ var partnerTableColNames = [[#{basic.partner.table.cols}]];
 						</div>
 						<div class="card-body">
 							<div class="form-group row">
-								<label th:text="#{basic.partner.label.name}" class="col-form-label text-md-left col-md-10"></label>
-								<div class="col-md-20">
-									<input type="text" id="name" name="name" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
+<!-- 								<label th:text="#{basic.port.label.name}" class="col-form-label text-md-left col-md-10"></label> -->
+								<label class="col-form-label text-md-left col-md-5">HBL NO.</label>
+								<div class="col-md-15">
+									<input type="text" id="hblNo" name="hblNo" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
+								</div>
+								<label class="col-form-label text-md-left col-md-5">A/N Mail</label>
+								<div class="col-md-12">
+									<select class="form-control selectric" id="arrivalNotice" name="arrivalNotice">
+										<option value="" selected>ALL</option>
+				                        <option value="1">Sent Completed</option>
+				                        <option value="0">Not Completed</option>
+			                      	</select>
 								</div>
 							</div>
 						</div>
@@ -46,15 +52,12 @@ var partnerTableColNames = [[#{basic.partner.table.cols}]];
 			<div class="row">
 				<div class="col-100">
 					<div class="card">
-						<div class="card-header text-right">
-<!-- 							<button class="btn btn-success" id="add" data-toggle="modal" data-target="#partner-popup" th:text="#{common.button.label.add}"></button> -->
-							<button class="btn btn-success" id="add" onclick="gridAdd()" th:text="#{common.button.label.add}"></button>
-							<button class="btn btn-success" id="save" onclick="gridSave()" th:text="#{common.button.label.save}"></button>
-<!-- 							<button class="btn btn-danger" onclick="deletePartner()" th:text="#{common.button.label.delete}"></button> -->
+						<div class="card-header  text-right">
+							<button class="btn btn-success" onclick="anSend()">A/N Send</button>
 						</div>
 						<div class="card-body p-0">
 							<div class="table-responsive" style="overflow: hidden;">
-								<table id="partner-table"></table>
+								<table id="port-table"></table>
 							</div>
 						</div>
 					</div>
@@ -63,5 +66,4 @@ var partnerTableColNames = [[#{basic.partner.table.cols}]];
 		</div>
 	</section>
 </div>
-
 </html>

@@ -4,12 +4,11 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
-
 <!-- Page Specific JS File -->
 <script th:inline="javascript">
 var tableColNames = [[#{basic.terminal.table.cols}]];
 </script>
-<script src="/templates/html/apps/basic/terminal.js"></script>
+<script src="/templates/html/apps/master/terminal.js"></script>
 <!-- Main Content -->
 <div class="main-content">
 	<section class="section">
