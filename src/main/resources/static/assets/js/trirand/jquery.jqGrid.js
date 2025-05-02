@@ -1,5 +1,5 @@
 const C = '<img src="/assets/img/more.png" height="12px" value="C">';
-const U = '<img src="/assets/img/edit-button.png" height="12px" value="U">';
+const U = '<img src="/assets/img/edit.png" height="12px" value="U">';
 const D = '<img src="/assets/img/delete.png" height="12px" value="D">';
 
 //const C = 'C';
