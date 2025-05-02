@@ -53,8 +53,7 @@ async function upload(customFile) {
 }
 
 async function add(){
-	let rowId = $(tableName).getGridParam("records");
-	$(tableName).addRow(rowId);
+	$(tableName).addRow();
 }
 
 /**

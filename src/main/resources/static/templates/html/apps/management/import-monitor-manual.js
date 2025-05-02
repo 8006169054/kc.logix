@@ -32,7 +32,7 @@ function portTableInit(){
 	    	{ name: 'partner', 				width: 120, 	align:'center',		frozen:true,	cellattr:idColorFmt},
 	    	{ name: 'tankNo', 				width: 140, 	align:'center',		frozen:true},
 	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true},
-	    	{ name: 'item', 				width: 250, 	align:'center',		rowspan: true},
+	    	{ name: 'item', 				width: 250, 	align:'center',		rowspan: true, editable: true},
 	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center',		rowspan: true},
 	    	{ name: 'carrier', 				width: 80, 		align:'center',		rowspan: true},
 	    	{ name: 'mblNo', 				width: 140, 	align:'center',		rowspan: true},
@@ -64,7 +64,6 @@ function portTableInit(){
 		frozen: true,
 //		delselect: true,
 		onCellSelect : function(rowid, iCol, cellcontent, e) {
-			consoel.log(rowid, iCol, cellcontent, e);
 		}
 	});
 }
@@ -74,7 +73,8 @@ function arrivalNoticeFn (cellvalue, options, rowObject ){
 	if(cellvalue === '1')
 		return 'OK';
 	else{
-		return '<input type="radio" id="jqArrivalNotice" name="jqArrivalNotice" value="' + options.rowId + '" />';
+//		return '<input type="radio" id="jqArrivalNotice" name="jqArrivalNotice" value="' + options.rowId + '" />';
+		return 'NO';
 	}
 }
 

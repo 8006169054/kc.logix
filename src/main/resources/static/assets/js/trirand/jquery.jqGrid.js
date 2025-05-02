@@ -17262,7 +17262,7 @@ $.jgrid.extend({
 		p = $.extend(true, {
 			rowID : null,
 			initdata : {},
-			position :"first",
+			position :"last", // last, first
 			useDefValues : true,
 			useFormatter : false,
 			addRowParams : {extraparam:{}}
@@ -17279,7 +17279,8 @@ $.jgrid.extend({
 				$t.p.beforeAction = false;
 				return;
 			}
-			p.rowID = $.jgrid.isFunction(p.rowID) ? p.rowID.call($t, p) : ( (p.rowID != null) ? p.rowID : $.jgrid.randId());
+//			p.rowID = $.jgrid.isFunction(p.rowID) ? p.rowID.call($t, p) : ( (p.rowID != null) ? p.rowID : $.jgrid.randId());
+			p.rowID = $t.p.reccount + 1; // 정인선
 			if(p.useDefValues === true) {
 				$($t.p.colModel).each(function(){
 					if( this.editoptions && this.editoptions.defaultValue ) {
@@ -17289,9 +17290,16 @@ $.jgrid.extend({
 					}
 				});
 			}
-			$($t).jqGrid('addRowData', p.rowID, p.initdata, p.position);
+			
+//			console.log('p.rowID', p.rowID);
+//			console.log('$t.p.reccount', $t.p.reccount);
+			
 			p.rowID = $t.p.idPrefix + p.rowID;
+			$($t).jqGrid('addRowData', p.rowID, p.initdata, p.position);
 			$("#"+$.jgrid.jqID(p.rowID), "#"+$.jgrid.jqID($t.p.id)).addClass("jqgrid-new-row");
+			
+			if(p.position === 'last')
+				$('.ui-jqgrid-bdiv').animate({scrollTop: $('#' + $t.p.id)[0].scrollHeight},500);
 			
 			/**
 			 * 정인선 editRow 실행시 오류로 주석
