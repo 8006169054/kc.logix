@@ -5,6 +5,7 @@
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
 <!-- Page Specific JS File -->
+<script src="/templates/html/apps/home.js"></script>
 <!-- Main Content -->
 <div class="main-content">
 	<section class="section">
@@ -16,7 +17,36 @@
 				</div>
 			</div>
 		</div>
-		<div class="section-body"></div>
+		<div class="section-body">
+			<div class="row">
+				<div class="col-100">
+					<div class="card">
+						<div class="card-header text-right">
+							<button class="btn btn-primary" onclick="search()" th:text="#{common.button.label.search}"></button>
+						</div>
+						<div class="card-body">
+							<div class="form-group row">
+								<label class="col-form-label text-md-left col-md-5">HBL NO.</label>
+								<div class="col-md-15">
+									<input type="text" id="hblNo" name="hblNo" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-100">
+					<div class="card">
+						<div class="card-body p-0">
+							<div class="table-responsive" style="overflow: hidden;">
+								<table id="port-table"></table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 </div>
 
