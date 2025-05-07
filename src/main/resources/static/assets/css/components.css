@@ -829,7 +829,7 @@ tr:first-child > td > .fc-day-grid-event {
   box-sizing: border-box;
   cursor: pointer;
   display: block;
-  min-height: 42px;
+  min-height: 35px;
   -moz-user-select: none;
   user-select: none;
   -webkit-user-select: none;
@@ -865,7 +865,7 @@ tr:first-child > td > .fc-day-grid-event {
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
   min-height: 42px;
-  line-height: 42px;
+  line-height: 33px;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -874,7 +874,7 @@ tr:first-child > td > .fc-day-grid-event {
   top: 1px;
   right: 1px;
   width: 40px;
-  min-height: 42px;
+  min-height: 35px;
 }
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);

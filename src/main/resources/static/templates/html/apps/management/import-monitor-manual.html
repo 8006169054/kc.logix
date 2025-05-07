@@ -34,11 +34,11 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 <!-- 								<label th:text="#{basic.port.label.name}" class="col-form-label text-md-left col-md-10"></label> -->
 								<label class="col-form-label text-md-left col-md-5">HBL NO.</label>
 								<div class="col-md-15">
-									<input type="text" id="hblNo" name="hblNo" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
+									<input type="text" id="shblNo" name="shblNo" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
 								</div>
 								<label class="col-form-label text-md-left col-md-5">A/N Mail</label>
 								<div class="col-md-12">
-									<select class="form-control selectric" id="arrivalNotice" name="arrivalNotice">
+									<select class="form-control selectric" id="sarrivalNotice" name="sarrivalNotice">
 										<option value="" selected>ALL</option>
 				                        <option value="1">Sent Completed</option>
 				                        <option value="0">Not Completed</option>
@@ -69,7 +69,7 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 		                      	</select>
 							</div>
 							<div class="col-md-74 text-right">
-							<button class="btn btn-primary" onclick="anSend()">A/N Send</button>
+							<button class="btn btn-primary" id="add" data-toggle="modal" data-target="#importMonitorPopup" >Add</button>
 							<button class="btn btn-success" onclick="save()" th:text="#{common.button.label.save}"></button>
 							</div>
 							</div>
@@ -85,6 +85,10 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 		</div>
 	</section>
 </div>
+
 <!-- 팝업 사용방법 -->
 <th:block th:replace="html/apps/popup/terminal-popup :: Popup"></th:block>
+<!-- 팝업 사용방법 -->
+<th:block th:replace="html/apps/management/popup/import-monitor :: ImportMonitorPopup"></th:block>
+
 </html>

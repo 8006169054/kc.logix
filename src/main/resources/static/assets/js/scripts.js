@@ -592,6 +592,7 @@ $(function() {
       $('.datepicker').daterangepicker({
         locale: {format: 'YYYY-MM-DD'},
         singleDatePicker: true,
+        isInvalidDate: true
       });
     }
     if($(".datetimepicker").length) {

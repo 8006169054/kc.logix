@@ -8,7 +8,7 @@ $( document ).ready(function() {
  */
 async function search() {
 	$(tableName).clearGridData();
-	let response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#hblNo').val(), arrivalNotice : $('#arrivalNotice').val()});
+	let response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#shblNo').val(), arrivalNotice : $('#sarrivalNotice').val()});
 	$(tableName).searchData(response.data, {editor: true});
 	response = null;
 }
