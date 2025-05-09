@@ -74,6 +74,19 @@ public class PortController {
 		return message.getInsertMessage(KainosResponseEntity.builder().build()).close();
 	}
 	
+	@PostMapping(value = "/api/basic/upload-port")
+	public ResponseEntity<Void> uploadPort(@RequestBody List<PortDto> paramList, @KainosSession SessionDto session) throws Exception {
+		try {
+			service.uploadPort(paramList, session);
+		} catch (KainosBusinessException e) {
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new KainosBusinessException("common.system.error");
+		}
+		return message.getInsertMessage(KainosResponseEntity.builder().build()).close();
+	}
+	
 	@PostMapping(value = "/api/basic/arrival-notice-send-mail")
 	public ResponseEntity<InputStreamResource> arrivalNoticeSendMail(@RequestBody PortDto paramDto, @KainosSession SessionDto session) throws Exception {
 		HttpHeaders headers = new HttpHeaders();

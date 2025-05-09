@@ -83,6 +83,6 @@ async function save(){
 	if(saveData.length === 0)
 		alertMessage(getMessage('0001'), 'info');
 	else{
-		await requestApi('POST', '/api/basic/save-port', saveData);
+		await requestApi('POST', '/api/basic/upload-port', saveData);
 	}
 }

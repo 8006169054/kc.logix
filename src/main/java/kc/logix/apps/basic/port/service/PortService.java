@@ -30,7 +30,7 @@ public class PortService {
 	}
 	
 	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
-	public void savePort(List<PortDto> paramList, SessionDto session)throws Exception {
+	public void uploadPort(List<PortDto> paramList, SessionDto session)throws Exception {
 		String hbl = null;
 		for (int i = 0; i < paramList.size(); i++) {
 			PortDto dto = paramList.get(i);
@@ -40,6 +40,17 @@ public class PortService {
 				repository.excelUploadHblNoDelete(dto.getHblNo());
 			}
 			dto.setCreateUserId(session.getUserId());
+			dto.setUpdateUserId(session.getUserId());
+			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
+				repository.insertWebsiteTerminalCode(dto);
+			}
+		}
+	}
+	
+	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
+	public void savePort(List<PortDto> paramList, SessionDto session)throws Exception {
+		for (int i = 0; i < paramList.size(); i++) {
+			PortDto dto = paramList.get(i);
 			dto.setUpdateUserId(session.getUserId());
 			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
 				repository.insertWebsiteTerminalCode(dto);
