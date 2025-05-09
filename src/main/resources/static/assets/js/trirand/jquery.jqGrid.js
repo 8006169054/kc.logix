@@ -7803,14 +7803,12 @@ $.jgrid.extend({
 		let jqFlag = null;
 		/** 조회된 데이터가 변경 시만 jqFlag 변경이 된다. */
 		if(oRowData !== undefined){
-			
 			if(oRowData.jqFlag === C) return ;
-			let keys = Object.keys(oRowData);
 			/* 수정 시 */
 			if((oRowData.jqFlag === '' || oRowData.jqFlag === null) && iRowData.jqFlag !==D){
-				$(keys).each(function(i ,key){
-					if(key !== 'jqFlag'){
-						if(iRowData[key] !== oRowData[key]) {
+				$($t[0].p.colModel).each(function(i ,col){
+					if(col.name !== 'jqFlag' && col.name !== 'deletcb'){
+						if(iRowData[col.name] !== oRowData[col.name]) {
 							jqFlag = U;
 							return false;
 						}
@@ -7818,9 +7816,9 @@ $.jgrid.extend({
 				});
 			}
 			else if(iRowData.jqFlag === D){
-				$(keys).each(function(i ,key){
-					if(key !== 'jqFlag'){
-						if(iRowData[key] !== oRowData[key]) {
+				$($t[0].p.colModel).each(function(i ,col){
+					if(col.name !== 'jqFlag' && col.name !== 'deletcb'){
+						if(iRowData[col.name] !== oRowData[col.name]) {
 							jqFlag = U;
 							return false;
 						}
