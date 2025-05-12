@@ -1,6 +1,6 @@
 package kc.logix.apps.common.auth.repository;
 
-import static kc.logix.common.entity.QAccount.account;
+import static kc.logix.common.entity.QComUser.comUser;
 
 import org.springframework.stereotype.Repository;
 
@@ -21,12 +21,12 @@ public class AuthRepository extends KainosRepositorySupport {
 	 */
 	public SessionDto dbLogin(String id, String password) throws Exception {
 		return select(Projections.bean(SessionDto.class
-				, account.id
-				, account.name
-				, account.mail
+				, comUser.id
+				, comUser.name
+				, comUser.mail
 				))
-				.from(account)
-				.where(account.id.eq(id).and(account.password.eq(password)))
+				.from(comUser)
+				.where(comUser.id.eq(id).and(comUser.password.eq(password)))
 				.fetchOne();
 	}
 //	
