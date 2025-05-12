@@ -1,4 +1,4 @@
-package kc.logix.apps.basic.terminal;
+package kc.logix.apps.mdm.terminal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import kainos.framework.core.lang.KainosBusinessException;
 import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
-import kc.logix.apps.basic.terminal.dto.TerminalDto;
-import kc.logix.apps.basic.terminal.service.TerminalService;
+import kc.logix.apps.mdm.terminal.dto.TerminalDto;
+import kc.logix.apps.mdm.terminal.service.TerminalService;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.MessageUtil;
 import kc.logix.common.util.excel.KainosExcelReadHandler;
@@ -29,7 +29,7 @@ public class TerminalController {
 	private final TerminalService service;
 	private final MessageUtil message;
 	
-	@GetMapping(value = "/api/basic/terminal")
+	@GetMapping(value = "/api/mdm/terminal")
 	public ResponseEntity<TerminalDto> selectTerminal(
 			@RequestParam(required = false) String name,
 			@RequestParam(required = false) String code,
@@ -40,7 +40,7 @@ public class TerminalController {
 				.close();
 	}
 	
-	@PostMapping(value = "/api/basic/terminal")
+	@PostMapping(value = "/api/mdm/terminal")
 	public ResponseEntity<Void> saveTerminal(@RequestBody List<TerminalDto> paramList, @KainosSession SessionDto session) throws Exception {
 		try {
 			service.saveTerminal(paramList, session);
@@ -52,7 +52,7 @@ public class TerminalController {
 		return message.getInsertMessage(KainosResponseEntity.builder().build()).close();
 	}
 	
-	@PostMapping(value = "/api/basic/terminal/upload")
+	@PostMapping(value = "/api/mdm/terminal/upload")
 	public ResponseEntity<Void> excelupload(@RequestPart MultipartFile upload, @KainosSession SessionDto session) throws Exception {
 		List<TerminalDto> excelData = new ArrayList<>();
 		try {       

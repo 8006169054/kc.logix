@@ -1,4 +1,4 @@
-package kc.logix.apps.system.user.service;
+package kc.logix.apps.mdm.cargo.service;
 
 import java.util.List;
 
@@ -6,17 +6,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kainos.framework.core.KainosKey;
-import kc.logix.apps.system.user.dto.ComUserDto;
-import kc.logix.apps.system.user.repository.UserRepository;
+import kc.logix.apps.mdm.cargo.dto.CargoDto;
+import kc.logix.apps.mdm.cargo.repository.CargoRepository;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class CargoService {
 
-private final UserRepository repository;
+	private final CargoRepository repository;
 	
 	/**
 	 * 
@@ -25,8 +25,8 @@ private final UserRepository repository;
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public List<ComUserDto> selectComUser(ComUserDto paramDto) throws Exception {
-		return repository.selectComUser(paramDto);
+	public List<CargoDto> selectCargo(CargoDto paramDto) throws Exception {
+		return repository.selectCargo(paramDto);
 	}
 	
 	/**
@@ -36,16 +36,16 @@ private final UserRepository repository;
 	 * @throws Exception
 	 */
 	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
-	public void saveComUser(List<ComUserDto> paramList, SessionDto session) throws Exception {
+	public void saveCargo(List<CargoDto> paramList, SessionDto session) throws Exception {
 		String userId = session.getUserId();
 		for (int i = 0; i < paramList.size(); i++) {
-			ComUserDto dto = paramList.get(i);
+			CargoDto dto = paramList.get(i);
 			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
-				repository.insertComUser(dto, userId);
+				repository.insertCargo(dto, userId);
 			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Update)) {
-				repository.updateComUser(dto, userId);
+				repository.updateCargo(dto, userId);
 			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Delete)) {
-				repository.deleteComUser(dto);
+				repository.deleteCargo(dto);
 			}
 		}
 	}

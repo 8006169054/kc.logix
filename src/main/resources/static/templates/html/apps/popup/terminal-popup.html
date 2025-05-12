@@ -83,7 +83,7 @@
     
     const searchterminalpopup = async () => {
     	$("#terminalpopup").clearGridData();
-    	let response = await requestApi('GET', '/api/basic/terminal', {code : $('#terminalCode').val(), name : $('#terminalName').val(), region : $('#terminalRegion').val()});
+    	let response = await requestApi('GET', '/api/mdm/terminal', {code : $('#terminalCode').val(), name : $('#terminalName').val(), region : $('#terminalRegion').val()});
     	$("#terminalpopup").searchData(response.data);
     };
     

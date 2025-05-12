@@ -50,7 +50,7 @@ async function upload(customFile) {
 	try{
 		var frm = new FormData();
 	    frm.append('upload', customFile.files[0]);
-	    response = await requestFormDataApi('POST', '/api/basic/terminal/upload', frm);
+	    response = await requestFormDataApi('POST', '/api/mdm/terminal/upload', frm);
 	   	if(response.common.status === 'S'){
  			search();
  		}
@@ -78,7 +78,7 @@ function terminalFn (cellvalue, options, rowObject ){
  * 조회
  */
 async function search() {
-	response = await requestApi('GET', '/api/basic/terminal', {name : $('#name').val()});
+	response = await requestApi('GET', '/api/mdm/terminal', {name : $('#name').val()});
 	$(tableName).clearGridData();
 	$(tableName).searchData(response.data, {editor: true});
 }
@@ -88,7 +88,7 @@ async function save(){
 	if(saveData.length === 0)
 		alertMessage(getMessage('0001'), 'info');
 	else{
-		await requestApi('POST', '/api/basic/terminal', saveData, {successFn : portSaveFn, errorFn : portSaveFn});
+		await requestApi('POST', '/api/mdm/terminal', saveData, {successFn : portSaveFn, errorFn : portSaveFn});
 	}
 }
 

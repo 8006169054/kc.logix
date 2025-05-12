@@ -1,4 +1,4 @@
-package kc.logix.apps.basic.terminal.dto;
+package kc.logix.apps.mdm.terminal.dto;
 
 import kc.logix.common.util.excel.Field;
 import lombok.AllArgsConstructor;

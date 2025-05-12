@@ -204,11 +204,11 @@ var consigneeData = {
 	etcThree : ''
 }
 
-$("#consignee-popup").on("show.bs.modal", function(e) {
+$("#importMonitorPopup").on("show.bs.modal", function(e) {
 	dataBinding(consigneeData);
 });
   
-$("#consignee-popup").on("hide.bs.modal", function(e) {
+$("#importMonitorPopup").on("hide.bs.modal", function(e) {
 	clearFormValues($('#importMonitorPopupForm').serializeObject());
   	clearFormValues(consigneeData);
   	$('#formDiv').removeClass('was-validated');

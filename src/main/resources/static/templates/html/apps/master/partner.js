@@ -20,7 +20,7 @@ $( document ).ready(function() {
  * 조회
  */
 async function search() {
-	response = await requestApi('GET', '/api/basic/partner', {name : $('#name').val()});
+	response = await requestApi('GET', '/api/mdm/partner', {name : $('#name').val()});
 	$(tableName).clearGridData();
 	$(tableName).searchData(response.data);
 }
@@ -60,7 +60,7 @@ async function deletePartner(){
 	if(selectObjects.length === 0)
 		alertMessage(getMessage('0000'), 'info');
 	else{
-		await requestApi('DELETE', '/api/basic/partner', selectObjects, {successFn : partnerDeleteSaveFn, errorFn : partnerDeleteSaveFn});
+		await requestApi('DELETE', '/api/mdm/partner', selectObjects, {successFn : partnerDeleteSaveFn, errorFn : partnerDeleteSaveFn});
 	}
 }
 
@@ -79,6 +79,6 @@ async function gridSave(){
 	
 	 let method = 'POST';
   //	if(!isEmpty($('#code').val())) method = 'PATCH';
-  	await requestApi(method, '/api/basic/partner', ComGridData(tableName)[0]);
+  	await requestApi(method, '/api/mdm/partner', ComGridData(tableName)[0]);
   	
 }

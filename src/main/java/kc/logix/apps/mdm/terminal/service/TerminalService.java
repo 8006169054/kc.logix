@@ -1,4 +1,4 @@
-package kc.logix.apps.basic.terminal.service;
+package kc.logix.apps.mdm.terminal.service;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kainos.framework.core.KainosKey;
-import kc.logix.apps.basic.terminal.dto.TerminalDto;
-import kc.logix.apps.basic.terminal.repository.TerminalRepository;
+import kc.logix.apps.mdm.terminal.dto.TerminalDto;
+import kc.logix.apps.mdm.terminal.repository.TerminalRepository;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +60,6 @@ public class TerminalService {
 		for (int i = 0; i < paramList.size(); i++) {
 			TerminalDto dto = paramList.get(i);
 			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
-				repository.deleteTerminal(dto);
 				repository.insertTerminal(dto, userId);
 			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Update)) {
 				repository.updateTerminal(dto, userId);

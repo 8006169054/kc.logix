@@ -1,30 +1,28 @@
-package kc.logix.common.entity;
+package kc.logix.apps.mdm.cargo.dto;
 
 import java.util.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity
-@Builder
 @Data
-@ToString
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class Terminal {
+@AllArgsConstructor
+@ToString
+public class CargoDto {
 
-	@Id
-	private String code;
+	private String jqFlag;
 	private String name;
-	private String region;
-	private String type;
-	private String parkingLotCode;
-	private String homepage;
+	private String location;
+	private String depot;
+	private String cleaningCost;
+	private String difficultLevel;
+	private String remark1;
+	private String remark2;
 	private String createUserId;
 	private Date createDate;
 	private String updateUserId;

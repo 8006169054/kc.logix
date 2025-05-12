@@ -1,6 +1,6 @@
-package kc.logix.apps.basic.terminal.repository;
+package kc.logix.apps.mdm.terminal.repository;
 
-import static kc.logix.common.entity.QTerminal.terminal;
+import static kc.logix.common.entity.QMdmTerminal.mdmTerminal;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.querydsl.core.types.dsl.Expressions;
 
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosStringUtils;
-import kc.logix.apps.basic.terminal.dto.TerminalDto;
+import kc.logix.apps.mdm.terminal.dto.TerminalDto;
 
 @Repository
 public class TerminalRepository extends KainosRepositorySupport {
@@ -27,25 +27,25 @@ public class TerminalRepository extends KainosRepositorySupport {
 	public List<TerminalDto> selectTerminal(TerminalDto paramDto) throws Exception {
 		BooleanBuilder where = new BooleanBuilder();
 		if(!KainosStringUtils.isEmpty(paramDto.getCode()))
-			where.and(terminal.code.contains(paramDto.getCode()));
+			where.and(mdmTerminal.code.contains(paramDto.getCode()));
 		if(!KainosStringUtils.isEmpty(paramDto.getName()))
-			where.and(terminal.name.contains(paramDto.getName()));
+			where.and(mdmTerminal.name.contains(paramDto.getName()));
 		if(!KainosStringUtils.isEmpty(paramDto.getRegion()))
-			where.and(terminal.region.contains(paramDto.getRegion()));
+			where.and(mdmTerminal.region.contains(paramDto.getRegion()));
 		
 		return select(Projections.bean(TerminalDto.class,
-				terminal.code,
-				terminal.name,
-				terminal.region,
-				terminal.type,
-				terminal.parkingLotCode,
-				terminal.homepage,
-				terminal.createUserId,
-				Expressions.stringTemplate("to_char({0}, {1})", terminal.createDate, "YYYY-MM-DD").as("createDate"),
-				terminal.updateUserId,
-				Expressions.stringTemplate("to_char({0}, {1})", terminal.updateDate, "YYYY-MM-DD").as("updateDate")
+				mdmTerminal.code,
+				mdmTerminal.name,
+				mdmTerminal.region,
+				mdmTerminal.type,
+				mdmTerminal.parkingLotCode,
+				mdmTerminal.homepage,
+				mdmTerminal.createUserId,
+				Expressions.stringTemplate("to_char({0}, {1})", mdmTerminal.createDate, "YYYY-MM-DD").as("createDate"),
+				mdmTerminal.updateUserId,
+				Expressions.stringTemplate("to_char({0}, {1})", mdmTerminal.updateDate, "YYYY-MM-DD").as("updateDate")
 				))
-				.from(terminal)
+				.from(mdmTerminal)
 				.where(where)
 				.fetch();
 		
@@ -59,18 +59,18 @@ public class TerminalRepository extends KainosRepositorySupport {
 	 * @throws Exception
 	 */
 	public void insertTerminal(TerminalDto paramDto, String userId) throws Exception {
-		insert(terminal)
+		insert(mdmTerminal)
 		.columns(
-			terminal.code,
-			terminal.name,
-			terminal.region,
-			terminal.type,
-			terminal.parkingLotCode,
-			terminal.homepage,
-			terminal.createUserId,
-			terminal.createDate,
-			terminal.updateUserId,
-			terminal.updateDate
+			mdmTerminal.code,
+			mdmTerminal.name,
+			mdmTerminal.region,
+			mdmTerminal.type,
+			mdmTerminal.parkingLotCode,
+			mdmTerminal.homepage,
+			mdmTerminal.createUserId,
+			mdmTerminal.createDate,
+			mdmTerminal.updateUserId,
+			mdmTerminal.updateDate
 		).values(
 			paramDto.getCode(),
 			paramDto.getName(),
@@ -92,15 +92,15 @@ public class TerminalRepository extends KainosRepositorySupport {
 	 * @throws Exception
 	 */
 	public void updateTerminal(TerminalDto paramDto, String userId) throws Exception {
-		update(terminal)
-			.set(terminal.name, paramDto.getName())
-			.set(terminal.region, paramDto.getRegion())
-			.set(terminal.type, paramDto.getType())
-			.set(terminal.parkingLotCode, paramDto.getParkingLotCode().trim())
-			.set(terminal.homepage, paramDto.getHomepage())
-			.set(terminal.updateUserId, userId)
-			.set(terminal.updateDate, new Date())
-		.where(terminal.code.eq(paramDto.getCode()))
+		update(mdmTerminal)
+			.set(mdmTerminal.name, paramDto.getName())
+			.set(mdmTerminal.region, paramDto.getRegion())
+			.set(mdmTerminal.type, paramDto.getType())
+			.set(mdmTerminal.parkingLotCode, paramDto.getParkingLotCode().trim())
+			.set(mdmTerminal.homepage, paramDto.getHomepage())
+			.set(mdmTerminal.updateUserId, userId)
+			.set(mdmTerminal.updateDate, new Date())
+		.where(mdmTerminal.code.eq(paramDto.getCode()))
 		.execute();
 	}
 	
@@ -110,7 +110,7 @@ public class TerminalRepository extends KainosRepositorySupport {
 	 * @throws Exception
 	 */
 	public void deleteTerminal(TerminalDto paramDto) throws Exception {
-		delete(terminal).where(terminal.code.eq(paramDto.getCode())).execute();
+		delete(mdmTerminal).where(mdmTerminal.code.eq(paramDto.getCode())).execute();
 	}
 	
 }

@@ -99,7 +99,7 @@ async function partnerPopupSave(){
   	
   	let method = 'POST';
   	if(!isEmpty($('#code').val())) method = 'PATCH';
-  	await requestApi(method, '/api/basic/partner', $('#partnerPopupForm').serializeObject(), {successFn : partnerPopupSaveFn, errorFn : partnerPopupSaveFn});
+  	await requestApi(method, '/api/mdm/partner', $('#partnerPopupForm').serializeObject(), {successFn : partnerPopupSaveFn, errorFn : partnerPopupSaveFn});
 }
  	
 function partnerPopupSaveFn(response){
