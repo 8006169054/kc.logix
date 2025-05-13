@@ -15,7 +15,7 @@ function tableInit(){
 	   		{ name: 'jqFlag',			width: 40,		align:'center'},
 	   		{ name: 'region', 			width: 100, 	align:'left', editable: true},
 	       	{ name: 'type', 			width: 100, 	align:'center', editable: true},
-	       	{ name: 'code', 			width: 100, 	align:'center', editable: false},
+	       	{ name: 'code', 			width: 100, 	align:'center', editable: true, editoptions : {pk:true}},
 	       	{ name: 'name', 			width: 250, 	align:'left', editable: true},
 	       	{ name: 'parkingLotCode', 	width: 80, 		align:'center', editable: true},
 	    	{ name: 'homepage', 		width: 540, 	align:'left', editable: true},
