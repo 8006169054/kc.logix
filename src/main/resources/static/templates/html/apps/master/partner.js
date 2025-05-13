@@ -9,7 +9,7 @@ $( document ).ready(function() {
 async function search() {
 	response = await requestApi('GET', '/api/mdm/partner', {name : $('#name').val()});
 	$(tableName).clearGridData();
-	$(tableName).searchData(response.data);
+	$(tableName).searchData(response.data, {editor: true});
 }
 
 function partnerTableInit(){

@@ -14,6 +14,7 @@ import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
 import kc.logix.apps.mdm.partner.dto.PartnerDto;
 import kc.logix.apps.mdm.partner.service.PartnerService;
+import kc.logix.common.dto.SelectBoxDto;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,13 @@ public class PartnerController {
 				.close();
 	}
 	
+	@GetMapping(value = "/api/mdm/partner/autocomplete")
+	public ResponseEntity<SelectBoxDto.Autocomplete> selectPartnerAutocomplete() throws Exception {
+		return KainosResponseEntity.builder().build()
+				.addData(service.selectPartnerAutocomplete())
+				.close();
+	}
+	
 	@PostMapping(value = "/api/mdm/partner")
 	public ResponseEntity<Void> savePartner(@RequestBody List<PartnerDto> paramList, @KainosSession SessionDto session) throws Exception {
 		try {
@@ -43,4 +51,6 @@ public class PartnerController {
 		}
 		return message.getInsertMessage(KainosResponseEntity.builder().build()).close();
 	}
+	
+	
 }

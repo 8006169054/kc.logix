@@ -5944,6 +5944,7 @@ $.fn.jqGrid = function( pin ) {
 //				$(ts).jqGrid("setSelection", ri, selection, e);
 //			}
 //		}
+// 정인선 셀클릭
 		$(ts).before(grid.hDiv).on({
 			'click': function(e) {
 				td = e.target;
@@ -5996,16 +5997,19 @@ $.fn.jqGrid = function( pin ) {
 						var therow = $(ts).jqGrid('getGridRowById', ts.p.iRowId);
 						$(therow).removeClass("selected-row " + hover).find("td").eq( ts.p.iCol ).removeClass(highlight);
 					}
-					/*
-					if(e.target.children.length === 0 ) $(ts.rows[ptr[0].rowIndex].cells[ci]).addClass(highlight);
-					else {
-						for (const child of e.target.children) {
-							if($(child).prop("type") !== 'checkbox'){
-								$(ts.rows[ptr[0].rowIndex].cells[ci]).addClass(highlight);
-							}
-						}
-					}
-*/
+					
+					if(e.target.children.length === 0 ){
+						if(ts.p.colModel[ci].name !== 'cb' && ts.p.colModel[ci].name !== 'jqFlag')
+							$(ts.rows[ptr[0].rowIndex].cells[ci]).addClass(highlight);
+					} 
+//					else {
+//						for (const child of e.target.children) {
+//							if($(child).prop("type") !== 'checkbox'){
+//								$(ts.rows[ptr[0].rowIndex].cells[ci]).addClass(highlight);
+//							}
+//						}
+//					}
+
 					ts.p.iCol = ci; ts.p.iRow = ptr[0].rowIndex; ts.p.iRowId = ptr[0].rowIndex;
 				}
 				
@@ -7807,8 +7811,8 @@ $.jgrid.extend({
 			/* 수정 시 */
 			if((oRowData.jqFlag === '' || oRowData.jqFlag === null) && iRowData.jqFlag !==D){
 				$($t[0].p.colModel).each(function(i ,col){
-					if(col.name !== 'jqFlag' && col.name !== 'deletcb'){
-						if(iRowData[col.name] !== oRowData[col.name]) {
+					if(col.name !== 'jqFlag' && col.name !== 'deletcb' && col.editable){
+						if(emptyChange(iRowData[col.name]) !== emptyChange(oRowData[col.name])) {
 							jqFlag = U;
 							return false;
 						}
@@ -7817,8 +7821,8 @@ $.jgrid.extend({
 			}
 			else if(iRowData.jqFlag === D){
 				$($t[0].p.colModel).each(function(i ,col){
-					if(col.name !== 'jqFlag' && col.name !== 'deletcb'){
-						if(iRowData[col.name] !== oRowData[col.name]) {
+					if(col.name !== 'jqFlag' && col.name !== 'deletcb' && col.editable){
+						if(emptyChange(iRowData[col.name]) !== emptyChange(oRowData[col.name])) {
 							jqFlag = U;
 							return false;
 						}
@@ -9000,6 +9004,13 @@ $.jgrid.extend({
 				window.setTimeout(function () { $("#"+$.jgrid.jqID($t.p.knv)).attr("tabindex","-1").focus();},1);
 			}
 			cm = $t.p.colModel[iCol];
+			
+			/** 정인선 신규 등록만 EDITOR 모드로 처리 */
+			if(cm.editoptions !== undefined && cm.editoptions.pk){
+				var rowData = $($t).jqGrid('getRowData', $t.rows[iRow].id);
+				if(rowData.jqFlag !== C) return;
+			}
+			
 			nm = cm.name;
 			if (nm==='subgrid' || nm==='cb' || nm==='rn' || nm==='sc') {return;}
 			try {
@@ -9038,6 +9049,7 @@ $.jgrid.extend({
 					$t.p.beforeEditCell.call($t, $t.rows[iRow].id,nm,tmp,iRow,iCol);
 				}
 				var opt = $.extend({}, cm.editoptions || {} ,{id:iRow+"_"+nm,name:nm,rowId: $t.rows[iRow].id, oper:'edit', module : 'cell'});
+				
 				if (excel) {
 					tmp = event.key;
 				}

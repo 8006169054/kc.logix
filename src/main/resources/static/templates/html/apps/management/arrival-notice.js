@@ -9,7 +9,7 @@ $( document ).ready(function() {
 async function search() {
 	$(tableName).clearGridData();
 	let response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#hblNo').val(), arrivalNotice : $('#arrivalNotice').val()});
-	$(tableName).searchData(response.data);
+	$(tableName).searchData(response.data, {editor: true});
 	response = null;
 }
 

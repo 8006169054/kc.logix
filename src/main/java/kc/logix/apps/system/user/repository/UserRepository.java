@@ -1,6 +1,7 @@
 package kc.logix.apps.system.user.repository;
 
 import static kc.logix.common.entity.QComUser.comUser;
+import static kc.logix.common.entity.QMdmPartner.mdmPartner;
 
 import java.util.Date;
 import java.util.List;
@@ -13,11 +14,16 @@ import com.querydsl.core.types.dsl.Expressions;
 
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosStringUtils;
+import kc.logix.apps.mdm.partner.repository.PartnerRepository;
 import kc.logix.apps.system.user.dto.ComUserDto;
+import lombok.RequiredArgsConstructor;
 
 @Repository
+@RequiredArgsConstructor
 public class UserRepository extends KainosRepositorySupport {
 
+	private final PartnerRepository partnerRepo;
+	
 	/**
 	 * 
 	 * @param paramDto
@@ -36,13 +42,14 @@ public class UserRepository extends KainosRepositorySupport {
 				comUser.mail,
 				comUser.activation,
 				comUser.type,
-				comUser.partnerCode,
+				mdmPartner.name.as("partnerCode"),
 				comUser.createUserId,
 				Expressions.stringTemplate("to_char({0}, {1})", comUser.createDate, "YYYY-MM-DD").as("createDate"),
 				comUser.updateUserId,
 				Expressions.stringTemplate("to_char({0}, {1})", comUser.updateDate, "YYYY-MM-DD").as("updateDate")
 				))
 				.from(comUser)
+				.leftJoin(mdmPartner).on(comUser.partnerCode.eq(mdmPartner.code))
 				.where(where)
 				.fetch();
 	}
@@ -94,10 +101,10 @@ public class UserRepository extends KainosRepositorySupport {
 			.set(comUser.mail, paramDto.getMail())
 			.set(comUser.activation, paramDto.getActivation())
 			.set(comUser.type, paramDto.getType())
-			.set(comUser.partnerCode, paramDto.getPartnerCode())
+			.set(comUser.partnerCode, partnerRepo.selectPartnerCode(paramDto.getPartnerCode()))
 			.set(comUser.updateUserId, userId)
 			.set(comUser.updateDate, new Date())
-		.where(comUser.id.eq(paramDto.getName()))
+		.where(comUser.id.eq(paramDto.getId()))
 		.execute();
 	}
 	
@@ -107,6 +114,6 @@ public class UserRepository extends KainosRepositorySupport {
 	 * @throws Exception
 	 */
 	public void deleteComUser(ComUserDto paramDto) throws Exception {
-		delete(comUser).where(comUser.id.eq(paramDto.getName())).execute();
+		delete(comUser).where(comUser.id.eq(paramDto.getId())).execute();
 	}
 }

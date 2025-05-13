@@ -118,3 +118,9 @@ async function ComSelectBox(url, options){
 function isEmpty(str){
     return typeof str === 'undefined' || str === null || str === '' || str === 'null';
 }
+
+function emptyChange(str){
+	if(isEmpty(str)) return '';
+	
+	return str;
+}

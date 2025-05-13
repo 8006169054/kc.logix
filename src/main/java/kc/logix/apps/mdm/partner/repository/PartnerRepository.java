@@ -14,6 +14,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosStringUtils;
 import kc.logix.apps.mdm.partner.dto.PartnerDto;
+import kc.logix.common.dto.SelectBoxDto;
 import kc.logix.common.util.CodeGenerationUtil;
 
 @Repository
@@ -47,6 +48,35 @@ public class PartnerRepository extends KainosRepositorySupport {
 				))
 				.from(mdmPartner)
 				.where(where)
+				.fetch();
+	}
+	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
+	public String selectPartnerCode(String name) throws Exception {
+		return select(
+				mdmPartner.code
+				)
+				.from(mdmPartner)
+				.where(mdmPartner.name.eq(name))
+				.fetchOne();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<SelectBoxDto.Autocomplete> selectPartnerAutocomplete() throws Exception {
+		return select(Projections.bean(SelectBoxDto.Autocomplete.class,
+				mdmPartner.name.as("value"),
+				mdmPartner.name.as("label")
+				))
+				.from(mdmPartner)
 				.fetch();
 	}
 	

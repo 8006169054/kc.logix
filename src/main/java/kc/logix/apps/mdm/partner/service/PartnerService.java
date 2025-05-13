@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kainos.framework.core.KainosKey;
 import kc.logix.apps.mdm.partner.dto.PartnerDto;
 import kc.logix.apps.mdm.partner.repository.PartnerRepository;
+import kc.logix.common.dto.SelectBoxDto;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,17 @@ public class PartnerService {
 	@Transactional(readOnly = true)
 	public List<PartnerDto> selectPartner(PartnerDto paramDto) throws Exception {
 		return repository.selectPartner(paramDto, false);
+	}
+	
+	/**
+	 * 
+	 * @param paramDto
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(readOnly = true)
+	public List<SelectBoxDto.Autocomplete> selectPartnerAutocomplete() throws Exception {
+		return repository.selectPartnerAutocomplete();
 	}
 	
 	/**
@@ -52,4 +64,14 @@ public class PartnerService {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(readOnly = true)
+	public String selectPartnerCode(String name) throws Exception {
+		return repository.selectPartnerCode(name);
+	}
 }
