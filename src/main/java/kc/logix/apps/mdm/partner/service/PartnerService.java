@@ -9,7 +9,6 @@ import kainos.framework.core.KainosKey;
 import kc.logix.apps.mdm.partner.dto.PartnerDto;
 import kc.logix.apps.mdm.partner.repository.PartnerRepository;
 import kc.logix.common.dto.SessionDto;
-import kc.logix.common.entity.MdmPartner;
 import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +25,7 @@ public class PartnerService {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public List<MdmPartner> selectPartner(PartnerDto paramDto) throws Exception {
+	public List<PartnerDto> selectPartner(PartnerDto paramDto) throws Exception {
 		return repository.selectPartner(paramDto, false);
 	}
 	

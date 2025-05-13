@@ -1,16 +1,3 @@
-var partnerData = {
-	jqFlag: '',
-	code : '',
-	name : 'Partner Name',
-	contactName : 'Manager Name',
-	contactPerson : 'Manager Contact',
-	addressOne : 'Main Address',
-	addressTwo : 'Sub Address',
-	etcOne : 'Other1',
-	etcTwo : 'Other2',
-	etcThree : 'Other3'
-}
-
 var tableName = '#partner-table';
 $( document ).ready(function() {
    partnerTableInit();
@@ -28,57 +15,46 @@ async function search() {
 function partnerTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: partnerTableColNames.split(','),
+	   	colNames: ['','Code','Name','Company','PIC','e-mail','Update User','Update Date'],
 	   	colModel: [
-			{ name: 'jqFlag', 			width: 70, 		align:'center', hidden : false},
-	       	{ name: 'code', 			width: 70, 		align:'center', hidden : true},
-	       	{ name: 'name', 			width: 150, 	align:'center', editable : true},
-	       	{ name: 'contactName', 		width: 150, 	align:'center', editable : true},
-	       	{ name: 'contactPerson', 	width: 130, 	align:'center', editable : true},
-	    	{ name: 'addressOne', 		width: 180, 	align:'center', editable : true},
-	    	{ name: 'addressTwo', 		width: 180, 	align:'center', editable : true},
-	    	{ name: 'etcOne', 			width: 180, 	align:'center', editable : true},
-	    	{ name: 'etcTwo', 			width: 180, 	align:'center', editable : true},
-	    	{ name: 'etcThree', 		width: 180, 	align:'center', editable : true},
-	    	{ name: 'updateUserId', 	width: 100, 	align:'center'},
-	    	{ name: 'updateDate',		width: 140,		align:'center'}
+			{ name: 'jqFlag', 				width: 50, 		align:'center', hidden : false},
+	       	{ name: 'code', 				width: 100, 	align:'left', hidden : true, editable : false},
+	       	{ name: 'name', 				width: 300, 	align:'left', editable : true},
+	       	{ name: 'company', 				width: 500, 	align:'left', editable : true},
+	       	{ name: 'pic', 					width: 100, 	align:'center', editable : true},
+	    	{ name: 'representativeEml',	width: 200, 	align:'center', editable : true},
+	    	{ name: 'updateUserId', 		width: 100, 	align:'center'},
+	    	{ name: 'updateDate',			width: 140,		align:'center'}
 	   	],
 		height: 500, 
 		width: '100%',
 		delselect: true,
-		multiselect: true,
-		dblEdit : true,
-//		ondblClickRow : function(rowid, iRow, iCol,	e) {
-//			Object.assign(partnerData, ComRowData(this.id, iRow));
-//			$('#add').click();
+		//multiselect: true,
+		dblEdit : true
+//		afterEditCell: function (rowId, cellName, value, indexRow, indexCol){
+//			if(cellName == 'code')
+//			console.log(rowId, cellName, value, indexRow, indexCol);
+//			
+//			 return true;
 //		}
 	});
 }
 
-async function deletePartner(){
-	const selectObjects = ComMultiSelectRow(tableName);
-	if(selectObjects.length === 0)
-		alertMessage(getMessage('0000'), 'info');
+async function add(){
+	$(tableName).addRow();
+}
+
+async function save(){
+	var saveData = $(tableName).saveGridData();
+	if(saveData.length === 0)
+		alertMessage(getMessage('0001'), 'info');
 	else{
-		await requestApi('DELETE', '/api/mdm/partner', selectObjects, {successFn : partnerDeleteSaveFn, errorFn : partnerDeleteSaveFn});
+		await requestApi('POST', '/api/mdm/partner', saveData, {successFn : saveFn, errorFn : saveFn});
 	}
 }
 
-function partnerDeleteSaveFn(response){
+function saveFn(response){
 	if(response.common.status === 'S'){
  		search();
-	}
-}
- 
-function gridAdd(){
-	var rowId = $(tableName).getGridParam("reccount"); 
-	$(tableName).jqGrid("addRowData", rowId+1, partnerData, 'first');
-}
-
-async function gridSave(){
-	
-	 let method = 'POST';
-  //	if(!isEmpty($('#code').val())) method = 'PATCH';
-  	await requestApi(method, '/api/mdm/partner', ComGridData(tableName)[0]);
-  	
+ 	}
 }

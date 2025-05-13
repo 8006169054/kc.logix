@@ -15,7 +15,6 @@ import kainos.framework.core.session.annotation.KainosSession;
 import kc.logix.apps.mdm.partner.dto.PartnerDto;
 import kc.logix.apps.mdm.partner.service.PartnerService;
 import kc.logix.common.dto.SessionDto;
-import kc.logix.common.entity.MdmPartner;
 import kc.logix.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +26,7 @@ public class PartnerController {
 	private final MessageUtil message;
 	
 	@GetMapping(value = "/api/mdm/partner")
-	public ResponseEntity<MdmPartner> selectPartner(@RequestParam(required = false) String name) throws Exception {
+	public ResponseEntity<PartnerDto> selectPartner(@RequestParam(required = false) String name) throws Exception {
 		return KainosResponseEntity.builder().build()
 				.addData(service.selectPartner(PartnerDto.builder().name(name).build()))
 				.close();

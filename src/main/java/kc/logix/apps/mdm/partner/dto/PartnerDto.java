@@ -1,7 +1,5 @@
 package kc.logix.apps.mdm.partner.dto;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +20,7 @@ public class PartnerDto {
 	private String pic;
 	private String representativeEml;
 	private String createUserId;
-	private Date createDate;
+	private String createDate;
 	private String updateUserId;
-	private Date updateDate;
+	private String updateDate;
 }

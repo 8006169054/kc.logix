@@ -8,11 +8,13 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosStringUtils;
 import kc.logix.apps.mdm.partner.dto.PartnerDto;
-import kc.logix.common.entity.MdmPartner;
+import kc.logix.common.util.CodeGenerationUtil;
 
 @Repository
 public class PartnerRepository extends KainosRepositorySupport {
@@ -24,7 +26,7 @@ public class PartnerRepository extends KainosRepositorySupport {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<MdmPartner> selectPartner(PartnerDto paramDto, boolean eq) throws Exception {
+	public List<PartnerDto> selectPartner(PartnerDto paramDto, boolean eq) throws Exception {
 		BooleanBuilder where = new BooleanBuilder();
 		if(!KainosStringUtils.isEmpty(paramDto.getName()))
 			if(!eq)
@@ -32,7 +34,20 @@ public class PartnerRepository extends KainosRepositorySupport {
 			else
 				where.and(mdmPartner.name.eq(paramDto.getName()));
 		
-		return selectFrom(mdmPartner).where(where).fetch();
+		return select(Projections.bean(PartnerDto.class,
+				mdmPartner.code,
+				mdmPartner.name,
+				mdmPartner.company,
+				mdmPartner.pic,
+				mdmPartner.representativeEml,
+				mdmPartner.createUserId,
+				Expressions.stringTemplate("to_char({0}, {1})", mdmPartner.createDate, "YYYY-MM-DD").as("createDate"),
+				mdmPartner.updateUserId,
+				Expressions.stringTemplate("to_char({0}, {1})", mdmPartner.updateDate, "YYYY-MM-DD").as("updateDate")
+				))
+				.from(mdmPartner)
+				.where(where)
+				.fetch();
 	}
 	
 	/**
@@ -53,7 +68,7 @@ public class PartnerRepository extends KainosRepositorySupport {
 				mdmPartner.updateUserId,
 				mdmPartner.updateDate
 		).values(
-			paramDto.getCode(),
+			CodeGenerationUtil.createCode("PA"),
 			paramDto.getName(),
 			paramDto.getCompany(),
 			paramDto.getPic(),

@@ -1,7 +1,5 @@
 package kc.logix.apps.system.user.dto;
 
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,8 +22,8 @@ public class ComUserDto {
 	private String type;
 	private String partnerCode;
 	private String createUserId;
-	private Date createDate;
+	private String createDate;
 	private String updateUserId;
-	private Date updateDate;
+	private String updateDate;
 	
 }
