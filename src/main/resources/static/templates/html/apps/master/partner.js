@@ -1,6 +1,9 @@
 var tableName = '#partner-table';
 $( document ).ready(function() {
    partnerTableInit();
+   $('input[type="file"]').change(function() { 
+    	upload(this);
+	});
 });
 
 /**
@@ -40,6 +43,20 @@ function partnerTableInit(){
 	});
 }
 
+async function upload(customFile) {
+	try{
+		var frm = new FormData();
+	    frm.append('upload', customFile.files[0]);
+	    response = await requestFormDataApi('POST', '/api/mdm/cargo/partner', frm);
+	   	if(response.common.status === 'S'){
+ 			search();
+ 		}
+	}catch (error) {
+	}finally {
+	  document.getElementById("customFile").value=null;
+	}
+}
+
 async function add(){
 	$(tableName).addRow();
 }
@@ -57,4 +74,8 @@ function saveFn(response){
 	if(response.common.status === 'S'){
  		search();
  	}
+}
+
+async function fileOpen(){
+	$('#customFile').click();
 }

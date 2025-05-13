@@ -74,4 +74,24 @@ public class PartnerService {
 	public String selectPartnerCode(String name) throws Exception {
 		return repository.selectPartnerCode(name);
 	}
+	
+	/**
+	 * 
+	 * @param paramDto
+	 * @param session
+	 * @throws Exception
+	 */
+	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
+	public void excelupload(List<PartnerDto> paramList, SessionDto session) throws Exception {
+		String userId = session.getUserId();
+		for (int i = 0; i < paramList.size(); i++) {
+			PartnerDto dto = paramList.get(i);
+			
+//			if(selectPartner(dto).size() == 0 ) 
+//				repository.insertCargo(dto, userId);
+//			else 
+//				repository.uploadUpdateCargo(dto, userId);
+			
+		}
+	}
 }
