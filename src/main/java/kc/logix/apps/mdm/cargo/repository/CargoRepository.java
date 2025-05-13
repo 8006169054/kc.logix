@@ -1,7 +1,7 @@
 package kc.logix.apps.mdm.cargo.repository;
 
 import static kc.logix.common.entity.QMdmCargo.mdmCargo;
-
+import static kc.logix.common.entity.QMdmCargoHistory.mdmCargoHistory;
 import java.util.Date;
 import java.util.List;
 
@@ -29,11 +29,16 @@ public class CargoRepository extends KainosRepositorySupport {
 		BooleanBuilder where = new BooleanBuilder();
 		if(!KainosStringUtils.isEmpty(paramDto.getName()))
 			where.and(mdmCargo.name.contains(paramDto.getName()));
+		if(!KainosStringUtils.isEmpty(paramDto.getCargoDate()))
+			where.and(mdmCargo.cargoDate.contains(paramDto.getCargoDate()));
+		if(!KainosStringUtils.isEmpty(paramDto.getLocation()))
+			where.and(mdmCargo.location.contains(paramDto.getLocation()));
 		
 		return select(Projections.bean(CargoDto.class,
 				mdmCargo.code,
 				mdmCargo.location,
 				mdmCargo.name,
+				mdmCargo.cargoDate,
 				mdmCargo.depot,
 				mdmCargo.cleaningCost,
 				mdmCargo.difficultLevel,
@@ -55,12 +60,44 @@ public class CargoRepository extends KainosRepositorySupport {
 	 * @param userId
 	 * @throws Exception
 	 */
+	public void insertCargoHistory(CargoDto paramDto, String userId) throws Exception {
+		insert(mdmCargoHistory)
+		.columns(
+				mdmCargoHistory.name,
+				mdmCargoHistory.location,
+				mdmCargoHistory.cargoDate,
+				mdmCargoHistory.depot,
+				mdmCargoHistory.cleaningCost,
+				mdmCargoHistory.difficultLevel,
+				mdmCargoHistory.remark1,
+				mdmCargoHistory.remark2,
+				mdmCargoHistory.createUserId,
+				mdmCargoHistory.createDate,
+				mdmCargoHistory.updateUserId,
+				mdmCargoHistory.updateDate
+		).values(
+			paramDto.getName(),
+			paramDto.getLocation(),
+			paramDto.getCargoDate(),
+			paramDto.getDepot(),
+			paramDto.getCleaningCost(),
+			paramDto.getDifficultLevel(),
+			paramDto.getRemark1(),
+			paramDto.getRemark2(),
+			userId,
+			new Date(),
+			userId,
+			new Date()
+		).execute();
+	}
+	
 	public void insertCargo(CargoDto paramDto, String userId) throws Exception {
 		insert(mdmCargo)
 		.columns(
 			mdmCargo.code,
 			mdmCargo.name,
 			mdmCargo.location,
+			mdmCargo.cargoDate,
 			mdmCargo.depot,
 			mdmCargo.cleaningCost,
 			mdmCargo.difficultLevel,
@@ -74,6 +111,7 @@ public class CargoRepository extends KainosRepositorySupport {
 			CodeGenerationUtil.createCode("CG"),
 			paramDto.getName(),
 			paramDto.getLocation(),
+			paramDto.getCargoDate(),
 			paramDto.getDepot(),
 			paramDto.getCleaningCost(),
 			paramDto.getDifficultLevel(),
@@ -86,6 +124,7 @@ public class CargoRepository extends KainosRepositorySupport {
 		).execute();
 	}
 	
+	
 	/**
 	 * 
 	 * @param paramDto
@@ -95,6 +134,8 @@ public class CargoRepository extends KainosRepositorySupport {
 	public void updateCargo(CargoDto paramDto, String userId) throws Exception {
 		update(mdmCargo)
 			.set(mdmCargo.depot, paramDto.getDepot())
+//			.set(mdmCargo.cargoDate, paramDto.getCargoDate())
+//			.set(mdmCargo.location, paramDto.getLocation())
 			.set(mdmCargo.cleaningCost, paramDto.getCleaningCost())
 			.set(mdmCargo.difficultLevel, paramDto.getDifficultLevel())
 			.set(mdmCargo.remark1, paramDto.getRemark1())
@@ -102,6 +143,25 @@ public class CargoRepository extends KainosRepositorySupport {
 			.set(mdmCargo.updateUserId, userId)
 			.set(mdmCargo.updateDate, new Date())
 		.where(mdmCargo.code.eq(paramDto.getCode()))
+		.execute();
+	}
+	
+	/**
+	 * 
+	 * @param paramDto
+	 * @param userId
+	 * @throws Exception
+	 */
+	public void uploadUpdateCargo(CargoDto paramDto, String userId) throws Exception {
+		update(mdmCargo)
+			.set(mdmCargo.depot, paramDto.getDepot())
+			.set(mdmCargo.cleaningCost, paramDto.getCleaningCost())
+			.set(mdmCargo.difficultLevel, paramDto.getDifficultLevel())
+			.set(mdmCargo.remark1, paramDto.getRemark1())
+			.set(mdmCargo.remark2, paramDto.getRemark2())
+			.set(mdmCargo.updateUserId, userId)
+			.set(mdmCargo.updateDate, new Date())
+		.where(mdmCargo.cargoDate.eq(paramDto.getCargoDate()).and(mdmCargo.location.eq(paramDto.getLocation())).and(mdmCargo.name.eq(paramDto.getName())))
 		.execute();
 	}
 	

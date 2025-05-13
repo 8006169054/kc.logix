@@ -42,12 +42,39 @@ public class CargoService {
 			CargoDto dto = paramList.get(i);
 			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
 				repository.insertCargo(dto, userId);
+				repository.insertCargoHistory(dto, userId);
 			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Update)) {
 				repository.updateCargo(dto, userId);
+				repository.insertCargoHistory(dto, userId);
 			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Delete)) {
 				repository.deleteCargo(dto);
 			}
 		}
 	}
 	
+	/**
+	 * 
+	 * @param paramDto
+	 * @param session
+	 * @throws Exception
+	 */
+	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
+	public void excelupload(List<CargoDto> paramList, SessionDto session) throws Exception {
+		String userId = session.getUserId();
+		for (int i = 0; i < paramList.size(); i++) {
+			CargoDto dto = paramList.get(i);
+			if(dto.getCleaningCost().equalsIgnoreCase("X")) dto.setCleaningCost("");
+			if(dto.getDifficultLevel().equalsIgnoreCase("X")) dto.setDifficultLevel("");
+			
+			dto.setCleaningCost((dto.getCleaningCost().replaceAll(".0", "")));
+			dto.setDifficultLevel((dto.getDifficultLevel().replaceAll(".0", "")));
+			
+			if(selectCargo(dto).size() == 0 ) 
+				repository.insertCargo(dto, userId);
+			else 
+				repository.uploadUpdateCargo(dto, userId);
+			
+			repository.insertCargoHistory(dto, userId);
+		}
+	}
 }

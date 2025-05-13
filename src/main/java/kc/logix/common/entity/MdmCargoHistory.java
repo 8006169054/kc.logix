@@ -16,10 +16,9 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class MdmCargo {
+public class MdmCargoHistory {
 
 	@Id
-	private String code;
 	private String name;
 	private String location;
 	private String cargoDate;

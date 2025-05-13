@@ -4312,9 +4312,10 @@ $.fn.jqGrid = function( pin ) {
 					var oe = (e.originalEvent || e).clipboardData;
 					clipboardData = oe.getData("text/plain");
 				}
+				
 				clipboardData = clipboardData.split("	");
 				for ( var i = 0 ; i < clipboardData.length ; i++ ) {
-					$(ts).jqGrid("setCell", $.jgrid.jqID(ts.p.selrow), (selectGridData.iCol+i), clipboardData[i]);
+					$(ts).jqGrid("setCell", $.jgrid.jqID(ts.p.iRow), (selectGridData.iCol+i), clipboardData[i]);
 				}
 				type=null,clipboardData=null;
 			});
