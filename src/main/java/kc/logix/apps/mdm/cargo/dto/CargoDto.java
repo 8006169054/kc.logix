@@ -16,6 +16,7 @@ import lombok.ToString;
 public class CargoDto {
 
 	private String jqFlag;
+	private String code;
 	private String name;
 	private String location;
 	private String depot;

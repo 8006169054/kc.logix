@@ -19,6 +19,7 @@ import lombok.ToString;
 public class MdmCargo {
 
 	@Id
+	private String code;
 	private String name;
 	private String location;
 	private String depot;

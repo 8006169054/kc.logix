@@ -14,6 +14,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosStringUtils;
 import kc.logix.apps.mdm.cargo.dto.CargoDto;
+import kc.logix.common.util.CodeGenerationUtil;
 
 @Repository
 public class CargoRepository extends KainosRepositorySupport {
@@ -30,6 +31,7 @@ public class CargoRepository extends KainosRepositorySupport {
 			where.and(mdmCargo.name.contains(paramDto.getName()));
 		
 		return select(Projections.bean(CargoDto.class,
+				mdmCargo.code,
 				mdmCargo.location,
 				mdmCargo.name,
 				mdmCargo.depot,
@@ -56,6 +58,7 @@ public class CargoRepository extends KainosRepositorySupport {
 	public void insertCargo(CargoDto paramDto, String userId) throws Exception {
 		insert(mdmCargo)
 		.columns(
+			mdmCargo.code,
 			mdmCargo.name,
 			mdmCargo.location,
 			mdmCargo.depot,
@@ -68,6 +71,7 @@ public class CargoRepository extends KainosRepositorySupport {
 			mdmCargo.updateUserId,
 			mdmCargo.updateDate
 		).values(
+			CodeGenerationUtil.createCode("CG"),
 			paramDto.getName(),
 			paramDto.getLocation(),
 			paramDto.getDepot(),
@@ -97,7 +101,7 @@ public class CargoRepository extends KainosRepositorySupport {
 			.set(mdmCargo.remark2, paramDto.getRemark2())
 			.set(mdmCargo.updateUserId, userId)
 			.set(mdmCargo.updateDate, new Date())
-		.where(mdmCargo.name.eq(paramDto.getName()).and(mdmCargo.location.eq(paramDto.getLocation())))
+		.where(mdmCargo.code.eq(paramDto.getCode()))
 		.execute();
 	}
 	
@@ -107,7 +111,7 @@ public class CargoRepository extends KainosRepositorySupport {
 	 * @throws Exception
 	 */
 	public void deleteCargo(CargoDto paramDto) throws Exception {
-		delete(mdmCargo).where(mdmCargo.name.eq(paramDto.getName()).and(mdmCargo.location.eq(paramDto.getLocation()))).execute();
+		delete(mdmCargo).where(mdmCargo.code.eq(paramDto.getCode())).execute();
 	}
 	
 }
