@@ -28,7 +28,7 @@
 						</div>
 						<div class="card-body">
 							<div class="form-group row">
-								<label class="col-form-label text-md-left col-md-10">name</label>
+								<label class="col-form-label text-md-left col-md-5">name</label>
 								<div class="col-md-20">
 									<input type="text" id="name" name="name" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
 								</div>
@@ -41,7 +41,7 @@
 				<div class="col-100">
 					<div class="card">
 						<div class="card-header text-right">
-							<button class="btn btn-info" onclick="passwordChange()">Password Reset</button>
+<!-- 							<button class="btn btn-info" onclick="passwordChange()">Password Reset</button> -->
 							<button class="btn btn-primary" id="add" onclick="add()" th:text="#{common.button.label.add}"></button>
 							<button class="btn btn-success" id="save" onclick="save()" th:text="#{common.button.label.save}"></button>
 						</div>

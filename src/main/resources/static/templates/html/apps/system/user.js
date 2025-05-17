@@ -18,10 +18,11 @@ async function search() {
 function userTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','ID','Name','e-Mail','Use','Type','Partner','Update User','Update Date'],
+	   	colNames: ['','ID','Password','Name','e-Mail','Use','Type','Partner','Update User','Update Date'],
 	   	colModel: [
 			{ name: 'jqFlag', 			width: 50, 		align:'center', hidden : false},
 	       	{ name: 'id', 				width: 100, 	align:'center', editable : true, editoptions : {pk:true}},
+	       	{ name: 'password', 		width: 200, 	align:'center', editable : true},
 	       	{ name: 'name', 			width: 200, 	align:'center', editable : true},
 	       	{ name: 'mail', 			width: 150, 	align:'center', editable : true},
 	    	{ name: 'activation',		width: 80, 		align:'center', editable : true, formatter:'select', edittype:'select', editoptions : {value: 'Y:Y;N:N'}},

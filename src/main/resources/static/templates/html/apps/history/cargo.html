@@ -4,11 +4,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
-<!-- Page Specific JS File -->
-<script th:inline="javascript">
-var partnerTableColNames = [[#{basic.partner.table.cols}]];
-</script>
-<script src="/templates/html/apps/master/cargo.js"></script>
+<script src="/templates/html/apps/history/cargo.js"></script>
 <!-- Main Content -->
 <div class="main-content">
 	<section class="section">
@@ -31,7 +27,7 @@ var partnerTableColNames = [[#{basic.partner.table.cols}]];
 						</div>
 						<div class="card-body">
 							<div class="form-group row">
-								<label class="col-form-label text-md-left col-md-5">name</label>
+								<label class="col-form-label text-md-left col-md-5">Item</label>
 								<div class="col-md-20">
 									<input type="text" id="name" name="name" class="form-control" onkeydown="if (event.key == 'Enter'){ search(); }">
 								</div>
@@ -43,12 +39,6 @@ var partnerTableColNames = [[#{basic.partner.table.cols}]];
 			<div class="row">
 				<div class="col-100">
 					<div class="card">
-						<div class="card-header text-right">
-							<input type="file" id="customFile" name="customFile" style="visibility:hidden; width: 10px;" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-		                    <button class="btn btn-info" onclick="fileOpen()" th:text="#{common.button.label.upload}"></button>
-							<button class="btn btn-primary" id="add" onclick="add()" th:text="#{common.button.label.add}"></button>
-							<button class="btn btn-success" id="save" onclick="save()" th:text="#{common.button.label.save}"></button>
-						</div>
 						<div class="card-body p-0">
 							<div class="table-responsive" style="overflow: hidden;">
 								<table id="cargo-table"></table>
