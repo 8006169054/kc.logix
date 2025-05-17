@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kainos.framework.core.KainosKey;
 import kc.logix.apps.basic.port.dto.PortDto;
 import kc.logix.apps.basic.port.repository.PortRepository;
+import kc.logix.apps.mdm.cargo.repository.CargoRepository;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 public class PortService {
 
 	private final PortRepository repository;
+	private final CargoRepository cargrepository;
+	
 	
 	/**
 	 * 
@@ -52,6 +55,7 @@ public class PortService {
 		for (int i = 0; i < paramList.size(); i++) {
 			PortDto dto = paramList.get(i);
 			dto.setUpdateUserId(session.getUserId());
+			dto.setItem(cargrepository.selectCargoCode(dto.getItem()));
 			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
 				repository.insertWebsiteTerminalCode(dto);
 			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Update)) {

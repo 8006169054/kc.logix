@@ -21,6 +21,16 @@ public class CargoRepository extends KainosRepositorySupport {
 
 	/**
 	 * 
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
+	public String selectCargoCode(String name)  throws Exception {
+		return select(mdmCargo.code).from(mdmCargo).where(mdmCargo.name.upper().eq(name.toUpperCase())).fetchOne();
+	}
+	
+	/**
+	 * 
 	 * @param paramDto
 	 * @return
 	 * @throws Exception

@@ -1,5 +1,6 @@
 package kc.logix.apps.basic.port.repository;
 
+import static kc.logix.common.entity.QMdmCargo.mdmCargo;
 import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
 
 import java.util.Date;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
@@ -56,6 +58,8 @@ public class PortRepository extends KainosRepositorySupport {
 					websiteTerminalCode.pol,
 					websiteTerminalCode.pod,
 					websiteTerminalCode.terminal,
+//					websiteTerminalCode.item,
+					new CaseBuilder().when(mdmCargo.name.isNull()).then(websiteTerminalCode.item).otherwise(mdmCargo.name).as("item"),
 //					ExpressionUtils.as(JPAExpressions.select(terminal.homepage).from(terminal).where(websiteTerminalCode.pod.eq(terminal.region)), "homepage"),
 					websiteTerminalCode.etd,
 					websiteTerminalCode.eta,
@@ -79,6 +83,7 @@ public class PortRepository extends KainosRepositorySupport {
 					websiteTerminalCode.updateUserId,
 					Expressions.stringTemplate("to_char({0}, {1})", websiteTerminalCode.updateDate, "YYYY-MM-DD").as("updateDate")
 				)).from(websiteTerminalCode)
+				.leftJoin(mdmCargo).on(websiteTerminalCode.item.eq(mdmCargo.code))
 				.where(where)
 				.orderBy(websiteTerminalCode.uuid.asc())
 				.fetch();
