@@ -1,7 +1,12 @@
 var tableName = '#port-table';
 $( document ).ready(function() {
    	portTableInit();
+   	  searchPartnerAutocomplete();
+   	  searchCargoAutocomplete();
 });
+
+var partnerList = [];
+var carGoList = [];
 
 /**
  * 조회
@@ -29,10 +34,36 @@ function portTableInit(){
 	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true},
 	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true},
 	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'partner', 				width: 120, 	align:'center',		frozen:true},
+	    	{ name: 'partner',				width: 120, 	align:'center', 	rowspan: false,  frozen:true, editable : true, editable : true, edittype: 'text', editoptions: {
+				dataInit:function(elem) {
+					$(elem).autocomplete({
+						source: partnerList,
+						delay: 100,
+						autoFocus: true,
+						minChars: 1,
+				        select: function (event, ui) {
+//				            $(e).val(ui.item.label);
+//				            $("input#birthPlaceId").val(ui.item.value);
+				        }
+					});
+				}
+			}},
 	    	{ name: 'tankNo', 				width: 140, 	align:'center',		frozen:true},
 	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true},
-	    	{ name: 'item', 				width: 250, 	align:'center',		rowspan: true, editable: true},
+	    	{ name: 'item',					width: 120, 	align:'center', 	rowspan: true, editable : true, edittype: 'text', editoptions: {
+				dataInit:function(elem) {
+					$(elem).autocomplete({
+						source: carGoList,
+						delay: 100,
+						autoFocus: true,
+						minChars: 1,
+				        select: function (event, ui) {
+//				            $(e).val(ui.item.label);
+//				            $("input#birthPlaceId").val(ui.item.value);
+				        }
+					});
+				}
+			}},
 	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center',		rowspan: true},
 	    	{ name: 'carrier', 				width: 80, 		align:'center',		rowspan: true},
 	    	{ name: 'mblNo', 				width: 140, 	align:'center',		rowspan: true},
@@ -68,6 +99,21 @@ function portTableInit(){
 		}
 	});
 }
+
+async function searchPartnerAutocomplete(){
+	var response = await requestApi('GET', '/api/mdm/partner/autocomplete');
+	if(response.common.status === 'S'){
+		partnerList = response.data;
+	}
+}
+
+async function searchCargoAutocomplete(){
+	var response = await requestApi('GET', '/api/mdm/cargo/autocomplete');
+	if(response.common.status === 'S'){
+		carGoList = response.data;
+	}
+}
+
 
 
 function arrivalNoticeFn (cellvalue, options, rowObject ){

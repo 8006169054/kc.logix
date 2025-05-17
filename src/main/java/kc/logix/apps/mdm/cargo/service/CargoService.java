@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kainos.framework.core.KainosKey;
 import kc.logix.apps.mdm.cargo.dto.CargoDto;
 import kc.logix.apps.mdm.cargo.repository.CargoRepository;
+import kc.logix.common.dto.SelectBoxDto;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,17 @@ public class CargoService {
 	@Transactional(readOnly = true)
 	public List<CargoDto> selectCargo(CargoDto paramDto) throws Exception {
 		return repository.selectCargo(paramDto);
+	}
+	
+	/**
+	 * 
+	 * @param paramDto
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(readOnly = true)
+	public List<SelectBoxDto.Autocomplete> selectAutocomplete() throws Exception {
+		return repository.selectAutocomplete();
 	}
 	
 	/**

@@ -2,6 +2,8 @@ package kc.logix.apps.mdm.cargo.repository;
 
 import static kc.logix.common.entity.QMdmCargo.mdmCargo;
 import static kc.logix.common.entity.QMdmCargoHistory.mdmCargoHistory;
+import static kc.logix.common.entity.QMdmPartner.mdmPartner;
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosStringUtils;
 import kc.logix.apps.mdm.cargo.dto.CargoDto;
+import kc.logix.common.dto.SelectBoxDto;
 import kc.logix.common.util.CodeGenerationUtil;
 
 @Repository
@@ -61,6 +64,20 @@ public class CargoRepository extends KainosRepositorySupport {
 				))
 				.from(mdmCargo)
 				.where(where)
+				.fetch();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<SelectBoxDto.Autocomplete> selectAutocomplete() throws Exception {
+		return select(Projections.bean(SelectBoxDto.Autocomplete.class,
+				mdmCargo.name.as("value"),
+				mdmCargo.name.as("label")
+				))
+				.from(mdmCargo)
 				.fetch();
 	}
 	

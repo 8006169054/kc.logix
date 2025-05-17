@@ -17,6 +17,7 @@ import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
 import kc.logix.apps.mdm.cargo.dto.CargoDto;
 import kc.logix.apps.mdm.cargo.service.CargoService;
+import kc.logix.common.dto.SelectBoxDto;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.MessageUtil;
 import kc.logix.common.util.excel.KainosExcelReadHandler;
@@ -35,6 +36,13 @@ public class CargoController {
 			) throws Exception {
 		return KainosResponseEntity.builder().build()
 				.addData(service.selectCargo(CargoDto.builder().name(name).build()))
+				.close();
+	}
+	
+	@GetMapping(value = "/api/mdm/cargo/autocomplete")
+	public ResponseEntity<SelectBoxDto.Autocomplete> selectAutocomplete() throws Exception {
+		return KainosResponseEntity.builder().build()
+				.addData(service.selectAutocomplete())
 				.close();
 	}
 	
