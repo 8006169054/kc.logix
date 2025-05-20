@@ -44,6 +44,7 @@ public class HistoryRepository extends KainosRepositorySupport {
 				))
 				.from(mdmCargoHistory)
 				.where(where)
+				.orderBy(mdmCargoHistory.updateDate.desc())
 				.fetch();
 	}
 	

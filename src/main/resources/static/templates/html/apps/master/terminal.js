@@ -5,6 +5,8 @@ $( document ).ready(function() {
 	$('input[type="file"]').change(function() { 
     	upload(this);
 	});
+	
+	search();
 });
 
 function tableInit(){
@@ -78,8 +80,8 @@ function terminalFn (cellvalue, options, rowObject ){
  * 조회
  */
 async function search() {
-	response = await requestApi('GET', '/api/mdm/terminal', {name : $('#name').val()});
 	$(tableName).clearGridData();
+	response = await requestApi('GET', '/api/mdm/terminal', {name : $('#name').val()});
 	$(tableName).searchData(response.data, {editor: true});
 }
 
