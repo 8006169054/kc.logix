@@ -13,7 +13,7 @@ var carGoList = [];
  */
 async function search() {
 	$(tableName).clearGridData();
-	let response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#shblNo').val(), arrivalNotice : $('#sarrivalNotice').val()});
+	let response = await requestApi('GET', '/api/management/website-terminal-code', {hblNo : $('#shblNo').val(), arrivalNotice : $('#sarrivalNotice').val()});
 	$(tableName).searchData(response.data, {editor: true});
 	response = null;
 }
@@ -21,9 +21,10 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['','cargo','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
 	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
+	   		{ name: 'cargo',				width: 40,		align:'center', 	hidden : false,	frozen:true},
 	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true,	frozen:true},
 	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true},
@@ -50,7 +51,7 @@ function portTableInit(){
 			}},
 	    	{ name: 'tankNo', 				width: 140, 	align:'center',		frozen:true},
 	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true},
-	    	{ name: 'item',					width: 120, 	align:'center', 	rowspan: true, editable : true, edittype: 'text', editoptions: {
+	    	{ name: 'item',					width: 220, 	align:'center', 	rowspan: true, editable : true, edittype: 'text', editoptions: {
 				dataInit:function(elem) {
 					$(elem).autocomplete({
 						source: carGoList,
@@ -58,7 +59,8 @@ function portTableInit(){
 						autoFocus: true,
 						minChars: 1,
 				        select: function (event, ui) {
-//				            $(e).val(ui.item.label);
+//							console.log('select',event, ui);
+//				            $(elem).val('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 //				            $("input#birthPlaceId").val(ui.item.value);
 				        }
 					});
@@ -114,57 +116,6 @@ async function searchCargoAutocomplete(){
 	}
 }
 
-
-
-function arrivalNoticeFn (cellvalue, options, rowObject ){
-	if(cellvalue === '1')
-		return 'OK';
-	else{
-//		return '<input type="radio" id="jqArrivalNotice" name="jqArrivalNotice" value="' + options.rowId + '" />';
-		return 'NO';
-	}
-}
-
-/** 국내 매출 */
-function domesticSalesFn (cellvalue, options, rowObject ){
-	if(cellvalue !== '-' && cellvalue !== ''){
-		return usMoneyConversion('US$', cellvalue, '');
-	} 
-	return cellvalue;
-}
-
-/** 국내 매출 */
-function foreignSalesFn (cellvalue, options, rowObject ){
-	if(cellvalue !== '-' && cellvalue !== ''){
-		return usMoneyConversion('US$', cellvalue, '');
-	} 
-	return cellvalue;
-}
-
-/**  TOTAL DEM */
-function totalDemFn (cellvalue, options, rowObject ){
-	if(cellvalue !== 'N/A' && cellvalue !== ''){
-		return usMoneyConversion('US$', cellvalue, '');
-	} 
-	return cellvalue;
-}
-
-/**  DEM(USD)-매입 */
-function demPrchFn (cellvalue, options, rowObject ){
-	if(cellvalue !== 'N/A' && cellvalue !== ''){
-		return usMoneyConversion('US$', cellvalue, '');
-	} 
-	return cellvalue;
-}
-
-/**  DEM 매출 */
-function demSalesFn (cellvalue, options, rowObject ){
-	if(cellvalue !== 'N/A' && cellvalue !== ''){
-		return usMoneyConversion('US$', cellvalue, '');
-	} 
-	return cellvalue;
-}
-
 /**  터미널 링크 */
 function terminalFn (cellvalue, options, rowObject ){
 	if(cellvalue === '')
@@ -184,27 +135,12 @@ function podLinkFn (cellvalue, options, rowObject ){
 		
 }
 
-function idColorFmt( rowId, tv, rawObject, cm, rdata) {
-	switch( cm.name) {
-		case 'partner':
-			return 'style="background-color:rgb(0 176 240)"';
-			break;
-
-		case 'eta':
-			return 'style="color:red"';
-			break;
-
-		default:
-			return  "";
-	}
-}
-
 async function save(){
 	var saveData = $(tableName).saveGridData();
 	if(saveData.length === 0)
 		alertMessage(getMessage('0001'), 'info');
 	else{
-		await requestApi('POST', '/api/basic/save-port', saveData, {successFn : portSaveFn, errorFn : portSaveFn});
+		await requestApi('POST', '/api/management/save-port', saveData, {successFn : portSaveFn, errorFn : portSaveFn});
 	}
 }
 
@@ -212,11 +148,6 @@ function portSaveFn(response){
 	if(response.common.status === 'S'){
  		search();
  	}
-}
-
-async function anSend(){
-	var rowData = ComRowData(tableName, $('#jqArrivalNotice').val());
-	await requestFileDownload('POST', '/api/basic/arrival-notice-send-mail', rowData, 'ArrivalNoticeTemplate_' + rowData.hblNo + '.eml');
 }
 
 function frozenCelHide(){

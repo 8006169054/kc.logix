@@ -12,7 +12,7 @@ async function upload(customFile) {
 		$(tableName).clearGridData();
 		var frm = new FormData();
 	    frm.append('upload', customFile.files[0]);
-	    response = await requestFormDataApi('POST', '/api/basic/excel-upload', frm);
+	    response = await requestFormDataApi('POST', '/api/management/excel-upload', frm);
 		$(tableName).searchData(response.data, {jqFlag: C});
 	}catch (error) {
 	}finally {
@@ -83,6 +83,6 @@ async function save(){
 	if(saveData.length === 0)
 		alertMessage(getMessage('0001'), 'info');
 	else{
-		await requestApi('POST', '/api/basic/upload-port', saveData);
+		await requestApi('POST', '/api/management/upload-port', saveData);
 	}
 }

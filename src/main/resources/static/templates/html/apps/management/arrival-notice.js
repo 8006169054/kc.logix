@@ -8,7 +8,7 @@ $( document ).ready(function() {
  */
 async function search() {
 	$(tableName).clearGridData();
-	let response = await requestApi('GET', '/api/basic/website-terminal-code', {hblNo : $('#hblNo').val(), arrivalNotice : $('#arrivalNotice').val()});
+	let response = await requestApi('GET', '/api/management/website-terminal-code', {hblNo : $('#hblNo').val(), arrivalNotice : $('#arrivalNotice').val()});
 	$(tableName).searchData(response.data, {editor: true});
 	response = null;
 }
@@ -73,5 +73,5 @@ function portTableInit(){
 
 async function anSend(){
 	var rowData = ComSelectRow(tableName);
-	await requestFileDownload('POST', '/api/basic/arrival-notice-send-mail', rowData, 'ArrivalNoticeTemplate_' + rowData.hblNo + '.eml');
+	await requestFileDownload('POST', '/api/management/arrival-notice-send-mail', rowData, 'ArrivalNoticeTemplate_' + rowData.hblNo + '.eml');
 }

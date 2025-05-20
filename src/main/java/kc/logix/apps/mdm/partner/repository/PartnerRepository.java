@@ -99,10 +99,10 @@ public class PartnerRepository extends KainosRepositorySupport {
 				mdmPartner.updateDate
 		).values(
 			CodeGenerationUtil.createCode("PA"),
-			paramDto.getName(),
-			paramDto.getCompany(),
-			paramDto.getPic(),
-			paramDto.getRepresentativeEml(),
+			paramDto.getName().trim(),
+			paramDto.getCompany().trim(),
+			paramDto.getPic().trim(),
+			paramDto.getRepresentativeEml().trim(),
 			paramDto.getCreateUserId(),
 			new Date(),
 			paramDto.getUpdateUserId(),

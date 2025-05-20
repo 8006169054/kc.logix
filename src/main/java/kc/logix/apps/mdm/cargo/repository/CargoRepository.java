@@ -74,8 +74,8 @@ public class CargoRepository extends KainosRepositorySupport {
 	 */
 	public List<SelectBoxDto.Autocomplete> selectAutocomplete() throws Exception {
 		return select(Projections.bean(SelectBoxDto.Autocomplete.class,
-				mdmCargo.name.as("value"),
-				mdmCargo.name.as("label")
+				mdmCargo.name.concat(" | ").concat(mdmCargo.cargoDate).concat(" | ").concat(mdmCargo.location).as("value"),
+				mdmCargo.name.concat(" | ").concat(mdmCargo.cargoDate).concat(" | ").concat(mdmCargo.location).as("label")
 				))
 				.from(mdmCargo)
 				.fetch();
@@ -103,14 +103,14 @@ public class CargoRepository extends KainosRepositorySupport {
 				mdmCargoHistory.updateUserId,
 				mdmCargoHistory.updateDate
 		).values(
-			paramDto.getName(),
-			paramDto.getLocation(),
-			paramDto.getCargoDate(),
-			paramDto.getDepot(),
-			paramDto.getCleaningCost(),
-			paramDto.getDifficultLevel(),
-			paramDto.getRemark1(),
-			paramDto.getRemark2(),
+			paramDto.getName().trim(),
+			paramDto.getLocation().trim(),
+			paramDto.getCargoDate().trim(),
+			paramDto.getDepot().trim(),
+			paramDto.getCleaningCost().trim(),
+			paramDto.getDifficultLevel().trim(),
+			paramDto.getRemark1().trim(),
+			paramDto.getRemark2().trim(),
 			userId,
 			new Date(),
 			userId,

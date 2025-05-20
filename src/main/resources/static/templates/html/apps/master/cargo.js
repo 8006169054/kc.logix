@@ -22,7 +22,7 @@ function cargoTableInit(){
 	   	colModel: [
 			{ name: 'jqFlag', 			width: 50, 		align:'center', hidden : false},
 	       	{ name: 'code', 			width: 100, 	align:'left', 	hidden : true, editable : false},
-	       	{ name: 'cargoDate', 		width: 80, 		align:'center', 	editable : true, editoptions : {pk:true}},
+	       	{ name: 'cargoDate', 		width: 80, 		align:'center', editable : true, editoptions : {pk:true}, edittype: "date"},
 	       	{ name: 'name', 			width: 450, 	align:'left', 	editable : true, editoptions : {pk:true}},
 	       	{ name: 'location', 		width: 100, 	align:'center', editable : true, editoptions : {pk:true}},
 	       	{ name: 'depot', 			width: 80, 		align:'center', editable : true},
