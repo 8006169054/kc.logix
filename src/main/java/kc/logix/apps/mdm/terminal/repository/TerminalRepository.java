@@ -14,6 +14,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
 import kainos.framework.utils.KainosStringUtils;
 import kc.logix.apps.mdm.terminal.dto.TerminalDto;
+import kc.logix.common.dto.SelectBoxDto;
 
 @Repository
 public class TerminalRepository extends KainosRepositorySupport {
@@ -113,4 +114,20 @@ public class TerminalRepository extends KainosRepositorySupport {
 		delete(mdmTerminal).where(mdmTerminal.code.eq(paramDto.getCode())).execute();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public List<SelectBoxDto.TerminalAutoComplete> selectAutocomplete() throws Exception {
+		return select(Projections.bean(SelectBoxDto.TerminalAutoComplete.class,
+				mdmTerminal.code,
+				mdmTerminal.region,
+				mdmTerminal.homepage,
+				mdmTerminal.name.upper().as("value"),
+				mdmTerminal.name.upper().as("label")
+				))
+				.from(mdmTerminal)
+				.fetch();
+	}
 }

@@ -83,7 +83,9 @@ public class WebsiteDto {
 	private String pod; //POD
 	
 	@Field(value = "T")
-	private String terminal; //TERMINAL
+	private String terminalCode; //TERMINAL code
+	private String terminalName; //TERMINAL code
+	private String terminalHomepage; //TERMINAL code
 	
 	@Field(value = "U")
 	private String etd; //ETD

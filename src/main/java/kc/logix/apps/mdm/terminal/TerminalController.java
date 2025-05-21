@@ -17,6 +17,7 @@ import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
 import kc.logix.apps.mdm.terminal.dto.TerminalDto;
 import kc.logix.apps.mdm.terminal.service.TerminalService;
+import kc.logix.common.dto.SelectBoxDto;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.MessageUtil;
 import kc.logix.common.util.excel.KainosExcelReadHandler;
@@ -77,5 +78,13 @@ public class TerminalController {
 			throw new KainosBusinessException("common.system.error");
 		}
 		return message.getInsertMessage(KainosResponseEntity.builder().build()).close();
+	}
+	
+	
+	@GetMapping(value = "/api/mdm/terminal/autocomplete")
+	public ResponseEntity<SelectBoxDto.TerminalAutoComplete> selectAutocomplete() throws Exception {
+		return KainosResponseEntity.builder().build()
+				.addData(service.selectAutocomplete())
+				.close();
 	}
 }

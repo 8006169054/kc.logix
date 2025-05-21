@@ -3,10 +3,12 @@ $( document ).ready(function() {
    	portTableInit();
    	  searchPartnerAutocomplete();
    	  searchCargoAutocomplete();
+   	  searchTerminalAutocomplete();
 });
 
 var partnerList = [];
 var carGoList = [];
+var terminalList = [];
 
 /**
  * 조회
@@ -21,20 +23,20 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','cargo','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['','cargo','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'terminalCode', 'Name', 'Link', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
 	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
 	   		{ name: 'cargo',				width: 100,		align:'center', 	rowspan: true,	editable : true, hidden : true,	frozen:true},
 	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true,	frozen:true},
 	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true, editable: true},
-	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true},
+	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true, editable: true},
 	       	{ name: 'arrivalNotice',		width: 70, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'invoice', 				width: 70, 		align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'concine', 				width: 150, 	align:'center',		rowspan: true,	frozen:true},
+	    	{ name: 'concine', 				width: 150, 	align:'center',		rowspan: true,	frozen:true, editable: true},
 	    	{ name: 'profitDate', 			width: 90, 		align:'center',		rowspan: true,	frozen:true, editable: true, edittype: "date"},
-	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true,	frozen:true},
+	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true, editable: true},
+	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true, editable: true},
+	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true,	frozen:true, editable: true},
 	    	{ name: 'partner',				width: 120, 	align:'center', 	rowspan: false,  frozen:true, editable : true, editable : true, edittype: 'text', editoptions: {
 				dataInit:function(elem) {
 					$(elem).autocomplete({
@@ -43,14 +45,12 @@ function portTableInit(){
 						autoFocus: true,
 						minChars: 1,
 				        select: function (event, ui) {
-//				            $(e).val(ui.item.label);
-//				            $("input#birthPlaceId").val(ui.item.value);
 				        }
 					});
 				}
 			}},
-	    	{ name: 'tankNo', 				width: 140, 	align:'center',		frozen:true},
-	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true},
+	    	{ name: 'tankNo', 				width: 140, 	align:'center',		frozen:true, editable: true},
+	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true, editable: true},
 	    	{ name: 'item',					width: 220, 	align:'center', 	rowspan: true, editable : true, edittype: 'text', editoptions: {
 				dataInit:function(elem) {
 					$(elem).autocomplete({
@@ -62,24 +62,36 @@ function portTableInit(){
 							ComSetCellData(tableName, ComSelectIndex(tableName), 2, ui.item.code, true);
 							ComSetCellData(tableName, ComSelectIndex(tableName), 'cargoDate', ui.item.cargoDate, true);
 							ComSetCellData(tableName, ComSelectIndex(tableName), 'location', ui.item.location, true);
-							$(elem).autocomplete( "close" );
+//							$(elem).autocomplete( "close" );
 				        }
-//				        ,
-//				        close : function(event) { // 자동완성 창 닫아질 때의 이벤트
-//				            ComSaveCell(tableName, ComSelectIndex(tableName), 2);
-//				        }
 					});
 				}
 			}},
 			{ name: 'cargoDate', 			width: 80, 		align:'center',		rowspan: true},
 			{ name: 'location', 			width: 100, 	align:'center',		rowspan: true},
-	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center',		rowspan: true},
-	    	{ name: 'carrier', 				width: 80, 		align:'center',		rowspan: true},
-	    	{ name: 'mblNo', 				width: 140, 	align:'center',		rowspan: true},
+	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center',		rowspan: true, editable: true},
+	    	{ name: 'carrier', 				width: 80, 		align:'center',		rowspan: true, editable: true},
+	    	{ name: 'mblNo', 				width: 140, 	align:'center',		rowspan: true, editable: true},
 	    	{ name: 'hblNo', 				width: 140, 	align:'center',		rowspan: true},
-	    	{ name: 'pol', 					width: 100, 	align:'center',		rowspan: true},
+	    	{ name: 'pol', 					width: 100, 	align:'center',		rowspan: true, editable: true},
 	    	{ name: 'pod', 					width: 100, 	align:'center'},
-	    	{ name: 'terminal', 			width: 150, 	align:'center'},
+	    	{ name: 'terminalCode', 		width: 100, 	align:'center', 	hidden : true,},
+	    	{ name: 'terminalName', 		width: 150, 	align:'center',		editable : true, edittype: 'text', editoptions: {
+				dataInit:function(elem) {
+					$(elem).autocomplete({
+						source: terminalList,
+						delay: 100,
+						autoFocus: true,
+						minChars: 1,
+				        select: function (event, ui) {
+							ComSetCellData(tableName, ComSelectIndex(tableName), 'terminalCode', ui.item.code, true);
+							ComSetCellData(tableName, ComSelectIndex(tableName), 'pod', ui.item.region, true);
+							ComSetCellData(tableName, ComSelectIndex(tableName), 'terminalHomepage', ui.item.homepage, true);
+				        }
+					});
+				}
+			}},
+	    	{ name: 'terminalHomepage', 	width: 60, 	align:'center', formatter: terminalFn},
 	    	{ name: 'etd', 					width: 90, 		align:'center'},
 	    	{ name: 'eta', 					width: 90, 		align:'center'},
 	       	{ name: 'ata', 					width: 90, 		align:'center'},
@@ -104,7 +116,17 @@ function portTableInit(){
 		frozen: true,
 		delselect: true,
 //		multiselect: true,
-		onCellSelect : function(rowid, iCol, cellcontent, e) {
+		afterSaveCell : function(rowid, cellname, value, iRow, iCol) {
+			if('terminalName' === cellname && value === ''){
+				ComSetCellData(tableName, iRow, 'terminalCode', '', true);
+				ComSetCellData(tableName, iRow, 'pod', '', true);
+				ComSetCellData(tableName, iRow, 'terminalHomepage', '', true);
+			}
+			else if('item' === cellname && value === ''){
+				ComSetCellData(tableName, iRow, 'cargo', '', true);
+				ComSetCellData(tableName, iRow, 'cargoDate', '', true);
+				ComSetCellData(tableName, iRow, 'location', '', true);
+			}
 		}
 	});
 	
@@ -112,6 +134,8 @@ function portTableInit(){
 				useColSpanStyle: true,
 				groupHeaders: [
                                 {startColumnName:'item', numberOfColumns: 3, titleText: 'Item' },
+                                {startColumnName:'pod', numberOfColumns: 4, titleText: 'Terminal' }
+                                
                               ]
 		});
 }
@@ -130,23 +154,18 @@ async function searchCargoAutocomplete(){
 	}
 }
 
-/**  터미널 링크 */
-function terminalFn (cellvalue, options, rowObject ){
-	if(cellvalue === '')
-		return cellvalue;
-	else
-		return '<a href="' + rowObject.homepage + '" target="_blank">' + cellvalue + '</a>';
+async function searchTerminalAutocomplete(){
+	var response = await requestApi('GET', '/api/mdm/terminal/autocomplete');
+	if(response.common.status === 'S'){
+		terminalList = response.data;
+	}
 }
 
-/**  터미널 링크 */
-function podLinkFn (cellvalue, options, rowObject ){
-	if(rowObject.pod === '')
-		return rowObject.pod;
+function terminalFn (cellvalue, options, rowObject ){
+	if(emptyChange(rowObject.terminalHomepage) === '')
+		return '';
 	else
-//		return '<a href="javascript:openterminal()">' + rowObject.pod + '</a>';
-		return '<a href="#" data-toggle="modal" data-target="#terminal-popup" data-id="' + rowObject.pod + '">' + rowObject.pod + '</a>';
-		
-		
+		return '<a href="' + rowObject.terminalHomepage + '" target="_blank"><img src="/assets/img/popup.png" height="22px"></a>';
 }
 
 async function save(){

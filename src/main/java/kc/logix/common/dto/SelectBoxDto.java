@@ -31,4 +31,18 @@ public class SelectBoxDto {
 		private String cargoDate;
 		private String location;
 	}
+	
+	@Builder
+	@Data
+	@ToString
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class TerminalAutoComplete {
+		private String value;
+		private String label;
+		private String code;
+		private String region;
+		private String homepage;
+		
+	}
 }

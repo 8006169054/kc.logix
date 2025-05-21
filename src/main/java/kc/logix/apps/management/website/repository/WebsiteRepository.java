@@ -2,7 +2,7 @@ package kc.logix.apps.management.website.repository;
 
 import static kc.logix.common.entity.QMdmCargo.mdmCargo;
 import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
-
+import static kc.logix.common.entity.QMdmTerminal.mdmTerminal;
 import java.util.Date;
 import java.util.List;
 
@@ -56,8 +56,12 @@ public class WebsiteRepository extends KainosRepositorySupport {
 					websiteTerminalCode.mblNo,
 					websiteTerminalCode.hblNo,
 					websiteTerminalCode.pol,
-					websiteTerminalCode.pod,
-					websiteTerminalCode.terminal,
+//					websiteTerminalCode.pod,
+					new CaseBuilder().when(mdmTerminal.region.isNull()).then(websiteTerminalCode.pod.upper()).otherwise(mdmTerminal.region.upper()).as("pod"),
+					mdmTerminal.code.as("terminalCode"),
+					mdmTerminal.name.as("terminalName"),
+//					mdmTerminal.region.upper().as("region"),
+					mdmTerminal.homepage.as("terminalHomepage"),
 					mdmCargo.code.as("cargo"),
 					mdmCargo.cargoDate.upper().as("cargoDate"),
 					mdmCargo.location.upper().as("location"),
@@ -86,6 +90,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 					Expressions.stringTemplate("to_char({0}, {1})", websiteTerminalCode.updateDate, "YYYY-MM-DD").as("updateDate")
 				)).from(websiteTerminalCode)
 				.leftJoin(mdmCargo).on(websiteTerminalCode.item.eq(mdmCargo.code))
+				.leftJoin(mdmTerminal).on(websiteTerminalCode.terminal.eq(mdmTerminal.code))
 				.where(where)
 				.orderBy(websiteTerminalCode.uuid.asc())
 				.fetch();
@@ -162,7 +167,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 			paramDto.getHblNo(),
 			paramDto.getPol(),
 			paramDto.getPod(),
-			paramDto.getTerminal(),
+			paramDto.getTerminalCode(),
 			paramDto.getEtd(),
 			paramDto.getEta(),
 			paramDto.getAta(),
@@ -213,7 +218,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 			.set(websiteTerminalCode.hblNo,               paramDto.getHblNo())
 			.set(websiteTerminalCode.pol,                 paramDto.getPol())
 			.set(websiteTerminalCode.pod,                 paramDto.getPod())
-			.set(websiteTerminalCode.terminal,            paramDto.getTerminal())
+			.set(websiteTerminalCode.terminal,            paramDto.getTerminalCode())
 			.set(websiteTerminalCode.etd,                 paramDto.getEtd())
 			.set(websiteTerminalCode.eta,                 paramDto.getEta())
 			.set(websiteTerminalCode.ata,                 paramDto.getAta())

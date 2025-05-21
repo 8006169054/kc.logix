@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kainos.framework.core.KainosKey;
 import kc.logix.apps.mdm.terminal.dto.TerminalDto;
 import kc.logix.apps.mdm.terminal.repository.TerminalRepository;
+import kc.logix.common.dto.SelectBoxDto;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
@@ -69,4 +70,14 @@ public class TerminalService {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param paramDto
+	 * @return
+	 * @throws Exception
+	 */
+	@Transactional(readOnly = true)
+	public List<SelectBoxDto.TerminalAutoComplete> selectAutocomplete() throws Exception {
+		return repository.selectAutocomplete();
+	}
 }

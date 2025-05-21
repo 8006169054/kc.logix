@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import kainos.framework.core.KainosKey;
 import kc.logix.apps.management.website.dto.WebsiteDto;
 import kc.logix.apps.management.website.repository.WebsiteRepository;
-import kc.logix.apps.mdm.cargo.repository.CargoRepository;
 import kc.logix.common.dto.SessionDto;
 import kc.logix.common.util.JqFlag;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class WebsiteService {
 
 	private final WebsiteRepository repository;
-	private final CargoRepository cargrepository;
+//	private final CargoRepository cargrepository;
 	
 	
 	/**

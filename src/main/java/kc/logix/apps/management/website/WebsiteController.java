@@ -222,7 +222,7 @@ public class WebsiteController {
 				sb.append("				<td>" + content.getHblNo()+ "<span></span></td>                                                ");
 				sb.append("				<td>" + content.getPol() + "<span></span></td>                                                  ");
 				sb.append("				<td>" + content.getPod() + "<span></span></td>                                                  ");
-				sb.append("				<td>" + content.getTerminal() + "<span></span></td>                                             ");
+				sb.append("				<td>" + content.getTerminalName() + "<span></span></td>                                             ");
 				sb.append("				<td>" + content.getEtd() + "<span></span></td>                                                  ");
 				sb.append("				<td>" + content.getEta() + "<span></span></td>                                                  ");
 				sb.append("				<td>" + content.getFt() + "<span></span></td>                                                   ");
