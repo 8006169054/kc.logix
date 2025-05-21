@@ -117,15 +117,46 @@ function portTableInit(){
 		delselect: true,
 //		multiselect: true,
 		afterSaveCell : function(rowid, cellname, value, iRow, iCol) {
-			if('terminalName' === cellname && value === ''){
-				ComSetCellData(tableName, iRow, 'terminalCode', '', true);
-				ComSetCellData(tableName, iRow, 'pod', '', true);
-				ComSetCellData(tableName, iRow, 'terminalHomepage', '', true);
-			}
-			else if('item' === cellname && value === ''){
-				ComSetCellData(tableName, iRow, 'cargo', '', true);
-				ComSetCellData(tableName, iRow, 'cargoDate', '', true);
-				ComSetCellData(tableName, iRow, 'location', '', true);
+			var changeVal = false;
+			if('terminalName' === cellname){
+				if(value === ''){
+					ComSetCellData(tableName, iRow, 'terminalCode', '', true);
+					ComSetCellData(tableName, iRow, 'pod', '', true);
+					ComSetCellData(tableName, iRow, 'terminalHomepage', '', true);
+				}else{
+					for (let terminal of terminalList) {
+						if(terminal.value === value){
+							changeVal = true;
+							return false;
+						}
+					}
+				}
+				
+				if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
+			}else if('partner' === cellname){
+				if(value != ''){
+					for (let partner of partnerList) {
+						if(partner.value === value){
+							changeVal = true;
+							return false;
+						}
+					}
+				}
+			}else if('item' === cellname){
+				if(value === ''){
+					ComSetCellData(tableName, iRow, 'cargo', '', true);
+					ComSetCellData(tableName, iRow, 'cargoDate', '', true);
+					ComSetCellData(tableName, iRow, 'location', '', true);
+				}else{
+					for (let carGo of carGoList) {
+						if(carGo.value === value){
+							changeVal = true;
+							return false;
+						}
+					}
+				}
+				
+				if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
 			}
 		}
 	});

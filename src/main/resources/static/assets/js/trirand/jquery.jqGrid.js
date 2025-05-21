@@ -7836,7 +7836,12 @@ $.jgrid.extend({
 			$($t).jqGrid('setCell', iRow, 'jqFlag', jqFlag);
 		}
 	},
-	
+	dataRecovery : function(rowid, colname) {
+		var $t = this;
+		var data = $t[0].p.basedata[rowid-1];
+		var recovery = eval("data." + colname);
+		$($t).jqGrid('setCell', rowid, colname, recovery);
+	},
 	setCell : function(rowid,colname,nData,cssp,attrp, forceupd) {
 		return this.each(function(){
 			var $t = this, pos =-1, v, ind;

@@ -71,8 +71,8 @@ public class PartnerRepository extends KainosRepositorySupport {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SelectBoxDto.Autocomplete> selectPartnerAutocomplete() throws Exception {
-		return select(Projections.bean(SelectBoxDto.Autocomplete.class,
+	public List<SelectBoxDto.PartnerAutocomplete> selectPartnerAutocomplete() throws Exception {
+		return select(Projections.bean(SelectBoxDto.PartnerAutocomplete.class,
 				mdmPartner.name.as("value"),
 				mdmPartner.name.as("label")
 				))

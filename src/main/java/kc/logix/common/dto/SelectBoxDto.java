@@ -13,10 +13,9 @@ public class SelectBoxDto {
 	@ToString
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class Autocomplete {
+	public static class PartnerAutocomplete {
 		private String value;
 		private String label;
-		private String code;
 	}
 	
 	@Builder

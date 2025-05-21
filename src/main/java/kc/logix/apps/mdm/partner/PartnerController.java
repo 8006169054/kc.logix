@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import kainos.framework.core.lang.KainosBusinessException;
 import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
-import kc.logix.apps.mdm.cargo.dto.CargoDto;
 import kc.logix.apps.mdm.partner.dto.PartnerDto;
 import kc.logix.apps.mdm.partner.service.PartnerService;
 import kc.logix.common.dto.SelectBoxDto;
@@ -39,7 +38,7 @@ public class PartnerController {
 	}
 	
 	@GetMapping(value = "/api/mdm/partner/autocomplete")
-	public ResponseEntity<SelectBoxDto.Autocomplete> selectPartnerAutocomplete() throws Exception {
+	public ResponseEntity<SelectBoxDto.PartnerAutocomplete> selectPartnerAutocomplete() throws Exception {
 		return KainosResponseEntity.builder().build()
 				.addData(service.selectPartnerAutocomplete())
 				.close();

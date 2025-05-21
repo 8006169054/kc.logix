@@ -37,7 +37,7 @@ public class PartnerService {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public List<SelectBoxDto.Autocomplete> selectPartnerAutocomplete() throws Exception {
+	public List<SelectBoxDto.PartnerAutocomplete> selectPartnerAutocomplete() throws Exception {
 		return repository.selectPartnerAutocomplete();
 	}
 	
