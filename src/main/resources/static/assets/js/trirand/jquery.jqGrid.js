@@ -7815,7 +7815,7 @@ $.jgrid.extend({
 					if(col.name !== 'jqFlag' && col.name !== 'deletcb' && col.editable){
 						if(emptyChange(iRowData[col.name]) !== emptyChange(oRowData[col.name])) {
 							try{
-								if($(iRowData[col.name])[0] === undefined)
+								if(col.edittype === 'textarea' || $(iRowData[col.name])[0] === undefined)
 									jqFlag = U;
 							} catch (error) {console.log(error)}
 							return false;

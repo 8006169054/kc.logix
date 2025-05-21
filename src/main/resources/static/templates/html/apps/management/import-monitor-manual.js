@@ -95,7 +95,7 @@ function portTableInit(){
 	    	{ name: 'etd', 					width: 90, 		align:'center', editable: true, edittype: "date"},
 	    	{ name: 'eta', 					width: 90, 		align:'center', editable: true, edittype: "date"},
 	       	{ name: 'ata', 					width: 90, 		align:'center', editable: true},
-	       	{ name: 'remark', 				width: 250, 	align:'center', editable: true,	rowspan: true},
+	       	{ name: 'remark', 				width: 250, 	align:'center', editable: true,	rowspan: true, edittype: 'textarea'},
 	       	{ name: 'ft', 					width: 70, 		align:'center', editable: true},
 	       	{ name: 'demRate', 				width: 80, 		align:'center', editable: true},
 	       	{ name: 'endOfFt', 				width: 90, 		align:'center', editable: true, edittype: "date"},
