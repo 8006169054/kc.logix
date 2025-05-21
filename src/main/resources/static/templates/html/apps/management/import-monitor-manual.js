@@ -131,8 +131,6 @@ function portTableInit(){
 						}
 					}
 				}
-				
-				if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
 			}else if('partner' === cellname){
 				if(value != ''){
 					for (let partner of partnerList) {
@@ -155,9 +153,9 @@ function portTableInit(){
 						}
 					}
 				}
-				
-				if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
 			}
+			
+			if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
 		}
 	});
 	
