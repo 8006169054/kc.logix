@@ -59,6 +59,8 @@ public class WebsiteRepository extends KainosRepositorySupport {
 					websiteTerminalCode.pod,
 					websiteTerminalCode.terminal,
 					mdmCargo.code.as("cargo"),
+					mdmCargo.cargoDate.upper().as("cargoDate"),
+					mdmCargo.location.upper().as("location"),
 					new CaseBuilder().when(mdmCargo.name.isNull()).then(websiteTerminalCode.item.upper()).otherwise(mdmCargo.name.upper()).as("item"),
 //					ExpressionUtils.as(JPAExpressions.select(terminal.homepage).from(terminal).where(websiteTerminalCode.pod.eq(terminal.region)), "homepage"),
 					websiteTerminalCode.etd,

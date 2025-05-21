@@ -37,7 +37,7 @@ public class CargoService {
 	 * @throws Exception
 	 */
 	@Transactional(readOnly = true)
-	public List<SelectBoxDto.Autocomplete> selectAutocomplete() throws Exception {
+	public List<SelectBoxDto.CarGoAutoComplete> selectAutocomplete() throws Exception {
 		return repository.selectAutocomplete();
 	}
 	

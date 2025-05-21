@@ -40,7 +40,7 @@ public class CargoController {
 	}
 	
 	@GetMapping(value = "/api/mdm/cargo/autocomplete")
-	public ResponseEntity<SelectBoxDto.Autocomplete> selectAutocomplete() throws Exception {
+	public ResponseEntity<SelectBoxDto.CarGoAutoComplete> selectAutocomplete() throws Exception {
 		return KainosResponseEntity.builder().build()
 				.addData(service.selectAutocomplete())
 				.close();

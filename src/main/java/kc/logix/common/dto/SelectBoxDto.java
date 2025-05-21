@@ -18,4 +18,17 @@ public class SelectBoxDto {
 		private String label;
 		private String code;
 	}
+	
+	@Builder
+	@Data
+	@ToString
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class CarGoAutoComplete {
+		private String value;
+		private String label;
+		private String code;
+		private String cargoDate;
+		private String location;
+	}
 }

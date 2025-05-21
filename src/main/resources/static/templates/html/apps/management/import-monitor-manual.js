@@ -21,7 +21,7 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','cargo','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['','cargo','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
 	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
 	   		{ name: 'cargo',				width: 100,		align:'center', 	rowspan: true,	editable : true, hidden : true,	frozen:true},
@@ -60,6 +60,8 @@ function portTableInit(){
 						minChars: 1,
 				        select: function (event, ui) {
 							ComSetCellData(tableName, ComSelectIndex(tableName), 2, ui.item.code, true);
+							ComSetCellData(tableName, ComSelectIndex(tableName), 'cargoDate', ui.item.cargoDate, true);
+							ComSetCellData(tableName, ComSelectIndex(tableName), 'location', ui.item.location, true);
 							$(elem).autocomplete( "close" );
 				        }
 //				        ,
@@ -69,6 +71,8 @@ function portTableInit(){
 					});
 				}
 			}},
+			{ name: 'cargoDate', 			width: 80, 		align:'center',		rowspan: true},
+			{ name: 'location', 			width: 100, 	align:'center',		rowspan: true},
 	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center',		rowspan: true},
 	    	{ name: 'carrier', 				width: 80, 		align:'center',		rowspan: true},
 	    	{ name: 'mblNo', 				width: 140, 	align:'center',		rowspan: true},
@@ -103,6 +107,13 @@ function portTableInit(){
 		onCellSelect : function(rowid, iCol, cellcontent, e) {
 		}
 	});
+	
+	$(tableName).jqGrid('setGroupHeaders', {
+				useColSpanStyle: true,
+				groupHeaders: [
+                                {startColumnName:'item', numberOfColumns: 3, titleText: 'Item' },
+                              ]
+		});
 }
 
 async function searchPartnerAutocomplete(){

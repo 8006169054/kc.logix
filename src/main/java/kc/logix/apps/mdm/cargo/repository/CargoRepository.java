@@ -82,9 +82,11 @@ public class CargoRepository extends KainosRepositorySupport {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<SelectBoxDto.Autocomplete> selectAutocomplete() throws Exception {
-		return select(Projections.bean(SelectBoxDto.Autocomplete.class,
+	public List<SelectBoxDto.CarGoAutoComplete> selectAutocomplete() throws Exception {
+		return select(Projections.bean(SelectBoxDto.CarGoAutoComplete.class,
 				mdmCargo.code,
+				mdmCargo.cargoDate,
+				mdmCargo.location,
 				mdmCargo.name.upper().as("value"),
 				mdmCargo.name.upper().concat(" | ").concat(mdmCargo.cargoDate).upper().concat(" | ").concat(mdmCargo.location).upper().as("label")
 				))
