@@ -41,7 +41,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 					websiteTerminalCode.sales,
 					websiteTerminalCode.carryoverSales,
 					new CaseBuilder().when(websiteTerminalCode.arrivalNotice.eq("1")).then(Expressions.constant("SEND")).otherwise(Expressions.constant("")).as("arrivalNotice"),
-					websiteTerminalCode.invoice,
+					new CaseBuilder().when(websiteTerminalCode.invoice.eq("1")).then(Expressions.constant("SEND")).otherwise(Expressions.constant("")).as("invoice"),
 					websiteTerminalCode.concine,
 					websiteTerminalCode.profitDate,
 					websiteTerminalCode.domesticSales,

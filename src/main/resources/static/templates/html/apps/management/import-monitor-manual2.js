@@ -23,21 +23,22 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','cargo','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'terminalCode', 'Name', 'Link', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['','cargo','uuid', 'HBL NO.', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'POL', 'POD', 'terminalCode', 'Name', 'Link', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
 	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
 	   		{ name: 'cargo',				width: 100,		align:'center', 	rowspan: true,	editable : true, hidden : true,	frozen:true},
 	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true,	frozen:true},
-	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true, editable: true},
-	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true, editable: true},
-	       	{ name: 'arrivalNotice',		width: 70, 		align:'center',		rowspan: true,	frozen:true},
-	       	{ name: 'invoice', 				width: 70, 		align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'concine', 				width: 150, 	align:'center',		rowspan: true,	frozen:true, editable: true},
-	    	{ name: 'profitDate', 			width: 90, 		align:'center',		rowspan: true,	frozen:true, editable: true, edittype: "date"},
-	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true, editable: true},
-	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true,	frozen:true, editable: true},
-	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true,	frozen:true, editable: true},
-	    	{ name: 'partner',				width: 100, 	align:'center', 	rowspan: false,  frozen:true, editable : true, editable : true, edittype: 'text', editoptions: {
+	       	{ name: 'hblNo', 				width: 140, 	align:'center',		rowspan: true,	frozen:true},
+	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	editable: true},
+	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	editable: true},
+	       	{ name: 'arrivalNotice',		width: 70, 		align:'center',		rowspan: true},
+	       	{ name: 'invoice', 				width: 70, 		align:'center',		rowspan: true},
+	    	{ name: 'concine', 				width: 150, 	align:'center',		rowspan: true, editable: true},
+	    	{ name: 'profitDate', 			width: 90, 		align:'center',		rowspan: true, editable: true, edittype: "date"},
+	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true, editable: true},
+	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true, editable: true},
+	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true, editable: true},
+	    	{ name: 'partner',				width: 100, 	align:'center', 	rowspan: false, editable : true, editable : true, edittype: 'text', editoptions: {
 				dataInit:function(elem) {
 					$(elem).autocomplete({
 						source: partnerList,
@@ -56,7 +57,7 @@ function portTableInit(){
 			        });
 				}
 			}},
-	    	{ name: 'tankNo', 				width: 120, 	align:'center',		frozen:true, editable: true},
+	    	{ name: 'tankNo', 				width: 120, 	align:'center', editable: true},
 	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true, editable: true},
 	    	{ name: 'item',					width: 220, 	align:'center', 	rowspan: true, editable : true, edittype: 'text', editoptions: {
 				dataInit:function(elem) {
@@ -85,7 +86,6 @@ function portTableInit(){
 	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center',		rowspan: true, editable: true},
 	    	{ name: 'carrier', 				width: 80, 		align:'center',		rowspan: true, editable: true},
 	    	{ name: 'mblNo', 				width: 140, 	align:'center',		rowspan: true, editable: true},
-	    	{ name: 'hblNo', 				width: 140, 	align:'center',		rowspan: true},
 	    	{ name: 'pol', 					width: 100, 	align:'center',		rowspan: true, editable: true},
 	    	{ name: 'pod', 					width: 100, 	align:'center'},
 	    	{ name: 'terminalCode', 		width: 100, 	align:'center', 	hidden : true,},
