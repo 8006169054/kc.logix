@@ -55,7 +55,13 @@ public class WebsiteService {
 		for (int i = 0; i < paramList.size(); i++) {
 			WebsiteDto dto = paramList.get(i);
 			dto.setUpdateUserId(session.getUserId());
-			dto.setItem(cargrepository.selectCargoCode(dto.getItem()));
+//			if(dto.getItem().indexOf("|") > 0) {
+//				String[] items = dto.getItem().split("|");
+//				dto.setItem(cargrepository.selectCargoCode(items[0], items[1], items[2]));
+//			}
+//			else {
+//				dto.setItem(cargrepository.selectCargoCode(dto.getItem(), null, null));
+//			}
 			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
 				repository.insertWebsiteTerminalCode(dto);
 			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Update)) {

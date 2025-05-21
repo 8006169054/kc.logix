@@ -40,7 +40,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 					websiteTerminalCode.uuid,
 					websiteTerminalCode.sales,
 					websiteTerminalCode.carryoverSales,
-					websiteTerminalCode.arrivalNotice,
+					new CaseBuilder().when(websiteTerminalCode.arrivalNotice.eq("1")).then(Expressions.constant("SEND")).otherwise(Expressions.constant("")).as("arrivalNotice"),
 					websiteTerminalCode.invoice,
 					websiteTerminalCode.concine,
 					websiteTerminalCode.profitDate,
@@ -58,8 +58,8 @@ public class WebsiteRepository extends KainosRepositorySupport {
 					websiteTerminalCode.pol,
 					websiteTerminalCode.pod,
 					websiteTerminalCode.terminal,
-//					websiteTerminalCode.item,
-					new CaseBuilder().when(mdmCargo.name.isNull()).then(websiteTerminalCode.item).otherwise(mdmCargo.name).as("item"),
+					mdmCargo.code.as("cargo"),
+					new CaseBuilder().when(mdmCargo.name.isNull()).then(websiteTerminalCode.item.upper()).otherwise(mdmCargo.name.upper()).as("item"),
 //					ExpressionUtils.as(JPAExpressions.select(terminal.homepage).from(terminal).where(websiteTerminalCode.pod.eq(terminal.region)), "homepage"),
 					websiteTerminalCode.etd,
 					websiteTerminalCode.eta,
@@ -194,8 +194,8 @@ public class WebsiteRepository extends KainosRepositorySupport {
 		update(websiteTerminalCode)
 			.set(websiteTerminalCode.sales,				paramDto.getSales())
 			.set(websiteTerminalCode.carryoverSales,      paramDto.getCarryoverSales())
-			.set(websiteTerminalCode.arrivalNotice,       paramDto.getArrivalNotice())
-			.set(websiteTerminalCode.invoice,             paramDto.getInvoice())
+//			.set(websiteTerminalCode.arrivalNotice,       paramDto.getArrivalNotice())
+//			.set(websiteTerminalCode.invoice,             paramDto.getInvoice())
 			.set(websiteTerminalCode.concine,             paramDto.getConcine())
 			.set(websiteTerminalCode.profitDate,          paramDto.getProfitDate())
 			.set(websiteTerminalCode.domesticSales,       paramDto.getDomesticSales().replaceAll("US\\$", ""))
@@ -204,7 +204,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 			.set(websiteTerminalCode.partner,             paramDto.getPartner())
 			.set(websiteTerminalCode.tankNo,              paramDto.getTankNo())
 			.set(websiteTerminalCode.term,                paramDto.getTerm())
-			.set(websiteTerminalCode.item,                paramDto.getItem())
+			.set(websiteTerminalCode.item,                !KainosStringUtils.isEmpty(paramDto.getCargo()) ? paramDto.getCargo() : paramDto.getItem())
 			.set(websiteTerminalCode.vesselVoyage,        paramDto.getVesselVoyage())
 			.set(websiteTerminalCode.carrier,             paramDto.getCarrier())
 			.set(websiteTerminalCode.mblNo,               paramDto.getMblNo())

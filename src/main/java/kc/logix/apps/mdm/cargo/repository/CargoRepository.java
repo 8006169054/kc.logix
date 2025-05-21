@@ -2,7 +2,6 @@ package kc.logix.apps.mdm.cargo.repository;
 
 import static kc.logix.common.entity.QMdmCargo.mdmCargo;
 import static kc.logix.common.entity.QMdmCargoHistory.mdmCargoHistory;
-import static kc.logix.common.entity.QMdmPartner.mdmPartner;
 
 import java.util.Date;
 import java.util.List;
@@ -25,11 +24,22 @@ public class CargoRepository extends KainosRepositorySupport {
 	/**
 	 * 
 	 * @param name
+	 * @param cargoDate
+	 * @param location
 	 * @return
 	 * @throws Exception
 	 */
-	public String selectCargoCode(String name)  throws Exception {
-		return select(mdmCargo.code).from(mdmCargo).where(mdmCargo.name.upper().eq(name.toUpperCase())).fetchOne();
+	public String selectCargoCode(String name, String cargoDate, String location)  throws Exception {
+		BooleanBuilder where = new BooleanBuilder();
+		if(!KainosStringUtils.isEmpty(name))
+			where.and(mdmCargo.name.eq(name.trim().toUpperCase()));
+		if(!KainosStringUtils.isEmpty(cargoDate))
+			where.and(mdmCargo.cargoDate.upper().eq(cargoDate.trim().toUpperCase()));
+		if(!KainosStringUtils.isEmpty(location))
+			where.and(mdmCargo.location.upper().eq(location.trim().toUpperCase()));
+		
+		List<String> list = select(mdmCargo.code).from(mdmCargo).where(where).fetch();
+		return list != null ? list.get(0) : null;
 	}
 	
 	/**
@@ -74,8 +84,9 @@ public class CargoRepository extends KainosRepositorySupport {
 	 */
 	public List<SelectBoxDto.Autocomplete> selectAutocomplete() throws Exception {
 		return select(Projections.bean(SelectBoxDto.Autocomplete.class,
-				mdmCargo.name.concat(" | ").concat(mdmCargo.cargoDate).concat(" | ").concat(mdmCargo.location).as("value"),
-				mdmCargo.name.concat(" | ").concat(mdmCargo.cargoDate).concat(" | ").concat(mdmCargo.location).as("label")
+				mdmCargo.code,
+				mdmCargo.name.upper().as("value"),
+				mdmCargo.name.upper().concat(" | ").concat(mdmCargo.cargoDate).upper().concat(" | ").concat(mdmCargo.location).upper().as("label")
 				))
 				.from(mdmCargo)
 				.fetch();

@@ -24,9 +24,9 @@ function portTableInit(){
 	   	colNames: ['','cargo','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
 	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
-	   		{ name: 'cargo',				width: 40,		align:'center', 	hidden : false,	frozen:true},
+	   		{ name: 'cargo',				width: 100,		align:'center', 	rowspan: true,	editable : true, hidden : false,	frozen:true},
 	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true,	frozen:true},
-	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true},
+	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true, editable: true},
 	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'arrivalNotice',		width: 70, 		align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'invoice', 				width: 70, 		align:'center',		rowspan: true,	frozen:true},
@@ -59,10 +59,13 @@ function portTableInit(){
 						autoFocus: true,
 						minChars: 1,
 				        select: function (event, ui) {
-//							console.log('select',event, ui);
-//				            $(elem).val('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-//				            $("input#birthPlaceId").val(ui.item.value);
+							ComSetCellData(tableName, ComSelectIndex(tableName), 2, ui.item.code, true);
+							$(elem).autocomplete( "close" );
 				        }
+//				        ,
+//				        close : function(event) { // 자동완성 창 닫아질 때의 이벤트
+//				            ComSaveCell(tableName, ComSelectIndex(tableName), 2);
+//				        }
 					});
 				}
 			}},

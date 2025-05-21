@@ -18,6 +18,9 @@ public class WebsiteDto {
 	private String jqFlag;
 	private String uuid;
 	
+	@Field(value = "KK", merge = true) 
+	private String cargo;
+	
 	@Field(value = "A", merge = true) 
 	private String sales; //매출
 	
@@ -143,6 +146,8 @@ public class WebsiteDto {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	public static class RowSpanOtion{
+		@Builder.Default
+		private RowSpan cargo = RowSpan.builder().build();
 		@Builder.Default
 		private RowSpan sales = RowSpan.builder().build();
 		@Builder.Default

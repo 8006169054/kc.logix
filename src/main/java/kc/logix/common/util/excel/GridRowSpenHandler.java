@@ -208,5 +208,6 @@ public class GridRowSpenHandler {
 		index.put("BX",75); 
 		index.put("BY",76); 
 		index.put("BZ",77); 
+		index.put("KK",100); 
 	}
 }

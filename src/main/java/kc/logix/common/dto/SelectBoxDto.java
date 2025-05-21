@@ -16,5 +16,6 @@ public class SelectBoxDto {
 	public static class Autocomplete {
 		private String value;
 		private String label;
+		private String code;
 	}
 }

@@ -22,6 +22,27 @@ function jqFlagFn (cellvalue, options, rowObject ){
 	else
 		return '';
 }
+
+function ComSelectIndex(gridName){
+	return $(gridName).getGridParam('selrow');
+}
+
+/**
+ * 
+ */
+function ComSetCellData(gridName, rowId, col, value, rowspan){
+	if(rowspan === undefined || rowspan === false)
+		$(gridName).setCell(rowId, col, value);
+	else if(rowspan === true){
+		$(gridName).setCellRowSpan(rowId, col, value);
+	}
+}
+
+function ComSaveCell(gridName, rowId, col){
+	console.log('ComSaveCell', rowId, col);
+	$(gridName).jqGrid("saveCell", rowid, col); 
+}
+
 /**
  * 
  * @param gridName  

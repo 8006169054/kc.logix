@@ -7814,7 +7814,10 @@ $.jgrid.extend({
 				$($t[0].p.colModel).each(function(i ,col){
 					if(col.name !== 'jqFlag' && col.name !== 'deletcb' && col.editable){
 						if(emptyChange(iRowData[col.name]) !== emptyChange(oRowData[col.name])) {
-							jqFlag = U;
+							try{
+								if($(iRowData[col.name])[0] === undefined)
+									jqFlag = U;
+							} catch (error) {console.log(error)}
 							return false;
 						}
 					}
@@ -7882,9 +7885,9 @@ $.jgrid.extend({
 							var fcell = $(tcell).clone();
 							$("#"+rowid +" td", "#" + $.jgrid.jqID($t.p.id + "_frozen") ).eq( pos ).replaceWith(fcell);
 						}
-//						if(colname !== 'jqFlag') {
-//							$($t).jqGrid("afterSaveJqFlag", rowid, $t.p.basedata[rowid-1]);
-//						}
+						if(colname !== 'jqFlag') {
+							$($t).jqGrid("afterSaveJqFlag", rowid, $t.p.basedata[rowid-1]);
+						}
 					}
 				}
 			}
@@ -9493,8 +9496,18 @@ $.jgrid.extend({
 					$($t).jqGrid("setCell", iRow+i, iCol, cellData, false, false, true);
 				
 				$($t).jqGrid("afterSaveJqFlag", iRow+i, $t.p.basedata[(iRow+i)-1]);
-				//afterSaveJqFlag($t, iRow+i, $t.p.basedata[(iRow+i)-1]);
 			}
+		});
+	},
+	setCellRowSpan : function(iRow, iCol, cellData) {
+		return this.each(function(){
+			var $t= this, trow = $($t).jqGrid("getGridRowById", $t.rows[iRow].id);
+			let rowspan = $('td', trow).eq( iCol ).attr('rowspan');
+			if(rowspan === undefined) rowspan = 1;
+			for ( var i = 0 ; i < rowspan ; i++ ) {
+				$($t).jqGrid("setCell", parseInt(iRow)+i, iCol, cellData, false, false, true);
+			}
+			
 		});
 	},
 	restoreCell : function(iRow, iCol) {
