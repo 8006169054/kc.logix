@@ -43,10 +43,17 @@ function portTableInit(){
 						source: partnerList,
 						delay: 100,
 						autoFocus: true,
-						minChars: 1,
+						minChars: 0,
+						minLength: 0,
 				        select: function (event, ui) {
+				        },
+				        close : function (event, ui) {
+				            $(tableName).delay(2000).focus();
+				            return false;
 				        }
-					});
+					}).focus(function() {
+			            $(this).autocomplete("search", $(this).val());
+			        });
 				}
 			}},
 	    	{ name: 'tankNo', 				width: 140, 	align:'center',		frozen:true, editable: true},
@@ -57,14 +64,20 @@ function portTableInit(){
 						source: carGoList,
 						delay: 100,
 						autoFocus: true,
-						minChars: 1,
+						minChars: 0,
+						minLength: 0,
 				        select: function (event, ui) {
 							ComSetCellData(tableName, ComSelectIndex(tableName), 2, ui.item.code, true);
 							ComSetCellData(tableName, ComSelectIndex(tableName), 'cargoDate', ui.item.cargoDate, true);
 							ComSetCellData(tableName, ComSelectIndex(tableName), 'location', ui.item.location, true);
-//							$(elem).autocomplete( "close" );
+				        },
+				        close : function (event, ui) {
+				            $(tableName).delay(2000).focus();
+				            return false;
 				        }
-					});
+					}).focus(function() {
+			            $(this).autocomplete("search", $(this).val());
+			        });
 				}
 			}},
 			{ name: 'cargoDate', 			width: 80, 		align:'center',		rowspan: true},
@@ -82,13 +95,20 @@ function portTableInit(){
 						source: terminalList,
 						delay: 100,
 						autoFocus: true,
-						minChars: 1,
+						minChars: 0,
+						minLength: 0,
 				        select: function (event, ui) {
 							ComSetCellData(tableName, ComSelectIndex(tableName), 'terminalCode', ui.item.code, true);
 							ComSetCellData(tableName, ComSelectIndex(tableName), 'pod', ui.item.region, true);
 							ComSetCellData(tableName, ComSelectIndex(tableName), 'terminalHomepage', ui.item.homepage, true);
+				        },
+				        close : function (event, ui) {
+				            $(tableName).delay(2000).focus();
+				            return false;
 				        }
-					});
+					}).focus(function() {
+			            $(this).autocomplete("search", $(this).val());
+			        });
 				}
 			}},
 	    	{ name: 'terminalHomepage', 	width: 60, 	align:'center', formatter: terminalFn},
