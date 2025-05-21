@@ -74,10 +74,11 @@
 		let response = await requestApi('GET', '/api/logout');
 		if(response.common.status === 'S'){
 			sessionStorage.clear();
-			window.localStorage.clear();
-			$.removeCookie('kainos', { path: '/view' });
-			setkainosLang(null);
-			location.replace("/");
+			window.localStorage.removeItem('kainos');
+			window.localStorage.removeItem('KC-USER');
+			window.localStorage.removeItem('kainos-lang');
+// 			$.removeCookie('kainos', { path: '/view' });
+			location.replace("/view/login/authlogin");
 		}
 	}
 

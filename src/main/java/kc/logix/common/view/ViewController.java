@@ -4,16 +4,17 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.CacheControl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.LocaleResolver;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kainos.framework.core.KainosKey;
+import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.KainosSessionContext;
-import kc.logix.common.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -39,7 +40,17 @@ public class ViewController {
     public String index(HttpServletRequest request, HttpServletResponse response, Locale locale) throws Exception {
 		String cacheControl = CacheControl.noCache().getHeaderValue();
 		response.addHeader("Cache-Control", cacheControl);
+		response.addHeader("locale", locale.getLanguage());
 		return "html/index";
+    }
+	
+	@GetMapping(value = "/open/lang")
+    public ResponseEntity<Void> lang(@RequestParam String lang, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		if(lang.equalsIgnoreCase("EN")) 
+			localeResolver.setLocale(request, response, Locale.ENGLISH);
+		else
+			localeResolver.setLocale(request, response, new Locale("zh", "CN"));
+		return KainosResponseEntity.noneData();
     }
 	
 	/**
@@ -56,28 +67,28 @@ public class ViewController {
 		if(PagePaths.links.containsKey(htmlPath.toUpperCase())) 
 			htmlPath = PagePaths.links.get(htmlPath.toUpperCase()).getLinkPath();
 		
-		setLocale(request, response, locale);
+//		setLocale(request, response, locale);
 		// OPEN << 권한 체크 패스
 		
-		if(sessionCheck(request))
+//		if(sessionCheck(request))
 			return "html/apps" + htmlPath;
-		else
-			return "html/apps/login/authlogin";
+//		else
+//			return "html/apps/login/authlogin";
     }
 	
 	private void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
-		Cookie langCookie = CookieUtil.getCookie("kainos-lang");
-		Cookie cookie = null;
-		if(langCookie != null && langCookie.getValue().equals("zh")) {
-			localeResolver.setLocale(request, response, Locale.CHINESE);
-	       	cookie = new Cookie("kainos-lang", "zh");
-	    }
-		else {
-			localeResolver.setLocale(request, response, Locale.ENGLISH);
-			cookie = new Cookie("kainos-lang", "en");
-	    }
-		cookie.setPath("/");
-        response.addCookie(cookie);
+//		Cookie langCookie = CookieUtil.getCookie("kainos-lang");
+//		Cookie cookie = null;
+//		if(langCookie != null && langCookie.getValue().equals("zh")) {
+//			localeResolver.setLocale(request, response, Locale.CHINESE);
+//	       	cookie = new Cookie("kainos-lang", "zh");
+//	    }
+//		else {
+//			localeResolver.setLocale(request, response, Locale.ENGLISH);
+//			cookie = new Cookie("kainos-lang", "en");
+//	    }
+//		cookie.setPath("/");
+//        response.addCookie(cookie);
 	}
 	
 	private boolean sessionCheck(HttpServletRequest request) throws Exception {

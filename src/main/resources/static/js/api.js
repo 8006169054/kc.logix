@@ -85,9 +85,9 @@ requestFormDataApi = async (method, url, formData, option) => {
 				return undefined;
 
 			case 403:
-				$.removeCookie('kainos', { path: '/view' });
-				setkainosLang(null);
-				location.replace("/view/home");
+//				$.removeCookie('kainos', { path: '/view' });
+				//setkainosLang(null);
+				location.replace("/login/authlogin");
 				return undefined;
 
 			default:
@@ -165,8 +165,8 @@ requestApi = async (method, url, params, option) => {
 
 				case 403:
 //					$.removeCookie('kainos', { path: '/view' });
-					setkainosLang(null);
-					location.replace("/view/home");
+//					setkainosLang(null);
+					location.replace("/view/login/authlogin");
 					return undefined;
 
 				default:
@@ -236,12 +236,12 @@ window.storage = window.sessionStorage || (function() {
 
 function setkainosLang(lang){
 	localStorage.setItem("kainos-lang", lang);
-	$.cookie('kainos-lang', lang);
+	requestApi('GET', '/open/lang', {'lang' : lang});
 }
 
 function getkainosLang(){
 	var kainoslang = sessionStorage.getItem("kainos-lang") === null ? localStorage.getItem("kainos-lang") : sessionStorage.getItem("kainos-lang");
-	return kainoslang === null ? $.cookie('kainos-lang') : kainoslang;
+	return isEmpty(kainoslang) ? 'en' : kainoslang;
 }
 
 function setToken(responseHeaderJSON){
@@ -249,7 +249,7 @@ function setToken(responseHeaderJSON){
 		const token = responseHeaderJSON.authorization.split('Bearer ')[1];
 		sessionStorage.setItem("kainos", token);
 		localStorage.setItem("kainos", token);
-		$.cookie('kainos', token);
+//		$.cookie('kainos', token);
 	}
 }
 
