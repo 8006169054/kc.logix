@@ -2,14 +2,6 @@ const C = '<img src="/assets/img/more.png" height="12px" value="C">';
 const U = '<img src="/assets/img/edit.png" height="12px" value="U">';
 const D = '<img src="/assets/img/delete.png" height="12px" value="D">';
 
-//const C = 'C';
-//const U = 'U';
-//const D = 'D';
-//
-//const CIMG = '<img src="/assets/img/more.png" height="12px">';
-//const UIMG = '<img src="/assets/img/edit-button.png" height="12px">';
-//const DIMG = '<img src="/assets/img/delete.png" height="12px">';
-
 /**
 *
 * @license Guriddo jqGrid JS - v5.8.8 - 2025-02-20
@@ -8348,6 +8340,8 @@ $.jgrid.extend({
 							else{
 								$(this).css("background", currentColor);
 							}
+							$(this).css("border-left-width", '0px');
+							$(this).css("border-top-width", '0px');
 							$(this).css("left", frozenWidth + 'px');
 							frozenIndex++;
 						}
