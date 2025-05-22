@@ -124,3 +124,9 @@ function emptyChange(str){
 	
 	return str;
 }
+
+function isTrue(bool){
+	if(bool === undefined) return false;
+	else if(bool) return true;
+	else return false;
+}

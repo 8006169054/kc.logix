@@ -5545,7 +5545,17 @@ $.fn.jqGrid = function( pin ) {
 			// 정인선 해더 체크박스 style='padding-top: 3px;' 추가
 			let style = "";
 			if(tmpcm.name === 'cb') style = "style='padding-top: 3px;'";
-			thead += "<div class='ui-th-div' id='jqgh_" + ts.p.id + "_" + tmpcm.name +"' " + tdc + style + ">" +ts.p.colNames[i];
+			// 수정 가능 필드는 색상이 틀리게 한다.
+			let colName = '';
+			if(tmpcm.editable){
+				colName = '<font color="#6777ef">' + ts.p.colNames[i] +'</font>';
+				if(tmpcm.editoptions)
+					if(tmpcm.editoptions.pk)
+						colName = ts.p.colNames[i];
+			}
+			if(colName === '') colName = ts.p.colNames[i];
+			
+			thead += "<div class='ui-th-div' id='jqgh_" + ts.p.id + "_" + tmpcm.name +"' " + tdc + style + ">" + colName;
 			
 			if(!tmpcm.width)  {
 				tmpcm.width = ts.p.defaultColWidth;

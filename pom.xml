@@ -199,6 +199,11 @@
 			<artifactId>kainos_framework_data_querydsl</artifactId>
 			<version>20250325</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.17.0</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>
@@ -232,7 +237,7 @@
 			</properties>
 		</profile>
 	</profiles>
-	
+
 	<build>
 		<resources>
 			<resource>

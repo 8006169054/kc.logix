@@ -15,6 +15,7 @@ import kainos.framework.core.context.KainosMessageAccessor;
 import kainos.framework.core.lang.KainosBusinessException;
 import kainos.framework.core.lang.KainosException;
 import kainos.framework.core.servlet.KainosResponseEntity;
+import kc.logix.apps.common.error.service.ErrorService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -23,6 +24,9 @@ public class GlobalException {
 
 	@Autowired
 	private KainosMessageAccessor message;
+	@Autowired
+	private ErrorService service;
+	
 	
     /**
      * System Exception
@@ -32,6 +36,7 @@ public class GlobalException {
     @ExceptionHandler( Exception.class )
     private ResponseEntity<?> systemException(Exception ex) {
     	log.error("{}", ex);
+    	service.insertErrorLog(ex);
     	KainosException kainosException = new KainosException("A system error has occurred. Please contact the administrator.", HttpStatus.INTERNAL_SERVER_ERROR);
     	kainosException.setType(KainosKey.Status.Error);
     	return KainosResponseEntity.builder().failResponse(kainosException).build().close();
