@@ -17,51 +17,21 @@
 							<input type="hidden" id="uuid" name="uuid">
 							<div id="formDiv" class="card-body needs-validation">
 								<div class="form-row">
-									<div class="form-group col-md-10">
-										<label for="name">매출</label>
-										<input type="text" class="form-control" id="sales" name="sales" autofocus>
+									<div class="form-group col-md-15">
+										<label for="name">HBL NO.</label>
+										<input type="text" class="form-control" id="hblNo" name="hblNo">
 									</div>
-									<div class="form-group col-md-10">
-										<label for="name">이월 매출</label>
-										<input type="text" class="form-control" id="carryoverSales" name="carryoverSales">
+									<div class="form-group col-md-30">
+										<label for="name">MBL NO.</label>
+										<input type="text" class="form-control" id="mblNo" name="mblNo">
 									</div>
-									<div class="form-group col-md-8">
-										<label for="name">A/N&EDI</label>
-										<input type="text" class="form-control" id="arrivalNotice" name="arrivalNotice">
-									</div>
-									<div class="form-group col-md-8">
-										<label for="name">INVOICE</label>
-										<input type="text" class="form-control" id="invoice" name="invoice">
-									</div>
-									<div class="form-group col-md-20">
-										<label for="name">PROFIT DATE</label>
-										<input type="text" class="form-control" id="profitDate" name="profitDate">
-									</div>
-									<div class="form-group col-md-42">
-										<label for="name">CNEE</label>
-										<input type="text" class="form-control" id="concine" name="concine">
-									</div>
-								</div>
-								<div class="form-row">
-									<div class="form-group col-md-10">
-										<label for="name">국내매출</label>
-										<input type="text" class="form-control" id="domesticSales" name="domesticSales">
-									</div>
-									<div class="form-group col-md-10">
-										<label for="name">해외매출</label>
-										<input type="text" class="form-control" id="foreignSales" name="foreignSales">
+									<div class="form-group col-md-30">
+										<label for="name">Tank no.( , )</label>
+										<input type="text" class="form-control" id="tankNo" name="tankNo">
 									</div>
 									<div class="form-group col-md-10">
 										<label for="name">Q'ty</label>
-										<input type="text" class="form-control" id="quantity" name="quantity">
-									</div>
-									<div class="form-group col-md-43">
-										<label for="name">Partner</label>
-										<input type="text" class="form-control" id="partner" name="partner">
-									</div>
-									<div class="form-group col-md-15">
-										<label for="name">Tank no.( , )</label>
-										<input type="text" class="form-control" id="tankNo" name="tankNo">
+										<input type="text" class="form-control numberFormat" id="quantity" name="quantity">
 									</div>
 									<div class="form-group col-md-10">
 										<label for="name">Term</label>
@@ -69,9 +39,32 @@
 									</div>
 								</div>
 								<div class="form-row">
+									<div class="form-group col-md-38">
+										<label for="name">CNEE</label>
+										<input type="text" class="form-control" id="concine" name="concine">
+									</div>
+									<div class="form-group col-md-38">
+										<label for="name">Partner</label>
+										<input type="text" class="form-control" id="partner" name="partner">
+									</div>
+									<div class="form-group col-md-20">
+										<label for="name">PROFIT DATE</label>
+										<input type="text" class="form-control dateFormat" id="profitDate" name="profitDate">
+									</div>
+								</div>
+								<div class="form-row">
 									<div class="form-group col-md-34">
-										<label for="name">ITEM</label>
-										<input type="text" class="form-control" id="item" name="item">
+										<label for="name">Item Name</label>
+										<input type="text" class="form-control" id="itemName" name="itemName">
+										<input type="hidden" class="form-control" id="cargo" name="cargo" readonly="readonly">
+									</div>
+									<div class="form-group col-md-10">
+										<label for="name">Item Date</label>
+										<input type="text" class="form-control" id="cargoDate" name="cargoDate" readonly="readonly">
+									</div>
+									<div class="form-group col-md-15">
+										<label for="name">Item Location</label>
+										<input type="text" class="form-control" id="cargoLocation" name="cargoLocation" readonly="readonly">
 									</div>
 									<div class="form-group col-md-20">
 										<label for="name">Vessel / Voyage</label>
@@ -81,14 +74,7 @@
 										<label for="name">Carrier</label>
 										<input type="text" class="form-control" id="carrier" name="carrier">
 									</div>
-									<div class="form-group col-md-15">
-										<label for="name">MBL NO.</label>
-										<input type="text" class="form-control" id="mblNo" name="mblNo">
-									</div>
-									<div class="form-group col-md-15">
-										<label for="name">HBL NO.</label>
-										<input type="text" class="form-control" id="hblNo" name="hblNo">
-									</div>
+
 								</div>
 								<div class="form-row">
 									<div class="form-group col-md-10">
@@ -97,11 +83,13 @@
 									</div>
 									<div class="form-group col-md-10">
 										<label for="name">POD</label>
-										<input type="text" class="form-control" id="pod" name="pod">
+										<input type="text" class="form-control" id="pod" name="pod" readonly="readonly">
 									</div>
-									<div class="form-group col-md-10">
+									<div class="form-group col-md-47">
 										<label for="name">TERMINAL</label>
 										<input type="text" class="form-control" id="terminal" name="terminal">
+										<input type="hidden" class="form-control" id="terminalCode" name="terminalCode" readonly="readonly">
+										
 									</div>
 									<div class="form-group col-md-10">
 										<label for="name">ETD</label>
@@ -110,14 +98,6 @@
 									<div class="form-group col-md-10">
 										<label for="name">ETA</label>
 										<input type="text" class="form-control" id="eta" name="eta">
-									</div>
-									<div class="form-group col-md-10">
-										<label for="name">ATA</label>
-										<input type="text" class="form-control" id="ata" name="ata">
-									</div>
-									<div class="form-group col-md-37">
-										<label for="name">비고</label>
-										<input type="text" class="form-control" id="remark" name="remark">
 									</div>
 								</div>
 								<div class="form-row">
@@ -133,47 +113,9 @@
 										<label for="name">END OF F/T</label>
 										<input type="text" class="form-control" id="endOfFt" name="endOfFt">
 									</div>
-									<div class="form-group col-md-15">
-										<label for="name">ESTIMATE RETURN DATE</label>
-										<input type="text" class="form-control" id="estimateReturnDate" name="estimateReturnDate" >
-									</div>
-									<div class="form-group col-md-11">
-										<label for="name">RETURN DATE</label>
-										<input type="text" class="form-control" id="returnDate" name="returnDate">
-									</div>
-									<div class="form-group col-md-15">
-										<label for="name">RETURN DEPOT</label>
-										<input type="text" class="form-control" id="returnDepot" name="returnDepot">
-									</div>
-									<div class="form-group col-md-11">
-										<label for="name">TOTAL DEM</label>
-										<input type="text" class="form-control" id="totalDem" name="totalDem">
-									</div>
-									<div class="form-group col-md-15">
-										<label for="name">DEM RECEIVED</label>
-										<input type="text" class="form-control" id="demReceived" name="demReceived">
-									</div>
-								</div>
-								<div class="form-row">
-									<div class="form-group col-md-15">
-										<label for="name">DEM RCVD</label>
-										<input type="text" class="form-control" id="demRcvd" name="demRcvd">
-									</div>
-									<div class="form-group col-md-15">
-										<label for="name">COMMISSION DEM</label>
-										<input type="text" class="form-control" id="demPrch" name="demPrch">
-									</div>
-									<div class="form-group col-md-15">
-										<label for="name">DEM COMMISSION</label>
-										<input type="text" class="form-control" id="demSales" name="demSales">
-									</div>
-									<div class="form-group col-md-20">
-										<label for="name">DEPOT IN DATE(REPO ONLY)</label>
-										<input type="text" class="form-control" id="depotInDate" name="depotInDate" >
-									</div>
-									<div class="form-group col-md-20">
-										<label for="name">REPOSITION 매입</label>
-										<input type="text" class="form-control" id="repositionPrch" name="repositionPrch">
+									<div class="form-group col-md-37">
+										<label for="name">비고</label>
+										<input type="text" class="form-control" id="remark" name="remark">
 									</div>
 								</div>
 							</div>
@@ -192,25 +134,83 @@
 
 <script type="text/javascript">
 
-var consigneeData = {
-	code : '',
-	name : '',
-	contactName : '',
-	contactPerson : '',
-	addressOne : '',
-	addressTwo : '',
-	etcOne : '',
-	etcTwo : '',
-	etcThree : ''
+async function partnerAutocompleteLoad(){
+	$("#partner").autocomplete({
+		source: partnerList,
+		delay: 100,
+		autoFocus: true,
+		minChars: 0,
+		minLength: 0,
+		open: function(){
+	        $(this).autocomplete('widget').css('z-index', 1100);
+	        return false;
+	    },
+	    select: function (event, ui) {
+	    },
+	    close : function (event, ui) {
+
+	        return false;
+	    }
+	}).focus(function() {
+	    $(this).autocomplete("search", $(this).val());
+	});
 }
 
+async function itemAutocompleteLoad(){
+	$("#itemName").autocomplete({
+		source: carGoList,
+		delay: 100,
+		autoFocus: true,
+		minChars: 0,
+		minLength: 0,
+		open: function(){
+	        $(this).autocomplete('widget').css('z-index', 1100);
+	        return false;
+	    },
+	    select: function (event, ui) {
+	    	$('#cargo').val(ui.item.code);
+	    	$('#cargoDate').val(ui.item.cargoDate);
+	    	$('#cargoLocation').val(ui.item.location);
+	    },
+	    close : function (event, ui) {
+	        return false;
+	    }
+	}).focus(function() {
+	    $(this).autocomplete("search", $(this).val());
+	});
+}
+
+async function terminalAutocompleteLoad(){
+	$("#terminal").autocomplete({
+		source: terminalList,
+		delay: 100,
+		autoFocus: true,
+		minChars: 0,
+		minLength: 0,
+		open: function(){
+	        $(this).autocomplete('widget').css('z-index', 1100);
+	        return false;
+	    },
+	    select: function (event, ui) {
+	    	$('#terminalCode').val(ui.item.code);
+	    	$('#pod').val(ui.item.region);
+	    },
+	    close : function (event, ui) {
+	        return false;
+	    }
+	}).focus(function() {
+	    $(this).autocomplete("search", $(this).val());
+	});
+}
+
+
 $("#importMonitorPopup").on("show.bs.modal", function(e) {
-	dataBinding(consigneeData);
+	//dataBinding(consigneeData);
 });
   
 $("#importMonitorPopup").on("hide.bs.modal", function(e) {
 	clearFormValues($('#importMonitorPopupForm').serializeObject());
-  	clearFormValues(consigneeData);
+  //	clearFormValues(consigneeData);
   	$('#formDiv').removeClass('was-validated');
 });
   
@@ -230,23 +230,5 @@ function paste(){
     });
 }  
   
-// /* 데이터 저장 */
-// async function consigneePopupSave(){
-//  	// 벨리데이션 체크 
-// 	if($('#name').val() === ''){
-// 		$('#formDiv').addClass('was-validated');
-// 		return false;
-// 	}
-  	
-//   	let method = 'POST';
-//   	if(!isEmpty($('#uuid').val())) method = 'PATCH';
-//   	await requestApi(method, '/api/basic/consignee', $('#consigneePopupForm').serializeObject());
-// }
- 	
-// function consigneePopupSaveFn(response){
-// 	if(response.common.status === 'S'){
-//  		$('#consignee-popup-close').click();
-//  	}
-//  }
 </script>
 </html>

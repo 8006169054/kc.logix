@@ -23,9 +23,9 @@ kainos:
   datasource:
     primary:
       driver-class-name: org.postgresql.Driver
-      jdbcUrl: jdbc:postgresql://172.17.35.39:5432/batch
-      username: hmm_test
-      password: test1234!
+      jdbcUrl: jdbc:postgresql://127.0.0.1:5430/postgres
+      username: postgres
+      password: qwer1234
       maximumPoolSize: 20
       minimumIdle: 10
       autoCommit: false

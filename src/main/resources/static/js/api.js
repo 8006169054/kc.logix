@@ -235,12 +235,14 @@ window.storage = window.sessionStorage || (function() {
 })();
 
 function setkainosLang(lang){
-	localStorage.setItem("kainos-lang", lang);
+//	localStorage.setItem("kainos-lang", lang);
+	sessionStorage.setItem("kainos-lang", lang);
 	requestApi('GET', '/open/lang', {'lang' : lang});
 }
 
 function getkainosLang(){
-	var kainoslang = sessionStorage.getItem("kainos-lang") === null ? localStorage.getItem("kainos-lang") : sessionStorage.getItem("kainos-lang");
+//	var kainoslang = sessionStorage.getItem("kainos-lang") === null ? localStorage.getItem("kainos-lang") : sessionStorage.getItem("kainos-lang");
+	var kainoslang = sessionStorage.getItem("kainos-lang");
 	return isEmpty(kainoslang) ? 'en' : kainoslang;
 }
 
@@ -248,13 +250,14 @@ function setToken(responseHeaderJSON){
 	if(responseHeaderJSON !== undefined && responseHeaderJSON.authorization !== undefined){
 		const token = responseHeaderJSON.authorization.split('Bearer ')[1];
 		sessionStorage.setItem("kainos", token);
-		localStorage.setItem("kainos", token);
+//		localStorage.setItem("kainos", token);
 //		$.cookie('kainos', token);
 	}
 }
 
 function getToken(){
-	return sessionStorage.getItem("kainos") === null ? localStorage.getItem("kainos") : sessionStorage.getItem("kainos");
+//	return sessionStorage.getItem("kainos") === null ? localStorage.getItem("kainos") : sessionStorage.getItem("kainos");
+	return sessionStorage.getItem("kainos");
 }
 
 /** ================================================================================ */

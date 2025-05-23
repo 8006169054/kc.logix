@@ -1,12 +1,12 @@
 package kc.logix.apps.management.website.repository;
 
 import static kc.logix.common.entity.QMdmCargo.mdmCargo;
-import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
 import static kc.logix.common.entity.QMdmTerminal.mdmTerminal;
+import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
+
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.math3.random.RandomDataGenerator;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.BooleanBuilder;
@@ -15,7 +15,6 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 
 import kainos.framework.data.querydsl.support.repository.KainosRepositorySupport;
-import kainos.framework.utils.KainosDateUtil;
 import kainos.framework.utils.KainosStringUtils;
 import kc.logix.apps.management.website.dto.WebsiteDto;
 
@@ -98,6 +97,15 @@ public class WebsiteRepository extends KainosRepositorySupport {
 	
 	/**
 	 * 
+	 * @param hblNo
+	 * @return
+	 */
+	public String getUuid(String hblNo) {
+		return select(websiteTerminalCode.uuid).from(websiteTerminalCode).where(websiteTerminalCode.hblNo.eq(hblNo)).fetchFirst();
+	}
+	
+	/**
+	 * 
 	 * @param paramDto
 	 * @throws Exception
 	 */
@@ -147,7 +155,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 			websiteTerminalCode.updateUserId,
 			websiteTerminalCode.updateDate
 		).values(
-			(KainosDateUtil.getCurrentDay("yyyyMMddHHmmssSSS") + new RandomDataGenerator().nextSecureHexString(3)),
+			paramDto.getUuid(),
 			paramDto.getSales(),
 			paramDto.getCarryoverSales(),
 			(paramDto.getArrivalNotice().equals("OK") ? "1" : "0"),

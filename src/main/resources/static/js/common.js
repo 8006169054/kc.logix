@@ -121,8 +121,10 @@ function isEmpty(str){
 
 function emptyChange(str){
 	if(isEmpty(str)) return '';
+	let reg = /[→\r\n]/gim;
+	return str.replace(reg, "");
 	
-	return str;
+//	return str;
 }
 
 function isTrue(bool){
@@ -130,3 +132,12 @@ function isTrue(bool){
 	else if(bool) return true;
 	else return false;
 }
+
+$( document ).ready(function() {
+	$(".dateFormat").keyup(function(){
+		$(this).val($(this).val().replace(/[^0-9]/gi, "").replace(/^(\d{4})(\d{2})(\d{2})$/, `$1-$2-$3`));
+	});
+	$(".numberFormat").keyup(function(){
+		$(this).val($(this).val().replace(/[^0-9]/gi, ""));
+	});
+});

@@ -60,8 +60,8 @@
 </nav>
 
 <script type="text/javascript">
-	//var kcUser = sessionStorage.getItem("KC-USER");
-	var kcUser = localStorage.getItem("KC-USER");
+	var kcUser = sessionStorage.getItem("KC-USER");
+// 	var kcUser = localStorage.getItem("KC-USER");
 	if(kcUser != null)
 		$("#userName").html(JSON.parse(kcUser).name);
 	
@@ -74,9 +74,9 @@
 		let response = await requestApi('GET', '/api/logout');
 		if(response.common.status === 'S'){
 			sessionStorage.clear();
-			window.localStorage.removeItem('kainos');
-			window.localStorage.removeItem('KC-USER');
-			window.localStorage.removeItem('kainos-lang');
+// 			window.localStorage.removeItem('kainos');
+// 			window.localStorage.removeItem('KC-USER');
+// 			window.localStorage.removeItem('kainos-lang');
 // 			$.removeCookie('kainos', { path: '/view' });
 			location.replace("/view/login/authlogin");
 		}

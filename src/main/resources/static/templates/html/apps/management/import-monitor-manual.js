@@ -146,7 +146,7 @@ function portTableInit(){
 				}else{
 					for (let terminal of terminalList) {
 						if(terminal.value === value){
-							changeVal = true;
+							if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
 							return false;
 						}
 					}
@@ -155,7 +155,7 @@ function portTableInit(){
 				if(value != ''){
 					for (let partner of partnerList) {
 						if(partner.value === value){
-							changeVal = true;
+							if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
 							return false;
 						}
 					}
@@ -168,14 +168,12 @@ function portTableInit(){
 				}else{
 					for (let carGo of carGoList) {
 						if(carGo.value === value){
-							changeVal = true;
+							if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
 							return false;
 						}
 					}
 				}
 			}
-			
-			if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
 		}
 	});
 	
@@ -193,6 +191,7 @@ async function searchPartnerAutocomplete(){
 	var response = await requestApi('GET', '/api/mdm/partner/autocomplete');
 	if(response.common.status === 'S'){
 		partnerList = response.data;
+		partnerAutocompleteLoad();
 	}
 }
 
@@ -200,6 +199,7 @@ async function searchCargoAutocomplete(){
 	var response = await requestApi('GET', '/api/mdm/cargo/autocomplete');
 	if(response.common.status === 'S'){
 		carGoList = response.data;
+		itemAutocompleteLoad();
 	}
 }
 
@@ -207,6 +207,7 @@ async function searchTerminalAutocomplete(){
 	var response = await requestApi('GET', '/api/mdm/terminal/autocomplete');
 	if(response.common.status === 'S'){
 		terminalList = response.data;
+		terminalAutocompleteLoad();
 	}
 }
 

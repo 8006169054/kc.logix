@@ -41,6 +41,9 @@ public class ViewController {
 		String cacheControl = CacheControl.noCache().getHeaderValue();
 		response.addHeader("Cache-Control", cacheControl);
 		response.addHeader("locale", locale.getLanguage());
+		
+		KainosKey.Jwt.Code code = kainosSession.resolveToken(request);
+		if(code == null || (KainosKey.Jwt.Code.ACCESS != code)) return "html/apps/login/authlogin";
 		return "html/index";
     }
 	
