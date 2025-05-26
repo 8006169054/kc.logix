@@ -23,11 +23,12 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','cargo','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'terminalCode', 'Name', 'Link', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['','cargo','uuid','Seq', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'terminalCode', 'Name', 'Link', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
 	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
 	   		{ name: 'cargo',				width: 100,		align:'center', 	rowspan: true,	editable : true, hidden : true,	frozen:true},
 	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true,	frozen:true},
+	   		{ name: 'seq', 					width: 50, 		align:'center',		hidden : true,	frozen:true},
 	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	frozen:true, editable: true},
 	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	frozen:true, editable: true},
 	       	{ name: 'arrivalNotice',		width: 70, 		align:'center',		rowspan: true,	frozen:true},
@@ -143,21 +144,23 @@ function portTableInit(){
 					ComSetCellData(tableName, iRow, 'terminalCode', '', true);
 					ComSetCellData(tableName, iRow, 'pod', '', true);
 					ComSetCellData(tableName, iRow, 'terminalHomepage', '', true);
-				}else{
-					for (let terminal of terminalList) {
-						if(terminal.value === value){
-							if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
-							return false;
-						}
-					}
 				}
+//				else{
+//					for (let terminal of terminalList) {
+//						if(terminal.value === value){
+//							if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
+//							return false;
+//						}
+//					}
+//				}
 			}else if('partner' === cellname){
 				if(value != ''){
 					for (let partner of partnerList) {
-						if(partner.value === value){
-							if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
-							return false;
-						}
+//						if(partner.value === value){
+//							console.log(partner.value, value);
+//							if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
+//							return false;
+//						}
 					}
 				}
 			}else if('item' === cellname){
@@ -165,14 +168,15 @@ function portTableInit(){
 					ComSetCellData(tableName, iRow, 'cargo', '', true);
 					ComSetCellData(tableName, iRow, 'cargoDate', '', true);
 					ComSetCellData(tableName, iRow, 'location', '', true);
-				}else{
-					for (let carGo of carGoList) {
-						if(carGo.value === value){
-							if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
-							return false;
-						}
-					}
 				}
+//				else{
+//					for (let carGo of carGoList) {
+//						if(carGo.value === value){
+//							if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
+//							return false;
+//						}
+//					}
+//				}
 			}
 		}
 	});

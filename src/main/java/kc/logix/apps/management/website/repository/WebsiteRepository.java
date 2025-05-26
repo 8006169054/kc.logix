@@ -37,6 +37,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 		
 		return select(Projections.bean(WebsiteDto.class,
 					websiteTerminalCode.uuid,
+					websiteTerminalCode.seq,
 					websiteTerminalCode.sales,
 					websiteTerminalCode.carryoverSales,
 					new CaseBuilder().when(websiteTerminalCode.arrivalNotice.eq("1")).then(Expressions.constant("SEND")).otherwise(Expressions.constant("")).as("arrivalNotice"),
@@ -91,7 +92,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 				.leftJoin(mdmCargo).on(websiteTerminalCode.item.eq(mdmCargo.code))
 				.leftJoin(mdmTerminal).on(websiteTerminalCode.terminal.eq(mdmTerminal.code))
 				.where(where)
-				.orderBy(websiteTerminalCode.uuid.asc())
+				.orderBy(websiteTerminalCode.uuid.asc(), websiteTerminalCode.seq.asc())
 				.fetch();
 	}
 	
@@ -110,9 +111,14 @@ public class WebsiteRepository extends KainosRepositorySupport {
 	 * @throws Exception
 	 */
 	public void insertWebsiteTerminalCode(WebsiteDto paramDto) throws Exception {
+		
+		int seq = select(websiteTerminalCode.seq.max().coalesce(0)).from(websiteTerminalCode).where(websiteTerminalCode.uuid.eq(paramDto.getUuid())).fetchFirst() + 1;
+		paramDto.setSeq(seq);
+		
 		insert(websiteTerminalCode)
 		.columns(
 			websiteTerminalCode.uuid,
+			websiteTerminalCode.seq,
 			websiteTerminalCode.sales,
 			websiteTerminalCode.carryoverSales,
 			websiteTerminalCode.arrivalNotice,
@@ -156,14 +162,15 @@ public class WebsiteRepository extends KainosRepositorySupport {
 			websiteTerminalCode.updateDate
 		).values(
 			paramDto.getUuid(),
+			paramDto.getSeq(),
 			paramDto.getSales(),
 			paramDto.getCarryoverSales(),
-			(paramDto.getArrivalNotice().equals("OK") ? "1" : "0"),
-			paramDto.getInvoice() == "OK" ? "1" : "0",
+			!KainosStringUtils.isEmpty(paramDto.getArrivalNotice()) ? (paramDto.getArrivalNotice().equals("OK") ? "1" : "0") : "",
+			!KainosStringUtils.isEmpty(paramDto.getInvoice()) ? (paramDto.getInvoice() == "OK" ? "1" : "0") : "",
 			paramDto.getConcine(),
 			paramDto.getProfitDate(),
-			paramDto.getDomesticSales().replaceAll("-", ""),
-			paramDto.getForeignSales().replaceAll("-", ""),
+			!KainosStringUtils.isEmpty(paramDto.getDomesticSales()) ? (paramDto.getDomesticSales().replaceAll("-", "")) : "",
+			!KainosStringUtils.isEmpty(paramDto.getForeignSales()) ? (paramDto.getForeignSales().replaceAll("-", "")) : "",
 			paramDto.getQuantity(),
 			paramDto.getPartner(),
 			paramDto.getTankNo(),
@@ -180,17 +187,17 @@ public class WebsiteRepository extends KainosRepositorySupport {
 			paramDto.getEta(),
 			paramDto.getAta(),
 			paramDto.getRemark(),
-			paramDto.getFt().replaceAll("-", ""),
-			paramDto.getDemRate().replaceAll("-", ""),
-			paramDto.getEndOfFt().replaceAll("N/A", ""),
+			!KainosStringUtils.isEmpty(paramDto.getFt()) ? (paramDto.getFt().replaceAll("-", "")) : "",
+			!KainosStringUtils.isEmpty(paramDto.getDemRate()) ? (paramDto.getDemRate().replaceAll("-", "")) : "",
+			!KainosStringUtils.isEmpty(paramDto.getEndOfFt()) ? (paramDto.getEndOfFt().replaceAll("N/A", "")) : "",
 			paramDto.getEstimateReturnDate(),
 			paramDto.getReturnDate(),
-			paramDto.getDemReceived().replaceAll("N/A", ""),
-			paramDto.getTotalDem().replaceAll("N/A", ""),
-			paramDto.getReturnDepot().replaceAll("-", ""),
-			paramDto.getDemRcvd().replaceAll("N/A", ""),
-			paramDto.getDemPrch().replaceAll("N/A", ""),
-			paramDto.getDemSales().replaceAll("N/A", ""),
+			!KainosStringUtils.isEmpty(paramDto.getDemReceived()) ? (paramDto.getDemReceived().replaceAll("N/A", "")) : "",
+			!KainosStringUtils.isEmpty(paramDto.getTotalDem()) ? (paramDto.getTotalDem().replaceAll("N/A", "")) : "",
+			!KainosStringUtils.isEmpty(paramDto.getReturnDepot()) ? (paramDto.getReturnDepot().replaceAll("-", "")) : "",
+			!KainosStringUtils.isEmpty(paramDto.getDemRcvd()) ? (paramDto.getDemRcvd().replaceAll("N/A", "")) : "",
+			!KainosStringUtils.isEmpty(paramDto.getDemPrch()) ? (paramDto.getDemPrch().replaceAll("N/A", "")) : "",
+			!KainosStringUtils.isEmpty(paramDto.getDemSales()) ? (paramDto.getDemSales().replaceAll("N/A", "")) : "",
 			paramDto.getDepotInDate(),
 			paramDto.getRepositionPrch(),
 			paramDto.getCreateUserId(),
@@ -213,8 +220,8 @@ public class WebsiteRepository extends KainosRepositorySupport {
 //			.set(websiteTerminalCode.invoice,             paramDto.getInvoice())
 			.set(websiteTerminalCode.concine,             paramDto.getConcine())
 			.set(websiteTerminalCode.profitDate,          paramDto.getProfitDate())
-			.set(websiteTerminalCode.domesticSales,       paramDto.getDomesticSales().replaceAll("US\\$", ""))
-			.set(websiteTerminalCode.foreignSales,        paramDto.getForeignSales().replaceAll("US\\$", ""))
+			.set(websiteTerminalCode.domesticSales,       !KainosStringUtils.isEmpty(paramDto.getDomesticSales()) ? (paramDto.getDomesticSales().replaceAll("US\\$", "")) : "")
+			.set(websiteTerminalCode.foreignSales,        !KainosStringUtils.isEmpty(paramDto.getForeignSales()) ? (paramDto.getForeignSales().replaceAll("US\\$", "")) : "")
 			.set(websiteTerminalCode.quantity,            paramDto.getQuantity())
 			.set(websiteTerminalCode.partner,             paramDto.getPartner())
 			.set(websiteTerminalCode.tankNo,              paramDto.getTankNo())
@@ -237,16 +244,16 @@ public class WebsiteRepository extends KainosRepositorySupport {
 			.set(websiteTerminalCode.estimateReturnDate,  paramDto.getEstimateReturnDate())
 			.set(websiteTerminalCode.returnDate,          paramDto.getReturnDate())
 			.set(websiteTerminalCode.demReceived,         paramDto.getDemReceived())
-			.set(websiteTerminalCode.totalDem,            paramDto.getTotalDem().replaceAll("US\\$", ""))
+			.set(websiteTerminalCode.totalDem,            !KainosStringUtils.isEmpty(paramDto.getTotalDem()) ? paramDto.getTotalDem().replaceAll("US\\$", "") : "")
 			.set(websiteTerminalCode.returnDepot,         paramDto.getReturnDepot())
 			.set(websiteTerminalCode.demRcvd,             paramDto.getDemRcvd())
-			.set(websiteTerminalCode.demPrch,             paramDto.getDemPrch().replaceAll("US\\$", ""))
-			.set(websiteTerminalCode.demSales,            paramDto.getDemSales().replaceAll("US\\$", ""))
+			.set(websiteTerminalCode.demPrch,             !KainosStringUtils.isEmpty(paramDto.getDemPrch()) ? paramDto.getDemPrch().replaceAll("US\\$", "") : "")
+			.set(websiteTerminalCode.demSales,            !KainosStringUtils.isEmpty(paramDto.getDemSales()) ? paramDto.getDemSales().replaceAll("US\\$", "") : "")
 			.set(websiteTerminalCode.depotInDate,         paramDto.getDepotInDate())
 			.set(websiteTerminalCode.repositionPrch, 	  paramDto.getRepositionPrch())
 			.set(websiteTerminalCode.updateUserId, 		  paramDto.getUpdateUserId())
 			.set(websiteTerminalCode.updateDate, 			new Date())
-		.where(websiteTerminalCode.uuid.eq(paramDto.getUuid()))
+		.where(websiteTerminalCode.uuid.eq(paramDto.getUuid()).and(websiteTerminalCode.seq.eq(paramDto.getSeq())))
 		.execute();
 	}
 	
@@ -261,10 +268,11 @@ public class WebsiteRepository extends KainosRepositorySupport {
 	/**
 	 * 
 	 * @param uuid
+	 * @param seq
 	 * @throws Exception
 	 */
-	public void deleteWebsiteTerminalCode(String uuid) throws Exception {
-		delete(websiteTerminalCode).where(websiteTerminalCode.uuid.eq(uuid)).execute();
+	public void deleteWebsiteTerminalCode(String uuid, int seq) throws Exception {
+		delete(websiteTerminalCode).where(websiteTerminalCode.uuid.eq(uuid).and(websiteTerminalCode.seq.eq(seq))).execute();
 	}
 	
 }

@@ -20,6 +20,7 @@ public class WebsiteTerminalCode {
 	
 	@Id
 	private String uuid;
+	private int seq;
 	private String sales;
 	private String carryoverSales;
 	private String arrivalNotice;

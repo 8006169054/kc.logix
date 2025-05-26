@@ -42,10 +42,10 @@ public class WebsiteService {
 			if(hbl == null || !dto.getHblNo().equals(hbl)) {
 				// BL No 삭제
 				hbl = dto.getHblNo();
-				uuid = KainosDateUtil.getCurrentDay("yyyyMMddHHmmssSSS");
+				uuid = KainosDateUtil.getCurrentDay("yyyyMMddHHmmssSSS") + new RandomDataGenerator().nextSecureHexString(3);
 				repository.excelUploadHblNoDelete(dto.getHblNo());
 			}
-			dto.setUuid(uuid + new RandomDataGenerator().nextSecureHexString(3));
+			dto.setUuid(uuid);
 			dto.setCreateUserId(session.getUserId());
 			dto.setUpdateUserId(session.getUserId());
 			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
@@ -59,23 +59,15 @@ public class WebsiteService {
 		for (int i = 0; i < paramList.size(); i++) {
 			WebsiteDto dto = paramList.get(i);
 			dto.setUpdateUserId(session.getUserId());
-//			if(dto.getItem().indexOf("|") > 0) {
-//				String[] items = dto.getItem().split("|");
-//				dto.setItem(cargrepository.selectCargoCode(items[0], items[1], items[2]));
-//			}
-//			else {
-//				dto.setItem(cargrepository.selectCargoCode(dto.getItem(), null, null));
-//			}
+			dto.setCreateUserId(session.getUserId());
 			if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Insert)) {
-				String uuid = repository.getUuid(dto.getHblNo());
-				if(uuid == null) uuid = KainosDateUtil.getCurrentDay("yyyyMMddHHmmssSSS") + new RandomDataGenerator().nextSecureHexString(3);
-				else uuid = uuid.substring(0, uuid.length()-3) + new RandomDataGenerator().nextSecureHexString(3);
-				dto.setUuid(uuid);
+				dto.setUuid(repository.getUuid(dto.getHblNo()));
+				if(dto.getUuid() == null) dto.setUuid(KainosDateUtil.getCurrentDay("yyyyMMddHHmmssSSS"));
 				repository.insertWebsiteTerminalCode(dto);
 			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Update)) {
 				repository.updateWebsiteTerminalCode(dto);
 			} else if(dto.getJqFlag().equalsIgnoreCase(JqFlag.Delete)) {
-				repository.deleteWebsiteTerminalCode(dto.getUuid());
+				repository.deleteWebsiteTerminalCode(dto.getUuid(), dto.getSeq());
 			}
 		}
 	}

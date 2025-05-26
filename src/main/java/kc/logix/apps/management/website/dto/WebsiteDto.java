@@ -17,6 +17,7 @@ public class WebsiteDto {
 
 	private String jqFlag;
 	private String uuid;
+	private int seq;
 	
 	@Field(value = "KA", merge = true) 
 	private String cargo;

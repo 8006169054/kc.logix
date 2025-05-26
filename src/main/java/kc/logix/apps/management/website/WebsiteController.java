@@ -26,6 +26,7 @@ import kc.logix.apps.management.website.dto.WebsiteDto;
 import kc.logix.apps.management.website.dto.WebsiteExcelReadDto;
 import kc.logix.apps.management.website.service.WebsiteService;
 import kc.logix.common.dto.SessionDto;
+import kc.logix.common.util.JqFlag;
 import kc.logix.common.util.MailUtil;
 import kc.logix.common.util.MessageUtil;
 import kc.logix.common.util.excel.GridRowSpenHandler;
@@ -65,6 +66,22 @@ public class WebsiteController {
 	public ResponseEntity<Void> savePort(@RequestBody List<WebsiteDto> paramList, @KainosSession SessionDto session) throws Exception {
 		try {
 			service.savePort(paramList, session);
+		} catch (KainosBusinessException e) {
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new KainosBusinessException("common.system.error");
+		}
+		return message.getInsertMessage(KainosResponseEntity.builder().build()).close();
+	}
+	
+	@PostMapping(value = "/api/management/save-popup-port")
+	public ResponseEntity<Void> savePopupPort(@RequestBody WebsiteDto paramList, @KainosSession SessionDto session) throws Exception {
+		try {
+			List<WebsiteDto> WebsiteDtoList = new ArrayList<WebsiteDto>();
+			paramList.setJqFlag(JqFlag.Insert);
+			WebsiteDtoList.add(paramList);
+			service.savePort(WebsiteDtoList, session);
 		} catch (KainosBusinessException e) {
 			throw e;
 		} catch (Exception e) {
