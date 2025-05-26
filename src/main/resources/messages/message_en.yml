@@ -33,3 +33,9 @@ basic:
     depot.insert.duplicated:
         message: The same depot exists.
         type: E  
+
+management:
+    website.insert.tankno.duplicated:
+        message: There is an identical tank number ({0}).
+        type: E
+        

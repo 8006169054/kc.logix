@@ -27,6 +27,20 @@ public class WebsiteRepository extends KainosRepositorySupport {
 	 * @return
 	 * @throws Exception
 	 */
+	public long selectWebsiteTerminalCount(WebsiteDto paramDto) throws Exception {
+		return select(websiteTerminalCode.uuid.count())
+				.from(websiteTerminalCode)
+				.where(websiteTerminalCode.hblNo.eq(paramDto.getHblNo())
+						.and(websiteTerminalCode.tankNo.eq(paramDto.getTankNo())))
+			.fetchOne();
+	}
+	
+	/**
+	 * 
+	 * @param paramDto
+	 * @return
+	 * @throws Exception
+	 */
 	public List<WebsiteDto> selectWebsiteTerminalCode(WebsiteDto paramDto) throws Exception {
 		BooleanBuilder where = new BooleanBuilder();
 		if(!KainosStringUtils.isEmpty(paramDto.getHblNo()))

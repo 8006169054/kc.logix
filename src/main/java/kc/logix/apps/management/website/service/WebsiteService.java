@@ -1,12 +1,17 @@
 package kc.logix.apps.management.website.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.math3.random.RandomDataGenerator;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kainos.framework.core.KainosKey;
+import kainos.framework.core.lang.KainosBusinessException;
 import kainos.framework.utils.KainosDateUtil;
 import kc.logix.apps.management.website.dto.WebsiteDto;
 import kc.logix.apps.management.website.repository.WebsiteRepository;
@@ -54,6 +59,31 @@ public class WebsiteService {
 		}
 	}
 	
+	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
+	public void savePopupPort(WebsiteDto paramDto, SessionDto session)throws Exception {
+		List<WebsiteDto> paramList = new ArrayList<>();
+		if(paramDto.getTankNo().indexOf(",") > 0) {
+			String[] tankNos = paramDto.getTankNo().split(",");
+			for (int i = 0; i < tankNos.length; i++) {
+				WebsiteDto websiteDto = WebsiteDto.builder().build();
+				BeanUtils.copyProperties(paramDto, websiteDto);
+				websiteDto.setTankNo(tankNos[i]);
+				paramList.add(websiteDto);
+			}
+		}
+		else
+			paramList.add(paramDto);
+		
+		for (int i = 0; i < paramList.size(); i++) {
+			long count = repository.selectWebsiteTerminalCount(paramList.get(i));
+			if(count > 0) {
+				throw new KainosBusinessException("management.website.insert.tankno.duplicated", new String[] {paramList.get(i).getTankNo()});
+			}
+		}
+		
+		savePort(paramList, session);
+	}
+
 	@Transactional(transactionManager = KainosKey.DBConfig.TransactionManager.Default, rollbackFor = Exception.class)
 	public void savePort(List<WebsiteDto> paramList, SessionDto session)throws Exception {
 		for (int i = 0; i < paramList.size(); i++) {

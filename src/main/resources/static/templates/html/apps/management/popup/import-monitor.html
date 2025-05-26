@@ -19,15 +19,18 @@
 								<div class="form-row">
 									<div class="form-group col-md-15">
 										<label for="name">HBL NO.</label>
-										<input type="text" class="form-control" id="hblNo" name="hblNo">
+										<input type="text" class="form-control" id="hblNo" name="hblNo" required>
+										<div class="invalid-feedback">This is a required field.</div>
 									</div>
 									<div class="form-group col-md-30">
 										<label for="name">MBL NO.</label>
-										<input type="text" class="form-control" id="mblNo" name="mblNo">
+										<input type="text" class="form-control" id="mblNo" name="mblNo" required>
+										<div class="invalid-feedback">This is a required field.</div>
 									</div>
 									<div class="form-group col-md-30">
 										<label for="name">Tank no.( , )</label>
-										<input type="text" class="form-control" id="tankNo" name="tankNo">
+										<input type="text" class="form-control" id="tankNo" name="tankNo" required>
+										<div class="invalid-feedback">This is a required field.</div>
 									</div>
 									<div class="form-group col-md-10">
 										<label for="name">Q'ty</label>
@@ -125,7 +128,7 @@
 			</div>
 			<div class="modal-footer bg-whitesmoke br">
 				<button type="button" class="btn btn-secondary" id="importMonitorPopupClose" data-dismiss="modal" th:text="#{common.button.label.close}"></button>
-				<button type="button" class="btn btn-primary" onclick="paste()">Paste</button>
+<!-- 				<button type="button" class="btn btn-primary" onclick="paste()">Paste</button> -->
 				<button type="button" class="btn btn-success" onclick="importMonitorPopupSave()" th:text="#{common.button.label.save}"></button>
 			</div>
 		</div>
@@ -134,25 +137,25 @@
 
 <script type="text/javascript">
 
-var testData = {
-		hblNo : 'SPTK24120377',
-		mblNo : 'COAU7255812920\n→ COAU7256762720',
-		tankNo : 'MJU2503355',
-		quantity : '7TKS',
-		term : 'CY-CY',
-		concine : '원익큐브',
-		profitDate : '2025-02-07',
-		vesselVoyage : 'QIYUNHE / 470E',
-		carrier : 'COSCO',
-		pol : 'SHANGHAI',
-		etd : '2025-02-06',
-		eta : '2025-02-07',
-		ft : '14',
-		demRate : '35',
-		endOfFt : '',
-		remark : '비고'
-	}
-	;
+// var testData = {
+// 		hblNo : 'SPTK24120377',
+// 		mblNo : 'COAU7255812920\n→ COAU7256762720',
+// 		tankNo : 'MJU2503355',
+// 		quantity : '7TKS',
+// 		term : 'CY-CY',
+// 		concine : '원익큐브',
+// 		profitDate : '2025-02-07',
+// 		vesselVoyage : 'QIYUNHE / 470E',
+// 		carrier : 'COSCO',
+// 		pol : 'SHANGHAI',
+// 		etd : '2025-02-06',
+// 		eta : '2025-02-07',
+// 		ft : '14',
+// 		demRate : '35',
+// 		endOfFt : '',
+// 		remark : '비고'
+// 	}
+// 	;
 	
 $("#eta").on( "focusout", function() {
   	if($(this).val() != '' && $('#ft').val() != ''){
@@ -239,7 +242,7 @@ async function terminalAutocompleteLoad(){
 
 
 $("#importMonitorPopup").on("show.bs.modal", function(e) {
-	dataBinding(testData);
+// 	dataBinding(testData);
 });
   
 $("#importMonitorPopup").on("hide.bs.modal", function(e) {
@@ -273,7 +276,7 @@ async function importMonitorPopupSave(){
   	
   	var response = await requestApi('POST', '/api/management/save-popup-port', $('#importMonitorPopupForm').serializeObject());
   	if(response.common.status === 'S'){
-//  		$('#importMonitorPopupClose').click();
+ 		$('#importMonitorPopupClose').click();
  	}
 }
 

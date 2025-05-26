@@ -76,12 +76,10 @@ public class WebsiteController {
 	}
 	
 	@PostMapping(value = "/api/management/save-popup-port")
-	public ResponseEntity<Void> savePopupPort(@RequestBody WebsiteDto paramList, @KainosSession SessionDto session) throws Exception {
+	public ResponseEntity<Void> savePopupPort(@RequestBody WebsiteDto paramDto, @KainosSession SessionDto session) throws Exception {
 		try {
-			List<WebsiteDto> WebsiteDtoList = new ArrayList<WebsiteDto>();
-			paramList.setJqFlag(JqFlag.Insert);
-			WebsiteDtoList.add(paramList);
-			service.savePort(WebsiteDtoList, session);
+			paramDto.setJqFlag(JqFlag.Insert);
+			service.savePopupPort(paramDto, session);
 		} catch (KainosBusinessException e) {
 			throw e;
 		} catch (Exception e) {

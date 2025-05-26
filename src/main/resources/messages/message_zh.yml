@@ -33,3 +33,8 @@ basic:
     depot.insert.duplicated:
         message: 存在相同的仓库.
         type: E  
+        
+management:
+    website.insert.tankno.duplicated:
+        message: 有相同的坦克编号 ({0}).
+        type: E
