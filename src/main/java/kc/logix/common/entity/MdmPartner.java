@@ -24,6 +24,8 @@ public class MdmPartner {
 	private String company;
 	private String pic;
 	private String representativeEml;
+	private String importMoniterRoleName;
+	private String importMoniterRoleCode;
 	private String createUserId;
 	private Date createDate;
 	private String updateUserId;

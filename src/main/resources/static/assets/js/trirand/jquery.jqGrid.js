@@ -7802,6 +7802,7 @@ $.jgrid.extend({
 			}
 		});
 	},
+	// 정인선 afterSaveJqFlag
 	afterSaveJqFlag : function(iRow, oRowData) {
 		var $t = this;
 		var deleteChecked = $('#' + 'delete_' + $t[0].id + '_' + iRow).is(":checked");
@@ -7814,7 +7815,7 @@ $.jgrid.extend({
 			/* 수정 시 */
 			if((oRowData.jqFlag === '' || oRowData.jqFlag === null) && iRowData.jqFlag !==D){
 				$($t[0].p.colModel).each(function(i ,col){
-					if(col.name !== 'jqFlag' && col.name !== 'deletcb' && col.editable){
+					if(col.name !== 'jqFlag' && col.name !== 'deletcb' && (col.editable || col.statuscheck)){
 						if(emptyChange(iRowData[col.name]) !== emptyChange(oRowData[col.name])) {
 							try{
 								if(col.edittype === 'textarea' || $(iRowData[col.name])[0] === undefined)
@@ -7827,7 +7828,7 @@ $.jgrid.extend({
 			}
 			else if(iRowData.jqFlag === D){
 				$($t[0].p.colModel).each(function(i ,col){
-					if(col.name !== 'jqFlag' && col.name !== 'deletcb' && col.editable){
+					if(col.name !== 'jqFlag' && col.name !== 'deletcb' && (col.editable || col.statuscheck)){
 						if(emptyChange(iRowData[col.name]) !== emptyChange(oRowData[col.name])) {
 							jqFlag = U;
 							return false;

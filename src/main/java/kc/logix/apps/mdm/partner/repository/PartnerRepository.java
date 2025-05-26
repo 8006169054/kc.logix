@@ -41,6 +41,8 @@ public class PartnerRepository extends KainosRepositorySupport {
 				mdmPartner.company,
 				mdmPartner.pic,
 				mdmPartner.representativeEml,
+				mdmPartner.importMoniterRoleCode,
+				mdmPartner.importMoniterRoleName,
 				mdmPartner.createUserId,
 				Expressions.stringTemplate("to_char({0}, {1})", mdmPartner.createDate, "YYYY-MM-DD").as("createDate"),
 				mdmPartner.updateUserId,
@@ -48,6 +50,7 @@ public class PartnerRepository extends KainosRepositorySupport {
 				))
 				.from(mdmPartner)
 				.where(where)
+				.orderBy(mdmPartner.updateDate.desc())
 				.fetch();
 	}
 	
@@ -93,6 +96,8 @@ public class PartnerRepository extends KainosRepositorySupport {
 				mdmPartner.company,
 				mdmPartner.pic,
 				mdmPartner.representativeEml,
+				mdmPartner.importMoniterRoleCode,
+				mdmPartner.importMoniterRoleName,
 				mdmPartner.createUserId,
 				mdmPartner.createDate,
 				mdmPartner.updateUserId,
@@ -103,6 +108,8 @@ public class PartnerRepository extends KainosRepositorySupport {
 			paramDto.getCompany().trim(),
 			paramDto.getPic().trim(),
 			paramDto.getRepresentativeEml().trim(),
+			paramDto.getImportMoniterRoleCode(),
+			paramDto.getImportMoniterRoleName(),
 			paramDto.getCreateUserId(),
 			new Date(),
 			paramDto.getUpdateUserId(),
@@ -121,6 +128,8 @@ public class PartnerRepository extends KainosRepositorySupport {
 			.set(mdmPartner.company, paramDto.getCompany())
 			.set(mdmPartner.pic, paramDto.getPic())
 			.set(mdmPartner.representativeEml, paramDto.getRepresentativeEml())
+			.set(mdmPartner.importMoniterRoleCode, paramDto.getImportMoniterRoleCode())
+			.set(mdmPartner.importMoniterRoleName, paramDto.getImportMoniterRoleName())
 			.set(mdmPartner.updateUserId, paramDto.getUpdateUserId())
 			.set(mdmPartner.updateDate, new Date())
 		.where(mdmPartner.code.eq(paramDto.getCode()))

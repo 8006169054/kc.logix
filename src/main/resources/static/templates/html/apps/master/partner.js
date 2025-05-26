@@ -18,14 +18,16 @@ async function search() {
 function partnerTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','Code','Name','Company','PIC','e-mail','Update User','Update Date'],
+	   	colNames: ['','Code','Name','Company','PIC','e-mail', 'import-moniter-role','Code','Update User','Update Date'],
 	   	colModel: [
 			{ name: 'jqFlag', 				width: 50, 		align:'center', hidden : false},
 	       	{ name: 'code', 				width: 100, 	align:'left', hidden : true, editable : false},
 	       	{ name: 'name', 				width: 300, 	align:'left', editable : true},
-	       	{ name: 'company', 				width: 500, 	align:'left', editable : true},
+	       	{ name: 'company', 				width: 400, 	align:'left', editable : true},
 	       	{ name: 'pic', 					width: 100, 	align:'center', editable : true},
 	    	{ name: 'representativeEml',	width: 200, 	align:'center', editable : true},
+	    	{ name: 'importMoniterRoleName',width: 300, 	align:'center'},
+	    	{ name: 'importMoniterRoleCode',width: 100, 	align:'center', hidden : true, statuscheck: true},
 	    	{ name: 'updateUserId', 		width: 100, 	align:'center'},
 	    	{ name: 'updateDate',			width: 140,		align:'center'}
 	   	],
@@ -33,6 +35,13 @@ function partnerTableInit(){
 		width: '100%',
 		delselect: true,
 		//multiselect: true,
+		ondblClickRow : function (rowid, iRow, iCol, e){
+			if(iCol === 7){
+				roleSelect.iRow = iRow;
+				roleSelect.importMoniterCode = ComRowData(tableName, iRow).importMoniterRoleCode;
+				$('#role').click();
+			}
+		},
 		dblEdit : true
 //		afterEditCell: function (rowId, cellName, value, indexRow, indexCol){
 //			if(cellName == 'code')

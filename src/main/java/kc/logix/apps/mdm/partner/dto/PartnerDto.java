@@ -19,6 +19,8 @@ public class PartnerDto {
 	private String company;
 	private String pic;
 	private String representativeEml;
+	private String importMoniterRoleName;
+	private String importMoniterRoleCode;
 	private String createUserId;
 	private String createDate;
 	private String updateUserId;
