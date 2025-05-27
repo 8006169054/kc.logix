@@ -27,4 +27,9 @@ public class HomeService {
 		return repository.selectWebsiteTerminalCode(paramDto);
 	}
 	
+	@Transactional(readOnly = true)
+	public String selectWebsiteTerminalCodeGridCol(String userId) throws Exception {
+		return repository.selectWebsiteTerminalCodeGridCol(userId);
+	}
+	
 }

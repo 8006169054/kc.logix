@@ -32,4 +32,11 @@ public class HomeController {
 				.addData(handler.GenerationRowSpen(PortList, WebsiteDto.class))
 				.close();
 	}
+	
+	@GetMapping(value = "/api/partner/home/website-terminal-code-grid-col")
+	public ResponseEntity<String> selectWebsiteTerminalCodeGridCol(@KainosSession SessionDto session) throws Exception {
+		return KainosResponseEntity.builder().build()
+				.addData(service.selectWebsiteTerminalCodeGridCol(session.getUserId()))
+				.close();
+	}
 }

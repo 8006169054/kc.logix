@@ -1,6 +1,7 @@
 package kc.logix.apps.partner.home.repository;
 
 import static kc.logix.common.entity.QMdmCargo.mdmCargo;
+import static kc.logix.common.entity.QComUser.comUser;
 import static kc.logix.common.entity.QMdmPartner.mdmPartner;
 import static kc.logix.common.entity.QMdmTerminal.mdmTerminal;
 import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
@@ -20,6 +21,13 @@ import kc.logix.apps.partner.home.dto.HomeDto;
 
 @Repository
 public class HomeRepository extends KainosRepositorySupport {
+	
+	public String selectWebsiteTerminalCodeGridCol(String userId) {
+		return select(mdmPartner.importMoniterRoleCode)
+		.from(mdmPartner)
+		.innerJoin(comUser).on(comUser.id.eq(userId).and(comUser.partnerCode.eq(mdmPartner.code)))
+		.fetchOne();
+	}
 	
 	/**
 	 * 
