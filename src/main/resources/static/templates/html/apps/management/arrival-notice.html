@@ -5,9 +5,6 @@
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
 <!-- Page Specific JS File -->
-<script th:inline="javascript">
-var portTableColNames = [[#{basic.port.table.cols}]];
-</script>
 <script src="/templates/html/apps/management/arrival-notice.js"></script>
 <!-- Main Content -->
 <div class="main-content">
@@ -15,11 +12,11 @@ var portTableColNames = [[#{basic.port.table.cols}]];
 		<div class="section-header">
 			<h1>Arrival Notice</h1>
 			<div class="section-header-breadcrumb">
-				<div class="breadcrumb-item active">
-					<a href="/" th:text="#{common.sidebar.hmoe.name}"></a>
-				</div>
-				<div class="breadcrumb-item">Management</div>
-				<div class="breadcrumb-item">Arrival Notice</div>
+<!-- 				<div class="breadcrumb-item active"> -->
+<!-- 					<a href="/" th:text="#{common.sidebar.hmoe.name}"></a> -->
+<!-- 				</div> -->
+<!-- 				<div class="breadcrumb-item">Management</div> -->
+<!-- 				<div class="breadcrumb-item">Arrival Notice</div> -->
 			</div>
 		</div>
 		<div class="section-body">

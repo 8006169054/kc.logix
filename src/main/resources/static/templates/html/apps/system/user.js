@@ -18,7 +18,7 @@ async function search() {
 function userTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','ID','Password','Name','e-Mail','Use','Type','Partner','Import Monitor Role', 'Update User','Update Date'],
+	   	colNames: ['','ID','Password','Name','e-Mail','Use','Type','Partner', 'Update User','Update Date'],
 	   	colModel: [
 			{ name: 'jqFlag', 			width: 50, 		align:'center', hidden : false},
 	       	{ name: 'id', 				width: 100, 	align:'center', editable : true, editoptions : {pk:true}},
@@ -33,15 +33,19 @@ function userTableInit(){
 						source: partnerList,
 						delay: 100,
 						autoFocus: true,
-						minChars: 1,
+						minChars: 0,
+						minLength: 0,
 				        select: function (event, ui) {
-//				            $(e).val(ui.item.label);
-//				            $("input#birthPlaceId").val(ui.item.value);
+				        },
+				        close : function (event, ui) {
+				            $(tableName).delay(2000).focus();
+				            return false;
 				        }
-					});
+					}).focus(function() {
+			            $(this).autocomplete("search", $(this).val());
+			        });
 				}
 			}},
-			{ name: 'imRole', 			width: 400, 	align:'center'},
 	    	{ name: 'updateUserId', 	width: 100, 	align:'center'},
 	    	{ name: 'updateDate',		width: 140,		align:'center'}
 	   	],

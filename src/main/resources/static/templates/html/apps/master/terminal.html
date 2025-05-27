@@ -5,9 +5,6 @@
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
 <!-- Page Specific JS File -->
-<script th:inline="javascript">
-var tableColNames = [[#{basic.terminal.table.cols}]];
-</script>
 <script src="/templates/html/apps/master/terminal.js"></script>
 <!-- Main Content -->
 <div class="main-content">
@@ -15,11 +12,11 @@ var tableColNames = [[#{basic.terminal.table.cols}]];
 		<div class="section-header">
 			<h1 th:text="#{common.maincontent.basic.terminal.title}"></h1>
 			<div class="section-header-breadcrumb">
-				<div class="breadcrumb-item active">
-					<a href="/" th:text="#{common.sidebar.hmoe.name}"></a>
-				</div>
-				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.name}"></div>
-				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.terminal.name}"></div>
+<!-- 				<div class="breadcrumb-item active"> -->
+<!-- 					<a href="/" th:text="#{common.sidebar.hmoe.name}"></a> -->
+<!-- 				</div> -->
+<!-- 				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.name}"></div> -->
+<!-- 				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.terminal.name}"></div> -->
 			</div>
 		</div>
 		<div class="section-body">

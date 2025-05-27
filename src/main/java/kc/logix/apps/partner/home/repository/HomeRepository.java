@@ -1,6 +1,7 @@
 package kc.logix.apps.partner.home.repository;
 
 import static kc.logix.common.entity.QMdmCargo.mdmCargo;
+import static kc.logix.common.entity.QMdmPartner.mdmPartner;
 import static kc.logix.common.entity.QMdmTerminal.mdmTerminal;
 import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
 
@@ -30,8 +31,6 @@ public class HomeRepository extends KainosRepositorySupport {
 		BooleanBuilder where = new BooleanBuilder();
 		if(!KainosStringUtils.isEmpty(paramDto.getHblNo()))
 			where.and(websiteTerminalCode.hblNo.contains(paramDto.getHblNo()));
-		
-		where.and(websiteTerminalCode.partner.eq(paramDto.getPartner()));
 		
 		return select(Projections.bean(HomeDto.class,
 					websiteTerminalCode.sales,
@@ -78,6 +77,7 @@ public class HomeRepository extends KainosRepositorySupport {
 					websiteTerminalCode.depotInDate,
 					websiteTerminalCode.repositionPrch
 				)).from(websiteTerminalCode)
+				.innerJoin(mdmPartner).on(mdmPartner.code.eq(paramDto.getPartner()).and(websiteTerminalCode.partner.eq(mdmPartner.name)))
 				.leftJoin(mdmCargo).on(websiteTerminalCode.item.eq(mdmCargo.code))
 				.leftJoin(mdmTerminal).on(websiteTerminalCode.terminal.eq(mdmTerminal.code))
 				.where(where)

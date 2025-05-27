@@ -5,9 +5,6 @@
 	layout:decorate="~{layouts/default/layout}" layout:fragment="Content">
 
 <!-- Page Specific JS File -->
-<script th:inline="javascript">
-var partnerTableColNames = [[#{basic.partner.table.cols}]];
-</script>
 <script src="/templates/html/apps/master/cargo.js"></script>
 <!-- Main Content -->
 <div class="main-content">
@@ -15,11 +12,11 @@ var partnerTableColNames = [[#{basic.partner.table.cols}]];
 		<div class="section-header">
 			<h1>Cargo List</h1>
 			<div class="section-header-breadcrumb">
-				<div class="breadcrumb-item active">
-					<a href="/" th:text="#{common.sidebar.hmoe.name}"></a>
-				</div>
-				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.name}"></div>
-				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.partner.name}"></div>
+<!-- 				<div class="breadcrumb-item active"> -->
+<!-- 					<a href="/" th:text="#{common.sidebar.hmoe.name}"></a> -->
+<!-- 				</div> -->
+<!-- 				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.name}"></div> -->
+<!-- 				<div class="breadcrumb-item" th:text="#{common.sidebar.basic.partner.name}"></div> -->
 			</div>
 		</div>
 		<div class="section-body">
