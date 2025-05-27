@@ -5,6 +5,9 @@ common:
     login.fail:
         message: Login failed. Please check your ID or password.
         type: E
+    login.activation:
+        message: This account has not been approved.
+        type: E  
     data.insert:
         message: It has Saved.
         type: S

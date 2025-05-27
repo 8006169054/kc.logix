@@ -5,6 +5,9 @@ common:
     login.fail:
         message: 로그인에 실패했습니다. ID 또는 비밀번호를 확인하세요.
         type: E
+    login.activation:
+        message: 해당 계정은 승인되지 않았습니다.
+        type: E     
     data.insert:
         message: 저장되었습니다.
         type: S
@@ -14,22 +17,3 @@ common:
     data.delete:
         message: 삭제되었습니다.
         type: S
-basic:
-    consignee.insert.duplicated:
-        message: 동일한 수화인이 존재합니다.
-        type: E
-    partner.insert.duplicated:
-        message: 동일한 파트너가 존재합니다.
-        type: E
-    shipping.insert.duplicated:
-        message: 동일한 운송사가 존재합니다.
-        type: E
-    product.insert.duplicated:
-        message: 동일한 아아템이 존재합니다.
-        type: E
-    port.insert.duplicated:
-        message: 동일한 항구 존재합니다.
-        type: E
-    depot.insert.duplicated:
-        message: 동일한 DEPOT 존재합니다.
-        type: E

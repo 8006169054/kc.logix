@@ -30,9 +30,12 @@ public class AuthService {
 		SessionDto session;
 		try {
 			session = repository.dbLogin(id, password);
-			if (session != null)
+			if (session != null) {
+				if(session.getActivation().equalsIgnoreCase("N")) {
+					throw new KainosBusinessException("common.login.activation");
+				}
 				kainosSession.openSession(session);
-			else
+			} else
 				throw new KainosBusinessException("common.login.fail");
 		} catch (KainosBusinessException e) {
 			throw e;

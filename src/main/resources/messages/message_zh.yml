@@ -5,6 +5,9 @@ common:
     login.fail:
         message: 登录失败. 请检查您的ID或密码.
         type: E
+    login.activation:
+        message: 此帐户尚未获得批准.
+        type: E 
     data.insert:
         message: 已儲存.
         type: S

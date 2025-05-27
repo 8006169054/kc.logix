@@ -20,6 +20,9 @@ public class SessionDto implements KainosSession, Serializable{
 	private String id;
 	private String name;
 	private String mail;
+	private String type;
+	private String activation;
+	private String partnerCode;
 	
 	@Override
 	public String getUserId() {

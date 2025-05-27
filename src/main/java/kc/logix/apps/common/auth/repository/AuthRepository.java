@@ -23,6 +23,9 @@ public class AuthRepository extends KainosRepositorySupport {
 		return select(Projections.bean(SessionDto.class
 				, comUser.id
 				, comUser.name
+				, comUser.type
+				, comUser.activation
+				, comUser.partnerCode
 				, comUser.mail
 				))
 				.from(comUser)
