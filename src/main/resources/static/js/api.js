@@ -234,10 +234,11 @@ window.storage = window.sessionStorage || (function() {
 	return fn;
 })();
 
-function setkainosLang(lang){
+async function setkainosLang(lang){
 //	localStorage.setItem("kainos-lang", lang);
 	sessionStorage.setItem("kainos-lang", lang);
-	requestApi('GET', '/open/lang', {'lang' : lang});
+	await requestApi('GET', '/open/lang', {'lang' : lang});
+	location.reload();
 }
 
 function getkainosLang(){

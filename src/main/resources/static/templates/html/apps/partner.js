@@ -153,3 +153,7 @@ function idColorFmt( rowId, tv, rawObject, cm, rdata) {
 			return  "";
 	}
 }
+
+async function excelDown(){
+	await requestFileDownload('GET', '/api/partner/home/website-terminal-code-exceldown', {hblNo : $('#hblNo').val()}, '서버엘셀다운로드.xlsx');
+}

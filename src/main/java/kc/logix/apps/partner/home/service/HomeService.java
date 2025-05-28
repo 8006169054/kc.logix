@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kc.logix.apps.partner.home.dto.HomeDto;
+import kc.logix.apps.partner.home.dto.HomeExcelDownDto;
 import kc.logix.apps.partner.home.repository.HomeRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -32,4 +33,8 @@ public class HomeService {
 		return repository.selectWebsiteTerminalCodeGridCol(userId);
 	}
 	
+	@Transactional(readOnly = true)
+	public List<HomeExcelDownDto> selectWebsiteTerminalCodeExcel(HomeDto paramDto) throws Exception {
+		return repository.selectWebsiteTerminalCodeExcel(paramDto);
+	}
 }
