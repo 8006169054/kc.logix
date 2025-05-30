@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true" packagingData="true" scan="false">
 
-	<property name="LOG_ROOT" value="/Log/app" />
+	<property name="LOG_ROOT" value="/app/log" />
 	<property name="LOG_FILE_NAME" value="kc.logic" />
 	
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
