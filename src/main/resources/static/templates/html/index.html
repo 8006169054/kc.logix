@@ -7,7 +7,7 @@
 <script type="text/javascript">
 var kcUser = sessionStorage.getItem("KC-USER");
 if(kcUser === null) location.replace("/view/login/authlogin");
-else if(kcUser.type === 'M') location.replace("/view/management/import-monitor-manual");
+else if(JSON.parse(kcUser).type === 'M') location.replace("/view/management/import-monitor-manual");
 else location.replace("/view/partner");
 </script>
 </head>
