@@ -93,5 +93,6 @@ function demSalesFn (cellvalue, options, rowObject ){
 }
 
 async function excelDown(){
-	await requestFileDownload('GET', '/api/partner/home/website-terminal-code-exceldown', {hblNo : $('#hblNo').val()}, '서버엘셀다운로드.xlsx');
+	var date = new Date().toString("yyyymmddhhmm");
+	await requestFileDownload('GET', '/api/partner/home/website-terminal-code-exceldown', {hblNo : $('#hblNo').val()}, 'kclogix-' + date +'.xlsx');
 }
