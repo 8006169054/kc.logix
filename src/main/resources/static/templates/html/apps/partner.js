@@ -35,84 +35,37 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['HBL NO.', 'MBL NO.', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['', 'HBL NO.', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Item', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'POL', 'POD', 'ETD', 'ETA', 'F/T', 'DEM RATE', 'END OF F/T', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)'],
 	   	colModel: [
-			{ name: 'hblNo', 				width: 140, 	align:'center',		rowspan: true,	frozen:true},
-			{ name: 'mblNo', 				width: 140, 	align:'center',		hidden : hiddenCelVal['mblNo'],		rowspan: true},
-	       	{ name: 'sales', 				width: 50, 		align:'center',		hidden : hiddenCelVal['sales'],		rowspan: true},
-	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		hidden : hiddenCelVal['carryoverSales'],		rowspan: true},
-	       	{ name: 'arrivalNotice',		width: 70, 		align:'center',		hidden : hiddenCelVal['arrivalNotice'],		rowspan: true, formatter: arrivalNoticeFn},
-	       	{ name: 'invoice', 				width: 70, 		align:'center',		hidden : hiddenCelVal['invoice'],		rowspan: true, formatter: invoiceFn},
-	    	{ name: 'concine', 				width: 150, 	align:'center',		hidden : hiddenCelVal['concine'],		rowspan: true},
-	    	{ name: 'profitDate', 			width: 90, 		align:'center',		hidden : hiddenCelVal['profitDate'],		rowspan: true},
-	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		hidden : hiddenCelVal['domesticSales'],		rowspan: true, formatter: domesticSalesFn},
-	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		hidden : hiddenCelVal['foreignSales'],		rowspan: true, formatter: foreignSalesFn},
-	    	{ name: 'quantity', 			width: 50, 		align:'center',		hidden : hiddenCelVal['quantity'],		rowspan: true},
-	    	{ name: 'partner', 				width: 120, 	align:'center',		hidden : hiddenCelVal['partner'],		cellattr:idColorFmt},
-	    	{ name: 'tankNo', 				width: 140, 	align:'center',		hidden : hiddenCelVal['tankNo']},
-	    	{ name: 'term', 				width: 80, 		align:'center',		hidden : hiddenCelVal['term'],		rowspan: true},
-	    	{ name: 'item', 				width: 250, 	align:'center',		hidden : hiddenCelVal['item'],		rowspan: true},
-	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center',		hidden : hiddenCelVal['vesselVoyage'],		rowspan: true},
-	    	{ name: 'carrier', 				width: 80, 		align:'center',		hidden : hiddenCelVal['carrier'],		rowspan: true},
-	    	{ name: 'pol', 					width: 100, 	align:'center',		hidden : hiddenCelVal['pol'],		rowspan: true},
-	    	{ name: 'pod', 					width: 100, 	align:'center',		hidden : hiddenCelVal['pod']},
-	    	{ name: 'terminal', 			width: 150, 	align:'center',		hidden : hiddenCelVal['terminal']},
-	    	{ name: 'etd', 					width: 90, 		align:'center',		hidden : hiddenCelVal['etd']},
-	    	{ name: 'eta', 					width: 90, 		align:'center',		hidden : hiddenCelVal['eta'],		cellattr:idColorFmt},
-	       	{ name: 'ata', 					width: 90, 		align:'center', 	hidden : hiddenCelVal['ata']},
-	       	{ name: 'remark', 				width: 250, 	align:'center', 	hidden : hiddenCelVal['remark'],		rowspan: true},
-	       	{ name: 'ft', 					width: 70, 		align:'center',		hidden : hiddenCelVal['ft']},
-	       	{ name: 'demRate', 				width: 80, 		align:'center',		hidden : hiddenCelVal['demRate']},
-	       	{ name: 'endOfFt', 				width: 90, 		align:'center',		hidden : hiddenCelVal['endOfFt']},
-	       	{ name: 'estimateReturnDate', 	width: 160, 	align:'center',		hidden : hiddenCelVal['estimateReturnDate']},
-	       	{ name: 'returnDate', 			width: 100, 	align:'center',		hidden : hiddenCelVal['returnDate']},
-	       	{ name: 'returnDepot', 			width: 140, 	align:'center',		hidden : hiddenCelVal['returnDepot']},
-	       	{ name: 'totalDem', 			width: 100, 	align:'center', 	hidden : hiddenCelVal['totalDem'],		formatter: totalDemFn},
-	       	{ name: 'demReceived', 			width: 100, 	align:'center',		hidden : hiddenCelVal['demReceived']},
-	       	{ name: 'demRcvd', 				width: 90, 		align:'center',		hidden : hiddenCelVal['demRcvd']},
-	       	{ name: 'demPrch', 				width: 140, 	align:'center', 	hidden : hiddenCelVal['demPrch'],		formatter: demPrchFn},
-	       	{ name: 'demSales', 			width: 140, 	align:'center', 	hidden : hiddenCelVal['demSales'],		formatter: demSalesFn},
-	       	{ name: 'depotInDate', 			width: 180, 	align:'center',		hidden : hiddenCelVal['depotInDate']},
-	       	{ name: 'repositionPrch', 		width: 120, 	align:'center',		hidden : hiddenCelVal['repositionPrch']}
+	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : true,	frozen:true},
+	       	{ name: 'hblNo', 				width: 140, 	align:'center',		rowspan: true,	frozen:true},
+	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true},
+	    	{ name: 'partner',				width: 100, 	align:'center'},
+	    	{ name: 'tankNo', 				width: 120, 	align:'center'},
+	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true},
+	    	{ name: 'item',					width: 220, 	align:'center', 	rowspan: true},
+	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center',		rowspan: true},
+	    	{ name: 'carrier', 				width: 80, 		align:'center',		rowspan: true},
+	    	{ name: 'mblNo', 				width: 140, 	align:'center',		rowspan: true},
+	    	{ name: 'pol', 					width: 100, 	align:'center',		rowspan: true},
+	    	{ name: 'pod', 					width: 100, 	align:'center'},
+	    	{ name: 'etd', 					width: 90, 		align:'center'},
+	    	{ name: 'eta', 					width: 90, 		align:'center'},
+	       	{ name: 'ft', 					width: 70, 		align:'center'},
+	       	{ name: 'demRate', 				width: 80, 		align:'center'},
+	       	{ name: 'endOfFt', 				width: 90, 		align:'center'},
+	       	{ name: 'returnDate', 			width: 100, 	align:'center'},
+	       	{ name: 'returnDepot', 			width: 100, 	align:'center'},
+	       	{ name: 'totalDem', 			width: 100, 	align:'center', formatter: totalDemFn},
+	       	{ name: 'demPrch', 				width: 100, 	align:'center', formatter: demPrchFn},
+	       	{ name: 'demSales', 			width: 100, 	align:'center', formatter: demSalesFn},
+	       	{ name: 'depotInDate', 			width: 180, 	align:'center'}
 	   	],
 		height: 530, 
-//		frozen: true,
 		width: '100%',
 		frozen: true
 	});
-}
-
-
-function invoiceFn (cellvalue, options, rowObject ){
-	if(cellvalue === '1')
-		return 'OK';
-	else{
-		return '';
-	}
-}
-
-function arrivalNoticeFn (cellvalue, options, rowObject ){
-	if(cellvalue === '1')
-		return 'OK';
-	else{
-		return '';
-	}
-}
-
-/** 국내 매출 */
-function domesticSalesFn (cellvalue, options, rowObject ){
-	if(cellvalue !== '-' && cellvalue !== ''){
-		return usMoneyConversion('US$', cellvalue, '');
-	} 
-	return cellvalue;
-}
-
-/** 국내 매출 */
-function foreignSalesFn (cellvalue, options, rowObject ){
-	if(cellvalue !== '-' && cellvalue !== ''){
-		return usMoneyConversion('US$', cellvalue, '');
-	} 
-	return cellvalue;
+	
 }
 
 /**  TOTAL DEM */
@@ -137,21 +90,6 @@ function demSalesFn (cellvalue, options, rowObject ){
 		return usMoneyConversion('US$', cellvalue, '');
 	} 
 	return cellvalue;
-}
-
-function idColorFmt( rowId, tv, rawObject, cm, rdata) {
-	switch( cm.name) {
-		case 'partner':
-			return 'style="background-color:rgb(0 176 240)"';
-			break;
-
-		case 'eta':
-			return 'style="color:red"';
-			break;
-
-		default:
-			return  "";
-	}
 }
 
 async function excelDown(){

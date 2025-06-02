@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kainos.framework.core.servlet.KainosResponseEntity;
 import kainos.framework.core.session.annotation.KainosSession;
-import kc.logix.apps.management.website.dto.WebsiteDto;
 import kc.logix.apps.partner.home.dto.HomeDto;
 import kc.logix.apps.partner.home.dto.HomeExcelDownDto;
 import kc.logix.apps.partner.home.service.HomeService;
@@ -37,7 +36,7 @@ public class HomeController {
 		) throws Exception {
 		List<HomeDto> PortList = service.selectWebsiteTerminalCode(HomeDto.builder().hblNo(hblNo).partner(session.getPartnerCode()).build());
 		return KainosResponseEntity.builder().build()
-				.addData(handler.GenerationRowSpen(PortList, WebsiteDto.class))
+				.addData(handler.GenerationRowSpen(PortList, HomeDto.class))
 				.close();
 	}
 	
@@ -56,7 +55,7 @@ public class HomeController {
 		
 		byte[] downLoadFile = null;
 		
-		KainosExcelWriteHandler excelWriteHandler = KainosExcelWriteHandler.builder().startRowNum(2)
+		KainosExcelWriteHandler excelWriteHandler = KainosExcelWriteHandler.builder().startRowNum(1)
 				.templateFile("excel/website-terminal-code-exceldown.xlsx") // 템플릿 파일 경로
 				.build();
 

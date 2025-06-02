@@ -15,125 +15,71 @@ import lombok.ToString;
 @NoArgsConstructor
 public class HomeDto {
 
-	@Field(value = "KA", merge = true) 
-	private String cargo;
-	@Field(value = "KB", merge = true) 
-	private String cargoDate;
-	@Field(value = "KC", merge = true) 
-	private String location;
-	
-	@Field(value = "A", merge = true) 
-	private String sales; //매출
-	
-	@Field(value = "B", merge = true)
-	private String carryoverSales; //이월 매출
-	
-	@Field(value = "C", merge = true)
-	private String arrivalNotice; //A/N&EDI
-	
-	@Field(value = "D", merge = true)
-	private String invoice; //INVOICE
-	
-	@Field(value = "E", merge = true)
-	private String concine; //CNEE
-	
-	@Field(value = "F", merge = true)
-	private String profitDate; //PROFIT DATE
-	
-	@Field(value = "G", merge = true)
-	private String domesticSales; //국내매출
-	
-	@Field(value = "H", merge = true)
-	private String foreignSales; //해외매출
-	
-	@Field(value = "I", merge = true)
-	private String quantity; //Q'ty
-	
-	@Field(value = "J")
-	private String partner; //Partner
-	
-	@Field(value = "K")
-	private String tankNo; //Tank no.
-	
-	@Field(value = "L", merge = true)
-	private String term; //Term
-	
-	@Field(value = "M", merge = true)
-	private String item; //ITEM
-	
-	@Field(value = "N", merge = true)
-	private String vesselVoyage; //Vessel / Voyage
-	
-	@Field(value = "O", merge = true)
-	private String carrier; //Carrier
-	
-	@Field(value = "P", merge = true)
-	private String mblNo; //MBL NO
-	
-	@Field(value = "Q", mergeOrder = 0, merge = true)
+	@Field(value = "A", mergeOrder = 0, merge = true)
 	private String hblNo; //HBL NO.
 	
-	@Field(value = "R", merge = true)
+	@Field(value = "B", merge = true)
+	private String quantity; //Q'ty
+	
+	@Field(value = "C")
+	private String partner; //Partner
+	
+	@Field(value = "D")
+	private String tankNo; //Tank no.
+	
+	@Field(value = "E", merge = true)
+	private String term; //Term
+	
+	@Field(value = "F", merge = true)
+	private String item; //ITEM
+	
+	@Field(value = "G", merge = true)
+	private String vesselVoyage; //Vessel / Voyage
+	
+	@Field(value = "H", merge = true)
+	private String carrier; //Carrier
+	
+	@Field(value = "I", merge = true)
+	private String mblNo; //MBL NO
+	
+	@Field(value = "J", merge = true)
 	private String pol; //POL
 	
-	@Field(value = "S")
+	@Field(value = "K")
 	private String pod; //POD
 	
-	@Field(value = "T")
-	private String terminalCode; //TERMINAL code
-	private String terminalName; //TERMINAL code
-	private String terminalHomepage; //TERMINAL code
-	
-	@Field(value = "U")
+	@Field(value = "L")
 	private String etd; //ETD
 	
-	@Field(value = "V")
+	@Field(value = "M")
 	private String eta; //ETA
 	
-	@Field(value = "W")
-	private String ata; //ATA
-	
-	@Field(value = "X", merge = true)
-	private String remark; //비고
-	
-	@Field(value = "Y")
+	@Field(value = "N")
 	private String ft; //F/T
 	
-	@Field(value = "Z")
+	@Field(value = "O")
 	private String demRate; //DEM RATE
 	
-	@Field(value = "AA")
+	@Field(value = "P")
 	private String endOfFt; //END OF F/T
 	
-	@Field(value = "AB")
-	private String estimateReturnDate; //ESTIMATE RETURN DATE
-	
-	@Field(value = "AC")
+	@Field(value = "Q")
 	private String returnDate; //RETURN DATE
 	
-	@Field(value = "AD")
+	@Field(value = "R")
 	private String returnDepot; //RETURN DEPOT
 	
-	@Field(value = "AE")
+	@Field(value = "S")
 	private String totalDem; //TOTAL DEM
 	
-	@Field(value = "AF")
-	private String demReceived; //DEM RECEIVED
-	
-	@Field(value = "AG")
-	private String demRcvd; //DEM RCVD
-	
-	@Field(value = "AH")
+	@Field(value = "T")
 	private String demPrch; //DEM(USD)-매입
 	
-	@Field(value = "AI")
+	@Field(value = "U")
 	private String demSales; //DEM 매출
 	
-	@Field(value = "AJ")
+	@Field(value = "V")
 	private String depotInDate; //DEPOT IN DATE
-	
-	@Field(value = "AK")
-	private String repositionPrch; //REPOSITION 매입
 	
 	@Builder.Default /* 필드명을 rowspan 해야 함 필수 */
 	private RowSpanOtion rowspan = RowSpanOtion.builder().build();
@@ -144,27 +90,7 @@ public class HomeDto {
 	@NoArgsConstructor
 	public static class RowSpanOtion{
 		@Builder.Default
-		private RowSpan cargo = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan cargoDate = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan location = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan sales = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan carryoverSales = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan arrivalNotice = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan invoice = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan concine = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan profitDate = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan domesticSales = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan foreignSales = RowSpan.builder().build();
+		private RowSpan hblNo = RowSpan.builder().build();
 		@Builder.Default
 		private RowSpan quantity = RowSpan.builder().build();
 		@Builder.Default
@@ -178,10 +104,6 @@ public class HomeDto {
 		@Builder.Default
 		private RowSpan mblNo = RowSpan.builder().build();
 		@Builder.Default
-		private RowSpan hblNo = RowSpan.builder().build();
-		@Builder.Default
 		private RowSpan pol = RowSpan.builder().build();
-		@Builder.Default
-		private RowSpan remark = RowSpan.builder().build();
 	};
 }
