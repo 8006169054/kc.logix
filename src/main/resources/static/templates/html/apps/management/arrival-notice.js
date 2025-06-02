@@ -1,4 +1,4 @@
-var tableName = '#port-table';
+var tableName = '#an-table';
 $( document ).ready(function() {
    	portTableInit();
 });
@@ -16,59 +16,51 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','uuid', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'ITEM', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'HBL NO.', 'POL', 'POD', 'TERMINAL', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['', 'uuid', 'A/N', 'HBL NO.',"Q'ty", 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'POL', 'POD', 'ETD', 'ETA', 'F/T', 'DEM RATE', 'END OF F/T'],
 	   	colModel: [
-	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : true},
-	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true},
-	       	{ name: 'sales', 				width: 50, 		align:'center'},
-	       	{ name: 'carryoverSales', 		width: 50, 		align:'center'},
-	       	{ name: 'arrivalNotice',		width: 70, 		align:'center'},
-	       	{ name: 'invoice', 				width: 70, 		align:'center'},
-	    	{ name: 'concine', 				width: 150, 	align:'center'},
-	    	{ name: 'profitDate', 			width: 90, 		align:'center'},
-	    	{ name: 'domesticSales', 		width: 80, 		align:'center'},
-	    	{ name: 'foreignSales', 		width: 80, 		align:'center'},
-	    	{ name: 'quantity', 			width: 50, 		align:'center'},
-	    	{ name: 'partner', 				width: 120, 	align:'center'},
-	    	{ name: 'tankNo', 				width: 140, 	align:'center'},
-	    	{ name: 'term', 				width: 80, 		align:'center'},
-	    	{ name: 'item', 				width: 250, 	align:'center'},
-	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center'},
-	    	{ name: 'carrier', 				width: 80, 		align:'center'},
-	    	{ name: 'mblNo', 				width: 140, 	align:'center'},
-	    	{ name: 'hblNo', 				width: 140, 	align:'center'},
-	    	{ name: 'pol', 					width: 100, 	align:'center'},
+			{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : true,  frozen:true},
+	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true, 	frozen:true},
+	       	{ name: 'arrivalNotice',		width: 70, 		align:'center',		rowspan: true,	frozen:true, formatter: arrivalNoticeFn},
+	       	{ name: 'hblNo', 				width: 140, 	align:'center',		rowspan: true,	frozen:true},
+	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true},
+	    	{ name: 'tankNo', 				width: 150, 	align:'center'},
+	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true},
+	    	{ name: 'item',					width: 250, 	align:'center',		rowspan: true},
+			{ name: 'cargoDate', 			width: 80, 		align:'center',		rowspan: true},
+			{ name: 'location', 			width: 100, 	align:'center',		rowspan: true},
+	    	{ name: 'vesselVoyage', 		width: 200, 	align:'center',		rowspan: true},
+	    	{ name: 'carrier', 				width: 80, 		align:'center',		rowspan: true},
+	    	{ name: 'mblNo', 				width: 140, 	align:'center',		rowspan: true},
+	    	{ name: 'pol', 					width: 100, 	align:'center',		rowspan: true},
 	    	{ name: 'pod', 					width: 100, 	align:'center'},
-	    	{ name: 'terminal', 			width: 150, 	align:'center'},
 	    	{ name: 'etd', 					width: 90, 		align:'center'},
 	    	{ name: 'eta', 					width: 90, 		align:'center'},
-	       	{ name: 'ata', 					width: 90, 		align:'center'},
-	       	{ name: 'remark', 				width: 250, 	align:'center'},
 	       	{ name: 'ft', 					width: 70, 		align:'center'},
 	       	{ name: 'demRate', 				width: 80, 		align:'center'},
-	       	{ name: 'endOfFt', 				width: 90, 		align:'center'},
-	       	{ name: 'estimateReturnDate', 	width: 160, 	align:'center'},
-	       	{ name: 'returnDate', 			width: 100, 	align:'center'},
-	       	{ name: 'returnDepot', 			width: 80, 		align:'center'},
-	       	{ name: 'totalDem', 			width: 100, 	align:'center'},
-	       	{ name: 'demReceived', 			width: 80, 		align:'center'},
-	       	{ name: 'demRcvd', 				width: 90, 		align:'center'},
-	       	{ name: 'demPrch', 				width: 100, 	align:'center'},
-	       	{ name: 'demSales', 			width: 100, 	align:'center'},
-	       	{ name: 'depotInDate', 			width: 180, 	align:'center'},
-	       	{ name: 'repositionPrch', 		width: 120, 	align:'center'}
+	       	{ name: 'endOfFt', 				width: 90, 		align:'center'}
 	   	],
 		height: 530, 
 		width: '100%',
-//		dblEdit : true,
-//		frozen: true,
-		multiselect : true, // 그리드 왼쪽부분에 체크 박스가 생겨 다중선택이 가능해진다.
- 		multiboxonly : true, // 다중선택을 단일 선택으로 제한
-//		delselect: true,
-		onCellSelect : function(rowid, iCol, cellcontent, e) {
-//			console.log('onCellSelect');
-		}
+		dblEdit : false,
+		frozen: true
+//		multiselect : true, // 그리드 왼쪽부분에 체크 박스가 생겨 다중선택이 가능해진다.
+// 		multiboxonly : true // 다중선택을 단일 선택으로 제한
 	});
+	
+	$(tableName).jqGrid('setGroupHeaders', {
+				useColSpanStyle: true,
+				groupHeaders: [
+                                {startColumnName:'item', numberOfColumns: 3, titleText: 'Item' }
+                                
+                              ]
+		});
+}
+
+function arrivalNoticeFn (cellvalue, options, rowObject ){
+	if(emptyChange(rowObject.arrivalNotice) === '')
+		return '<input type="radio" name="anRadio" id="anRadio" value="' + rowObject.hblNo + '" />';
+	else
+		return rowObject.arrivalNotice;
 }
 
 async function anSend(){
