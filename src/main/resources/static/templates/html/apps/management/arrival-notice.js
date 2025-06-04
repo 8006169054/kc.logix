@@ -67,7 +67,8 @@ function arrivalNoticeFn (cellvalue, options, rowObject ){
 }
 
 async function anSend(type){
-	var rowData = ComRowData(tableName, $("#anRadio").val());
+	var rowId = $("input:radio[name=anRadio]:checked").val();
+	var rowData = ComRowData(tableName, rowId);
 	if(isEmpty(rowData.concinePic))
 		alertMessage(getMessage('0004'), 'error');
 	else if(type === 'T'){

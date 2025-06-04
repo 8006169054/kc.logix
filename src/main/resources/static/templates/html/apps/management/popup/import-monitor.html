@@ -42,11 +42,16 @@
 									</div>
 								</div>
 								<div class="form-row">
-									<div class="form-group col-md-38">
+									<input type="hidden" class="form-control" id="concine" name="concine">
+									<div class="form-group col-md-30">
 										<label for="name">CNEE</label>
-										<input type="text" class="form-control" id="concine" name="concine">
+										<input type="text" class="form-control" id="concineName" name="concineName">
 									</div>
-									<div class="form-group col-md-38">
+									<div class="form-group col-md-15">
+										<label for="name">PIC</label>
+										<input type="text" class="form-control" id="concinePic" name="concinePic" readonly="readonly">
+									</div>
+									<div class="form-group col-md-25">
 										<label for="name">Partner</label>
 										<input type="text" class="form-control" id="partner" name="partner">
 									</div>
@@ -231,6 +236,29 @@ async function terminalAutocompleteLoad(){
 	    select: function (event, ui) {
 	    	$('#terminalCode').val(ui.item.code);
 	    	$('#pod').val(ui.item.region);
+	    },
+	    close : function (event, ui) {
+	        return false;
+	    }
+	}).focus(function() {
+	    $(this).autocomplete("search", $(this).val());
+	});
+}
+
+async function customerAutocompleteLoad(){
+	$("#concineName").autocomplete({
+		source: customerList,
+		delay: 100,
+		autoFocus: true,
+		minChars: 0,
+		minLength: 0,
+		open: function(){
+	        $(this).autocomplete('widget').css('z-index', 1100);
+	        return false;
+	    },
+	    select: function (event, ui) {
+	    	$('#concine').val(ui.item.code);
+	    	$('#concinePic').val(ui.item.pic);
 	    },
 	    close : function (event, ui) {
 	        return false;

@@ -29,7 +29,7 @@ function portTableInit(){
 	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
 	   		{ name: 'cargo',				width: 100,		align:'center', 	rowspan: true,	editable : true, hidden : true,	frozen:true},
 	   		{ name: 'concine', 				width: 70, 		align:'center',		rowspan: true,	editable : true, hidden : true,	frozen:true},
-	   		{ name: 'seq', 					width: 50, 		align:'center',		hidden : false,	frozen:true},
+	   		{ name: 'seq', 					width: 50, 		align:'center',		hidden : true,	frozen:true},
 	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true,	frozen:true},
 	       	{ name: 'hblNo', 				width: 140, 	align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	editable: true},
@@ -230,6 +230,7 @@ async function searchPartnerAutocomplete(){
 	var response = await requestApi('GET', '/api/mdm/partner/autocomplete');
 	if(response.common.status === 'S'){
 		partnerList = response.data;
+		partnerAutocompleteLoad();
 	}
 }
 
@@ -237,6 +238,7 @@ async function searchCargoAutocomplete(){
 	var response = await requestApi('GET', '/api/mdm/cargo/autocomplete');
 	if(response.common.status === 'S'){
 		carGoList = response.data;
+		itemAutocompleteLoad();
 	}
 }
 
@@ -244,6 +246,7 @@ async function searchTerminalAutocomplete(){
 	var response = await requestApi('GET', '/api/mdm/terminal/autocomplete');
 	if(response.common.status === 'S'){
 		terminalList = response.data;
+		terminalAutocompleteLoad();
 	}
 }
 
@@ -251,6 +254,7 @@ async function searchCustomerAutocomplete(){
 	var response = await requestApi('GET', '/api/mdm/customer/autocomplete');
 	if(response.common.status === 'S'){
 		customerList = response.data;
+		customerAutocompleteLoad();
 	}
 }
 
