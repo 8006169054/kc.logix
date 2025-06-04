@@ -14,7 +14,21 @@ spring:
     view-names: html/*
   messages:
     basename: messages/view
-    
+
+  mail:
+    protocol: smtp
+    host: smtp.sg.aliyun.com
+    port: 25
+    username: postmaster@kclogix.com
+    password: kclogix0407!
+    properties:
+      mail:
+        smtp:
+          auth: false
+          timeout: 5000
+          starttls:
+            enable: true
+
 kainos:
   web:
     cors:

@@ -25,6 +25,11 @@ public class WebsiteDto {
 	private String cargoDate;
 	@Field(value = "KC", merge = true) 
 	private String location;
+	@Field(value = "KD", merge = true) 
+	private String concineName;
+	@Field(value = "KE", merge = true) 
+	private String concinePic;
+	
 	
 	@Field(value = "A", merge = true) 
 	private String sales; //매출
@@ -159,6 +164,11 @@ public class WebsiteDto {
 		private RowSpan cargoDate = RowSpan.builder().build();
 		@Builder.Default
 		private RowSpan location = RowSpan.builder().build();
+		@Builder.Default
+		private RowSpan concineName = RowSpan.builder().build();
+		@Builder.Default
+		private RowSpan concinePic = RowSpan.builder().build();
+		
 		@Builder.Default
 		private RowSpan sales = RowSpan.builder().build();
 		@Builder.Default

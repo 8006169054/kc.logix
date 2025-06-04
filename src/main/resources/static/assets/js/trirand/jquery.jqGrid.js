@@ -7804,6 +7804,7 @@ $.jgrid.extend({
 	},
 	// 정인선 afterSaveJqFlag
 	afterSaveJqFlag : function(iRow, oRowData) {
+//		console.log('afterSaveJqFlag',iRow, oRowData);
 		var $t = this;
 		var deleteChecked = $('#' + 'delete_' + $t[0].id + '_' + iRow).is(":checked");
 		if(deleteChecked) return;
@@ -7818,7 +7819,10 @@ $.jgrid.extend({
 					if(col.name !== 'jqFlag' && col.name !== 'deletcb' && (col.editable || col.statuscheck)){
 						if(emptyChange(iRowData[col.name]) !== emptyChange(oRowData[col.name])) {
 							try{
-								if(col.edittype === 'textarea' || $(iRowData[col.name])[0] === undefined)
+//								console.log('col.name', col.name);
+//								console.log('col.edittype', col.edittype);
+//								console.log('$(iRowData[col.name])[0]', $(iRowData[col.name]));
+//								if(col.edittype === 'textarea' || $(iRowData[col.name])[0] === undefined)
 									jqFlag = U;
 							} catch (error) {console.log(error)}
 							return false;

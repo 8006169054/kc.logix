@@ -44,4 +44,19 @@ public class SelectBoxDto {
 		private String homepage;
 		
 	}
+	
+	@Builder
+	@Data
+	@ToString
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class CustomerAutoComplete {
+		private String value;
+		private String label;
+		private String code;
+		private String pic;
+		private String email;
+		private String tel;
+		
+	}
 }

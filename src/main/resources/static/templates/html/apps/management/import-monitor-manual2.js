@@ -4,12 +4,13 @@ $( document ).ready(function() {
    	  searchPartnerAutocomplete();
    	  searchCargoAutocomplete();
    	  searchTerminalAutocomplete();
+   	  searchCustomerAutocomplete();
 });
 
 var partnerList = [];
 var carGoList = [];
 var terminalList = [];
-
+var customerList = [];
 /**
  * 조회
  */
@@ -23,17 +24,40 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['','cargo','uuid', 'HBL NO.', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'POL', 'POD', 'terminalCode', 'Name', 'Link', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
+	   	colNames: ['','cargo','concine code', 'seq', 'uuid', 'HBL NO.', '매출', '이월 매출', 'A/N&EDI', 'INVOICE', 'CNEE', 'PIC', 'PROFIT DATE', '국내매출', '해외매출', "Q'ty", 'Partner', 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'POL', 'POD', 'terminalCode', 'Name', 'Link', 'ETD', 'ETA', 'ATA', '비고', 'F/T', 'DEM RATE', 'END OF F/T', 'ESTIMATE RETURN DATE', 'RETURN DATE', 'RETURN DEPOT', 'TOTAL DEM', 'DEM RECEIVED', 'DEM RCVD', 'COMMISSION DEM', 'DEM COMMISSION', 'DEPOT IN DATE(REPO ONLY)', 'REPOSITION 매입'],
 	   	colModel: [
 	   		{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : false,	frozen:true},
 	   		{ name: 'cargo',				width: 100,		align:'center', 	rowspan: true,	editable : true, hidden : true,	frozen:true},
+	   		{ name: 'concine', 				width: 70, 		align:'center',		rowspan: true,	editable : true, hidden : true,	frozen:true},
+	   		{ name: 'seq', 					width: 50, 		align:'center',		hidden : false,	frozen:true},
 	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true,	frozen:true},
 	       	{ name: 'hblNo', 				width: 140, 	align:'center',		rowspan: true,	frozen:true},
 	       	{ name: 'sales', 				width: 50, 		align:'center',		rowspan: true,	editable: true},
 	       	{ name: 'carryoverSales', 		width: 50, 		align:'center',		rowspan: true,	editable: true},
 	       	{ name: 'arrivalNotice',		width: 70, 		align:'center',		rowspan: true},
 	       	{ name: 'invoice', 				width: 70, 		align:'center',		rowspan: true},
-	    	{ name: 'concine', 				width: 150, 	align:'center',		rowspan: true, editable: true},
+	    	{ name: 'concineName',			width: 150, 	align:'center',		rowspan: true, editable: true, edittype: 'text', editoptions: {
+				dataInit:function(elem) {
+					$(elem).autocomplete({
+						source: customerList,
+						delay: 100,
+						autoFocus: true,
+						minChars: 0,
+						minLength: 0,
+				        select: function (event, ui) {
+							ComSetCellData(tableName, ComSelectIndex(tableName), 'concine', ui.item.code, true);
+							ComSetCellData(tableName, ComSelectIndex(tableName), 'concinePic', ui.item.pic, true);
+				        },
+				        close : function (event, ui) {
+				            $(tableName).delay(2000).focus();
+				            return false;
+				        }
+					}).focus(function() {
+			            $(this).autocomplete("search", $(this).val());
+			        });
+				}
+			}},
+			{ name: 'concinePic', 			width: 80, 		align:'center',		rowspan: true},
 	    	{ name: 'profitDate', 			width: 90, 		align:'center',		rowspan: true, editable: true, edittype: "date"},
 	    	{ name: 'domesticSales', 		width: 80, 		align:'center',		rowspan: true, editable: true},
 	    	{ name: 'foreignSales', 		width: 80, 		align:'center',		rowspan: true, editable: true},
@@ -173,6 +197,18 @@ function portTableInit(){
 						}
 					}
 				}
+			}else if('concineName' === cellname){
+				if(value === ''){
+					ComSetCellData(tableName, iRow, 'concine', '', true);
+					ComSetCellData(tableName, iRow, 'concinePic', '', true);
+				}else{
+					for (let customer of customerList) {
+						if(customer.value === value){
+							changeVal = true;
+							return false;
+						}
+					}
+				}
 			}
 			
 			if(!changeVal) $(tableName).jqGrid('dataRecovery', rowid, cellname);
@@ -183,7 +219,8 @@ function portTableInit(){
 				useColSpanStyle: true,
 				groupHeaders: [
                                 {startColumnName:'item', numberOfColumns: 3, titleText: 'Item' },
-                                {startColumnName:'pod', numberOfColumns: 4, titleText: 'Terminal' }
+                                {startColumnName:'pod', numberOfColumns: 4, titleText: 'Terminal' },
+                                {startColumnName:'concineName', numberOfColumns: 2, titleText: 'Customer' }
                                 
                               ]
 		});
@@ -209,6 +246,14 @@ async function searchTerminalAutocomplete(){
 		terminalList = response.data;
 	}
 }
+
+async function searchCustomerAutocomplete(){
+	var response = await requestApi('GET', '/api/mdm/customer/autocomplete');
+	if(response.common.status === 'S'){
+		customerList = response.data;
+	}
+}
+
 
 function terminalFn (cellvalue, options, rowObject ){
 	if(emptyChange(rowObject.terminalHomepage) === '')

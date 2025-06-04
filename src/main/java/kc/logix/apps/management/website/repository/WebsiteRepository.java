@@ -2,6 +2,7 @@ package kc.logix.apps.management.website.repository;
 
 import static kc.logix.common.entity.QMdmCargo.mdmCargo;
 import static kc.logix.common.entity.QMdmTerminal.mdmTerminal;
+import static kc.logix.common.entity.QMdmCustomer.mdmCustomer;
 import static kc.logix.common.entity.QWebsiteTerminalCode.websiteTerminalCode;
 
 import java.util.Date;
@@ -56,7 +57,9 @@ public class WebsiteRepository extends KainosRepositorySupport {
 					websiteTerminalCode.carryoverSales,
 					new CaseBuilder().when(websiteTerminalCode.arrivalNotice.eq("1")).then(Expressions.constant("SEND")).otherwise(Expressions.constant("")).as("arrivalNotice"),
 					new CaseBuilder().when(websiteTerminalCode.invoice.eq("1")).then(Expressions.constant("SEND")).otherwise(Expressions.constant("")).as("invoice"),
-					websiteTerminalCode.concine,
+					new CaseBuilder().when(mdmCustomer.name.isNull()).then(websiteTerminalCode.concine).otherwise(mdmCustomer.name).as("concineName"),
+					mdmCustomer.code.as("concine"),
+					mdmCustomer.pic.as("concinePic"),
 					websiteTerminalCode.profitDate,
 					websiteTerminalCode.domesticSales,
 					websiteTerminalCode.foreignSales,
@@ -105,6 +108,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 				)).from(websiteTerminalCode)
 				.leftJoin(mdmCargo).on(websiteTerminalCode.item.eq(mdmCargo.code))
 				.leftJoin(mdmTerminal).on(websiteTerminalCode.terminal.eq(mdmTerminal.code))
+				.leftJoin(mdmCustomer).on(websiteTerminalCode.concine.eq(mdmCustomer.code))
 				.where(where)
 				.orderBy(websiteTerminalCode.uuid.asc(), websiteTerminalCode.seq.asc())
 				.fetch();
