@@ -29,7 +29,8 @@ public class WebsiteDto {
 	private String concineName;
 	@Field(value = "KE", merge = true) 
 	private String concinePic;
-	
+	@Field(value = "KF", merge = true) 
+	private String concineEmail;
 	
 	@Field(value = "A", merge = true) 
 	private String sales; //매출
@@ -168,6 +169,8 @@ public class WebsiteDto {
 		private RowSpan concineName = RowSpan.builder().build();
 		@Builder.Default
 		private RowSpan concinePic = RowSpan.builder().build();
+		@Builder.Default
+		private RowSpan concineEmail = RowSpan.builder().build();
 		
 		@Builder.Default
 		private RowSpan sales = RowSpan.builder().build();

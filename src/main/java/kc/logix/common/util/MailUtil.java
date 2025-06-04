@@ -58,4 +58,31 @@ public class MailUtil {
             throw new KainosMailException(e);
         }
     }
+	
+	public void send(KainosMailDto mailDto) throws KainosMailException {
+		try {
+			MimeMessage msg = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(msg, true, "UTF-8");
+	        helper.setFrom(mailDto.getFrom());
+	        helper.setSubject(mailDto.getSubject());
+	        helper.setTo(mailDto.getTo().toArray(new InternetAddress[0]));
+	        
+	        if(mailDto.getCc().size() > 0)
+	        	helper.setCc(mailDto.getCc().toArray(new InternetAddress[0]));
+	        for (FileAttachment attachment : mailDto.getAttachment()) {
+	        	if(attachment.getFile() instanceof MultipartFile file) 
+	        		helper.addAttachment(file.getOriginalFilename(), file);
+	        	else if(attachment.getFile() instanceof File file) 
+	        		helper.addAttachment(file.getName(), file);
+	        }
+	        
+	        for (ReportAttachment attachment : mailDto.getReports())
+	        	helper.addAttachment(MimeUtility.encodeText(attachment.getFileName()), new ByteArrayResource(attachment.getFile()));
+	        
+	        helper.setText(mailDto.getMailbody(), mailDto.getHtml());
+	        mailSender.send(msg);
+        } catch (Exception e) {
+            throw new KainosMailException(e);
+        }
+    }
 }

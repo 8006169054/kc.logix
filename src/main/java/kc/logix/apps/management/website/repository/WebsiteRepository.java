@@ -60,6 +60,7 @@ public class WebsiteRepository extends KainosRepositorySupport {
 					new CaseBuilder().when(mdmCustomer.name.isNull()).then(websiteTerminalCode.concine).otherwise(mdmCustomer.name).as("concineName"),
 					mdmCustomer.code.as("concine"),
 					mdmCustomer.pic.as("concinePic"),
+					mdmCustomer.email.as("concineEmail"),
 					websiteTerminalCode.profitDate,
 					websiteTerminalCode.domesticSales,
 					websiteTerminalCode.foreignSales,

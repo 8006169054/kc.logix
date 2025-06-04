@@ -16,13 +16,15 @@ async function search() {
 function portTableInit(){
 	$(tableName).jqGrid({
 	   	datatype: "json",
-	   	colNames: ['', 'uuid', 'A/N', 'HBL NO.','PIC', "Q'ty", 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'POL', 'POD', 'ETD', 'ETA', 'F/T', 'DEM RATE', 'END OF F/T'],
+	   	colNames: ['', 'uuid', 'A/N', 'HBL NO.','CNEE', 'PIC', "e-mail", "Q'ty", 'Tank no.', 'Term', 'Name', 'Date', 'Location', 'Vessel / Voyage', 'Carrier', 'MBL NO.', 'POL', 'POD', 'ETD', 'ETA', 'F/T', 'DEM RATE', 'END OF F/T'],
 	   	colModel: [
 			{ name: 'jqFlag',				width: 40,		align:'center', 	hidden : true,  frozen:true},
 	   		{ name: 'uuid', 				width: 50, 		align:'center',		hidden : true, 	frozen:true},
 	       	{ name: 'arrivalNotice',		width: 70, 		align:'center',		rowspan: true,	frozen:true, formatter: arrivalNoticeFn},
 	       	{ name: 'hblNo', 				width: 140, 	align:'center',		rowspan: true,	frozen:true},
-	    	{ name: 'concinePic', 			width: 100,		align:'center',		rowspan: true},
+	       	{ name: 'concineName', 			width: 140, 	align:'center',		rowspan: true,	frozen:true},
+	    	{ name: 'concinePic', 			width: 100,		align:'center',		rowspan: true, editable: true},
+	    	{ name: 'concineEmail', 		width: 150,		align:'center',		rowspan: true, editable: true},
 	    	{ name: 'quantity', 			width: 50, 		align:'center',		rowspan: true},
 	    	{ name: 'tankNo', 				width: 150, 	align:'center'},
 	    	{ name: 'term', 				width: 80, 		align:'center',		rowspan: true},
@@ -42,7 +44,7 @@ function portTableInit(){
 	   	],
 		height: 530, 
 		width: '100%',
-		dblEdit : false,
+		dblEdit : true,
 		frozen: true
 //		multiselect : true, // 그리드 왼쪽부분에 체크 박스가 생겨 다중선택이 가능해진다.
 // 		multiboxonly : true // 다중선택을 단일 선택으로 제한
@@ -59,12 +61,19 @@ function portTableInit(){
 
 function arrivalNoticeFn (cellvalue, options, rowObject ){
 	if(emptyChange(rowObject.arrivalNotice) === '')
-		return '<input type="radio" name="anRadio" id="anRadio" value="' + rowObject.hblNo + '" />';
+		return '<input type="radio" name="anRadio" id="anRadio" value="' + options.rowId + '" />';
 	else
 		return rowObject.arrivalNotice;
 }
 
-async function anSend(){
-	var rowData = ComSelectRow(tableName);
-	await requestFileDownload('POST', '/api/management/arrival-notice-send-mail', rowData, 'ArrivalNoticeTemplate_' + rowData.hblNo + '.eml');
+async function anSend(type){
+	var rowData = ComRowData(tableName, $("#anRadio").val());
+	if(isEmpty(rowData.concinePic))
+		alertMessage(getMessage('0004'), 'error');
+	else if(type === 'T'){
+		await requestFileDownload('POST', '/api/management/arrival-notice-send-mail-template', rowData, 'ArrivalNoticeTemplate_' + rowData.hblNo + '.eml');
+	}
+	else if(type === 'M'){
+		await requestApi('POST', '/api/management/arrival-notice-send-mail', rowData);
+	}
 }

@@ -38,7 +38,7 @@
 									<select class="form-control selectric" id="arrivalNotice" name="arrivalNotice">
 										<option value="" selected>ALL</option>
 				                        <option value="1">Sent Completed</option>
-				                        <option value="0">Not Completed</option>
+				                        <option value="0" selected>Not Completed</option>
 			                      	</select>
 								</div>
 							</div>
@@ -50,7 +50,8 @@
 				<div class="col-100">
 					<div class="card">
 						<div class="card-header  text-right">
-							<button class="btn btn-success" onclick="anSend()">A/N Send</button>
+							<button class="btn btn-info" onclick="anSend('T')">A/N Send Template</button>
+<!-- 							<button class="btn btn-success" onclick="anSend('M')">A/N Send</button> -->
 						</div>
 						<div class="card-body p-0">
 							<div class="table-responsive" style="overflow: hidden;">
